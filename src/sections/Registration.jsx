@@ -21,6 +21,9 @@ import {
   Send,
   Edit2,
   HelpCircle,
+  FileDown,
+  FolderArchive,
+  ExternalLink,
 } from "lucide-react";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { Stepper } from "../components/ui/Stepper";
@@ -28,6 +31,7 @@ import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { EVENT_DATA } from "../data/codeniteData";
 import { triggerConfetti } from "../utils/confetti";
+import { openPrintSlipWindow } from "../utils/generatePdfSlip";
 import { cn } from "../utils/cn";
 
 // Single member schema
@@ -108,6 +112,7 @@ export function Registration() {
   const [submitError, setSubmitError] = useState(null);
   const [teamRegistrationId, setTeamRegistrationId] = useState("");
   const [copiedId, setCopiedId] = useState(false);
+  const [pdfDriveUrl, setPdfDriveUrl] = useState("");
 
   const steps = [
     { title: "Team Details" },
@@ -189,25 +194,30 @@ export function Registration() {
     setIsSubmitting(true);
     setSubmitError(null);
 
+    const generatedRegId = `CN27-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
     try {
-      // Simulated or Real Webhook POST to Google Apps Script / Formspree / Backend
       const payload = {
         timestamp: new Date().toISOString(),
-        registrationId: `CN27-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+        registrationId: generatedRegId,
         ...data,
       };
 
-      // In production, user can replace this with their Google Apps Script URL:
-      // const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+      // If user has set their Google Apps Script URL in an env or custom var, attempt POST
+      // Example:
+      // const scriptUrl = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+      // const response = await fetch(scriptUrl, {
       //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
+      //   headers: { "Content-Type": "text/plain;charset=utf-8" },
       //   body: JSON.stringify(payload)
       // });
+      // const resData = await response.json();
+      // if (resData.pdfUrl) setPdfDriveUrl(resData.pdfUrl);
 
-      // Simulated network call (1.2s delay)
+      // Simulated network sync (1.2s delay)
       await new Promise((resolve) => setTimeout(resolve, 1400));
 
-      setTeamRegistrationId(payload.registrationId);
+      setTeamRegistrationId(generatedRegId);
       setIsSubmitted(true);
       setCurrentStep(4);
       triggerConfetti();
@@ -872,15 +882,48 @@ export function Registration() {
                   </button>
                 </div>
 
+                {/* Action Buttons: PDF Download & Community Links */}
+                <div className="w-full space-y-3 mb-6">
+                  <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+                    <button
+                      type="button"
+                      onClick={() => openPrintSlipWindow(formValues, teamRegistrationId)}
+                      className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-acm-blue hover:from-sky-400 hover:to-acm-electric text-white text-xs font-heading font-bold text-center shadow-glow-sm hover:shadow-glow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <FileDown className="w-4 h-4" />
+                      <span>Download Registration PDF (Slip)</span>
+                    </button>
+
+                    {pdfDriveUrl && (
+                      <a
+                        href={pdfDriveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto py-3 px-4 rounded-xl bg-navy-800 hover:bg-navy-700 text-acm-cyan text-xs font-heading font-bold text-center border border-acm-cyan/40 hover:border-acm-cyan transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <FolderArchive className="w-4 h-4" />
+                        <span>View in Drive</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-navy-950/80 border border-acm-blue/30 text-[11px] text-slate-300 flex items-center justify-center gap-2 font-mono">
+                    <FolderArchive className="w-4 h-4 text-acm-cyan shrink-0" />
+                    <span>PDF saved to Google Drive: "CodeNite 2027 Registration PDFs"</span>
+                  </div>
+                </div>
+
                 {/* Important Instructions Box */}
                 <div className="w-full text-left p-4 rounded-xl bg-sky-950/30 border border-sky-600/30 text-xs text-slate-300 space-y-2 mb-8">
                   <div className="font-heading font-bold text-white flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-acm-cyan" />
                     Next Immediate Steps:
                   </div>
-                  <div>1. A confirmation email has been dispatched to all {formValues.teamSize} registered team members.</div>
-                  <div>2. Join the official ACM Discord & WhatsApp group using the links below for announcements.</div>
-                  <div>3. Check-in reporting begins at 06:00 PM on 17 January 2027 at the MITS Gwalior Campus.</div>
+                  <div>1. A confirmation email with the official registration PDF has been dispatched to the Team Leader.</div>
+                  <div>2. Keep the downloaded PDF safe or printed for on-campus verification at MITS Gwalior.</div>
+                  <div>3. Join the official ACM Discord & WhatsApp group using the links below for announcements.</div>
+                  <div>4. Check-in reporting begins at 06:00 PM on 17 January 2027 at the MITS Gwalior Campus.</div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
