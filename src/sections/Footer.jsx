@@ -38,11 +38,11 @@ export function Footer() {
           {/* Column 1: Chapter Brand & Mission (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full p-1 bg-navy-900 border border-acm-blue/40 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full overflow-hidden bg-white border-2 border-acm-cyan/60 flex items-center justify-center p-0 shrink-0 shadow-sm">
                 <img
                   src={EVENT_DATA.organizer.acmLogo}
                   alt="ACM Logo"
-                  className="w-full h-full object-contain filter drop-shadow-sm"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div>

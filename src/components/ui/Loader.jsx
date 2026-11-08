@@ -89,15 +89,15 @@ export function Loader({ onFinish }) {
             </defs>
           </svg>
 
-          {/* Central Logo with glow */}
-          <div className="absolute inset-4 rounded-full overflow-hidden p-3 bg-navy-900/90 border border-acm-blue/40 shadow-glow-md flex items-center justify-center">
+          {/* Central Logo with glow - fitted in frame */}
+          <div className="absolute inset-2.5 rounded-full overflow-hidden bg-white border-2 border-acm-cyan shadow-glow-md flex items-center justify-center p-0">
             <motion.img
               src="/acm-mits-logo.png"
               alt="ACM MITS Chapter Logo"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>

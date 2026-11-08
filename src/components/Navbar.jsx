@@ -65,11 +65,11 @@ export function Navbar() {
           onClick={(e) => handleNavClick(e, "#home")}
           className="flex items-center gap-3 group focus:outline-none"
         >
-          <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full p-1 bg-navy-900 border border-acm-blue/50 flex items-center justify-center group-hover:border-acm-cyan transition-colors">
+          <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden bg-white border-2 border-acm-blue/60 flex items-center justify-center p-0 group-hover:border-acm-cyan transition-colors shadow-sm shrink-0">
             <img
               src={EVENT_DATA.organizer.acmLogo}
               alt="ACM MITS Student Chapter"
-              className="w-full h-full object-contain filter drop-shadow-sm"
+              className="w-full h-full object-cover"
             />
           </div>
 

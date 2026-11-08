@@ -72,13 +72,15 @@ export function Hero() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-navy-900/90 border border-acm-blue/40 shadow-glow-sm mb-6"
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-navy-900/90 border border-acm-blue/40 shadow-glow-sm mb-6"
             >
-              <img
-                src={EVENT_DATA.organizer.acmLogo}
-                alt="ACM Logo"
-                className="w-5 h-5 object-contain"
-              />
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-white flex items-center justify-center shrink-0">
+                <img
+                  src={EVENT_DATA.organizer.acmLogo}
+                  alt="ACM Logo"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <span className="text-xs font-mono font-semibold tracking-wider uppercase text-acm-cyan">
                 ACM MITS Student Chapter Presents
               </span>
@@ -216,18 +218,18 @@ export function Hero() {
                   </span>
                 </div>
 
-                {/* Central ACM Chapter Emblem Display */}
+                {/* Central ACM Chapter Emblem Display - Fitted in Frame */}
                 <div className="py-6 flex flex-col items-center text-center">
-                  <div className="relative w-32 h-32 sm:w-36 sm:h-36 mb-4 flex items-center justify-center">
+                  <div className="relative w-36 h-36 sm:w-40 sm:h-40 mb-4 flex items-center justify-center">
                     {/* Glowing outer ring */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-acm-blue via-sky-400 to-acm-cyan opacity-40 blur-md animate-pulse-slow" />
+                    <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-acm-blue via-sky-400 to-acm-cyan opacity-50 blur-md animate-pulse-slow" />
                     
-                    {/* Inner bordered circle */}
-                    <div className="relative w-full h-full rounded-full p-3 bg-navy-950 border-2 border-acm-cyan/50 shadow-glow-md flex items-center justify-center">
+                    {/* Inner bordered circle perfectly fitted */}
+                    <div className="relative w-full h-full rounded-full overflow-hidden bg-white border-2 border-acm-cyan shadow-glow-md flex items-center justify-center p-0">
                       <img
                         src={EVENT_DATA.organizer.acmLogo}
                         alt="ACM MITS Student Chapter"
-                        className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
