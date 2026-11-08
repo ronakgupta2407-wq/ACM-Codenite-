@@ -8,8 +8,6 @@ import { BackgroundEffects } from "./components/BackgroundEffects";
 import { CustomCursor } from "./components/CustomCursor";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { Navbar } from "./components/Navbar";
-import { ToastNotification } from "./components/ToastNotification";
-import { WelcomeModal } from "./components/WelcomeModal";
 
 // Sections
 import { Hero } from "./sections/Hero";
@@ -92,14 +90,6 @@ export default function App() {
 
       {/* 7. Comprehensive Footer */}
       <Footer />
-
-      {/* 8. Global Modals & Toasts */}
-      {!loading && (
-        <>
-          <WelcomeModal showAfterLoader={!loading} />
-          <ToastNotification />
-        </>
-      )}
     </div>
   );
 }
