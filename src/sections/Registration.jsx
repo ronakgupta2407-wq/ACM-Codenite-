@@ -24,6 +24,9 @@ import {
   FileDown,
   FolderArchive,
   ExternalLink,
+  ShieldCheck,
+  Search,
+  XCircle,
 } from "lucide-react";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { Stepper } from "../components/ui/Stepper";
@@ -32,6 +35,11 @@ import { Card } from "../components/ui/Card";
 import { EVENT_DATA } from "../data/codeniteData";
 import { triggerConfetti } from "../utils/confetti";
 import { openPrintSlipWindow } from "../utils/generatePdfSlip";
+import {
+  saveRegisteredTeam,
+  searchTeamById,
+  getRegisteredTeams,
+} from "../utils/adminStore";
 import { cn } from "../utils/cn";
 
 // Single member schema
@@ -100,7 +108,7 @@ const createMemberTemplate = () => ({
   linkedin: "",
 });
 
-export function Registration() {
+export function Registration({ onOpenAdmin }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -109,6 +117,43 @@ export function Registration() {
   const [copiedId, setCopiedId] = useState(false);
   const [pdfDriveUrl, setPdfDriveUrl] = useState("");
   const [step2ErrorMsg, setStep2ErrorMsg] = useState("");
+  const [liveTeamStatus, setLiveTeamStatus] = useState("ACTIVE");
+  const [cancellationReason, setCancellationReason] = useState("");
+
+  // Team live status search state
+  const [showStatusLookup, setShowStatusLookup] = useState(false);
+  const [lookupQuery, setLookupQuery] = useState("");
+  const [lookupResult, setLookupResult] = useState(null);
+  const [lookupExecuted, setLookupExecuted] = useState(false);
+
+  // Sync with admin cancellations in real-time
+  useEffect(() => {
+    const handleUpdate = () => {
+      if (teamRegistrationId) {
+        const teams = getRegisteredTeams();
+        const current = teams.find(
+          (t) => t.registrationId.toUpperCase() === teamRegistrationId.toUpperCase()
+        );
+        if (current) {
+          setLiveTeamStatus(current.status);
+          if (current.cancellationReason) {
+            setCancellationReason(current.cancellationReason);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("acm_teams_updated", handleUpdate);
+    return () => window.removeEventListener("acm_teams_updated", handleUpdate);
+  }, [teamRegistrationId]);
+
+  const handleLookupSubmit = (e) => {
+    e.preventDefault();
+    if (!lookupQuery.trim()) return;
+    const res = searchTeamById(lookupQuery);
+    setLookupResult(res || null);
+    setLookupExecuted(true);
+  };
 
   const steps = [
     { title: "Team Details" },
@@ -302,7 +347,11 @@ export function Registration() {
       // Simulated network sync (1.2s delay)
       await new Promise((resolve) => setTimeout(resolve, 1400));
 
+      // Save to persistent team store for Admin portal & team lookup
+      saveRegisteredTeam(payload);
+
       setTeamRegistrationId(generatedRegId);
+      setLiveTeamStatus("ACTIVE");
       setIsSubmitted(true);
       setCurrentStep(4);
       triggerConfetti();
@@ -329,6 +378,106 @@ export function Registration() {
           highlight="CodeNite Squad"
           subtitle="Form a team of strictly 4 or 6 members. Registration is free. No gender requirement. Lock in your spot."
         />
+
+        {/* Action Header: Status Lookup & Admin Portal */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+          <button
+            type="button"
+            onClick={() => {
+              setShowStatusLookup(!showStatusLookup);
+              setLookupExecuted(false);
+            }}
+            className="px-4 py-2 rounded-xl bg-navy-900 border border-acm-blue/30 hover:border-acm-cyan text-slate-300 hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-colors cursor-pointer"
+          >
+            <Search className="w-3.5 h-3.5 text-acm-cyan" />
+            <span>{showStatusLookup ? "Close Status Lookup" : "Check Team Registration Status"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onOpenAdmin && onOpenAdmin()}
+            className="px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-sky-400/40 text-acm-cyan hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>Admin Portal</span>
+          </button>
+        </div>
+
+        {/* Live Team Status Lookup Expandable Box */}
+        <AnimatePresence>
+          {showStatusLookup && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-8 p-6 rounded-2xl bg-navy-900/95 border-2 border-acm-cyan/40 shadow-glow-sm overflow-hidden"
+            >
+              <h4 className="font-heading font-extrabold text-base text-white mb-1">
+                Lookup Live Squad Registration Status
+              </h4>
+              <p className="text-xs text-slate-400 font-mono mb-4">
+                Enter your Team Registration ID (e.g. <code>CN27-XXXXXX</code>) to check your real-time status.
+              </p>
+
+              <form onSubmit={handleLookupSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
+                <input
+                  type="text"
+                  value={lookupQuery}
+                  onChange={(e) => setLookupQuery(e.target.value)}
+                  placeholder="Enter Team ID or Leader Email (e.g. CN27-ALPHA1)"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-navy-950 border border-acm-blue/30 text-white text-xs font-mono focus:outline-none focus:border-acm-cyan"
+                />
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl bg-acm-blue hover:bg-sky-500 text-white font-heading font-bold text-xs transition-colors cursor-pointer"
+                >
+                  Verify Status
+                </button>
+              </form>
+
+              {/* Lookup Result Display */}
+              {lookupExecuted && (
+                <div className="pt-3 border-t border-acm-blue/20">
+                  {lookupResult ? (
+                    lookupResult.status === "CANCELLED" ? (
+                      <div className="p-4 rounded-xl bg-rose-950/80 border-2 border-rose-500 text-rose-200 text-xs font-mono">
+                        <div className="flex items-center gap-2 font-bold text-sm text-white mb-1">
+                          <XCircle className="w-5 h-5 text-rose-400 shrink-0" />
+                          <span>REGISTRATION CANCELLED BY ADMIN</span>
+                        </div>
+                        <div>Team: <strong>{lookupResult.teamName}</strong> (ID: {lookupResult.registrationId})</div>
+                        {lookupResult.cancellationReason && (
+                          <div className="mt-1 text-rose-300">
+                            Reason: {lookupResult.cancellationReason}
+                          </div>
+                        )}
+                        <div className="mt-2 text-slate-300">
+                          Notice: Your team registration was revoked by the ACM MITS Administrator. For inquiries, email: acmmits@mitsgwalior.in.
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-4 rounded-xl bg-emerald-950/60 border-2 border-emerald-500 text-emerald-200 text-xs font-mono">
+                        <div className="flex items-center gap-2 font-bold text-sm text-white mb-1">
+                          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                          <span>REGISTRATION ACTIVE & CONFIRMED</span>
+                        </div>
+                        <div>Team: <strong>{lookupResult.teamName}</strong> (ID: {lookupResult.registrationId})</div>
+                        <div>Track: {lookupResult.track} • Size: {lookupResult.teamSize} Members</div>
+                        <div className="mt-2 text-slate-300">
+                          Reporting: 17 January 2027 at 06:00 PM IST, MITS Gwalior Computing Complex.
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    <div className="p-3 rounded-xl bg-navy-950/60 border border-slate-700 text-slate-400 text-xs font-mono">
+                      No registered squad found matching "{lookupQuery}". Please check the ID and retry.
+                    </div>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Multi-step Stepper */}
         <Stepper
@@ -935,7 +1084,7 @@ export function Registration() {
               </motion.div>
             )}
 
-            {/* ================= STEP 4: SUBMISSION SUCCESS ================= */}
+            {/* ================= STEP 4: SUBMISSION SUCCESS / STATUS ================= */}
             {currentStep === 4 && isSubmitted && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -943,25 +1092,48 @@ export function Registration() {
                 transition={{ duration: 0.5 }}
                 className="py-8 text-center flex flex-col items-center max-w-lg mx-auto"
               >
-                {/* Animated Draw Checkmark Circle */}
-                <div className="relative w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 mb-6 shadow-[0_0_30px_rgba(52,211,153,0.4)]">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
-                  >
-                    <CheckCircle2 className="w-12 h-12 stroke-[2.5]" />
-                  </motion.div>
-                  <span className="absolute -inset-2 rounded-full border border-emerald-400/30 animate-ping pointer-events-none" />
-                </div>
+                {/* Live Cancellation Alert if cancelled by Admin */}
+                {liveTeamStatus === "CANCELLED" ? (
+                  <div className="w-full p-6 rounded-2xl bg-rose-950/80 border-2 border-rose-500 shadow-glow-md mb-6 text-left">
+                    <div className="flex items-center gap-2.5 text-rose-400 font-heading font-black text-lg mb-2">
+                      <XCircle className="w-6 h-6 shrink-0" />
+                      <span>Registration Cancelled by Admin</span>
+                    </div>
+                    <p className="text-xs text-rose-200 leading-relaxed font-mono">
+                      Your team registration for <strong className="text-white">"{formValues.teamName}"</strong> (ID: <code>{teamRegistrationId}</code>) has been cancelled by the ACM MITS Administrator.
+                    </p>
+                    {cancellationReason && (
+                      <div className="mt-2 text-xs font-mono text-rose-300">
+                        <strong>Reason:</strong> {cancellationReason}
+                      </div>
+                    )}
+                    <div className="mt-4 pt-3 border-t border-rose-500/30 text-[11px] text-slate-300">
+                      If you believe this cancellation was made in error, please contact the ACM MITS Organizing Committee immediately at <a href="mailto:acmmits@mitsgwalior.in" className="text-sky-300 underline">acmmits@mitsgwalior.in</a>.
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* Animated Draw Checkmark Circle */}
+                    <div className="relative w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 mb-6 shadow-[0_0_30px_rgba(52,211,153,0.4)]">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
+                      >
+                        <CheckCircle2 className="w-12 h-12 stroke-[2.5]" />
+                      </motion.div>
+                      <span className="absolute -inset-2 rounded-full border border-emerald-400/30 animate-ping pointer-events-none" />
+                    </div>
 
-                <h3 className="font-heading font-black text-2xl sm:text-3xl text-white mb-2">
-                  Registration Successful!
-                </h3>
+                    <h3 className="font-heading font-black text-2xl sm:text-3xl text-white mb-2">
+                      Registration Successful!
+                    </h3>
 
-                <p className="text-slate-300 text-sm leading-relaxed mb-6 font-normal">
-                  Your squad <strong className="text-white">"{formValues.teamName}"</strong> has been successfully registered for CodeNite 2027 by ACM MITS Student Chapter!
-                </p>
+                    <p className="text-slate-300 text-sm leading-relaxed mb-6 font-normal">
+                      Your squad <strong className="text-white">"{formValues.teamName}"</strong> has been successfully registered for CodeNite 2027 by ACM MITS Student Chapter!
+                    </p>
+                  </>
+                )}
 
                 {/* Registration ID Card */}
                 <div className="w-full p-4 rounded-xl bg-navy-950 border border-acm-cyan/40 shadow-glow-sm flex items-center justify-between gap-3 mb-6">

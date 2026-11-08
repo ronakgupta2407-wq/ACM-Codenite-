@@ -8,6 +8,7 @@ import { BackgroundEffects } from "./components/BackgroundEffects";
 import { CustomCursor } from "./components/CustomCursor";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { Navbar } from "./components/Navbar";
+import { AdminPortalModal } from "./components/AdminPortalModal";
 
 // Sections
 import { Hero } from "./sections/Hero";
@@ -25,6 +26,7 @@ import { Footer } from "./sections/Footer";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
 
   // Initialize Lenis smooth scroll
   useEffect(() => {
@@ -71,11 +73,11 @@ export default function App() {
       <CustomCursor />
 
       {/* 5. Sticky Navigation Bar */}
-      <Navbar />
+      <Navbar onOpenAdmin={() => setAdminModalOpen(true)} />
 
       {/* 6. Main Interactive Experience */}
       <main className="relative z-10 flex flex-col">
-        <Hero />
+        <Hero onOpenAdmin={() => setAdminModalOpen(true)} />
         <About />
         <Tracks />
         <Timeline />
@@ -85,11 +87,17 @@ export default function App() {
         <Sponsors />
         <Team />
         <FAQ />
-        <Registration />
+        <Registration onOpenAdmin={() => setAdminModalOpen(true)} />
       </main>
 
       {/* 7. Comprehensive Footer */}
       <Footer />
+
+      {/* 8. Admin Portal Modal */}
+      <AdminPortalModal
+        isOpen={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+      />
     </div>
   );
 }

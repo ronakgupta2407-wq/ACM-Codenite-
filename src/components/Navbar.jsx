@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, ArrowRight } from "lucide-react";
+import { Menu, X, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "./ui/Button";
 import { EVENT_DATA } from "../data/codeniteData";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { cn } from "../utils/cn";
 
-export function Navbar() {
+export function Navbar({ onOpenAdmin }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -119,8 +119,8 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Desktop CTA Button */}
-        <div className="hidden lg:flex items-center gap-3">
+        {/* Desktop CTA Button & Admin Access */}
+        <div className="hidden lg:flex items-center gap-2.5">
           <Button
             variant="primary"
             size="sm"
@@ -131,6 +131,17 @@ export function Navbar() {
             Register Now
             <ArrowRight className="w-3.5 h-3.5" />
           </Button>
+
+          {/* Admin Button on Right of Register */}
+          <button
+            type="button"
+            onClick={() => onOpenAdmin && onOpenAdmin()}
+            className="px-3.5 py-2 rounded-xl bg-navy-900/90 hover:bg-navy-800 text-slate-300 hover:text-acm-cyan border border-acm-blue/30 hover:border-acm-cyan text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+            title="Open ACM Organizer Admin Portal"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-acm-cyan" />
+            <span>Admin</span>
+          </button>
         </div>
 
         {/* Mobile Hamburger Button */}
@@ -182,7 +193,7 @@ export function Navbar() {
                 );
               })}
 
-              <div className="pt-4 border-t border-acm-blue/20 mt-2">
+              <div className="pt-4 border-t border-acm-blue/20 mt-2 space-y-2">
                 <Button
                   variant="primary"
                   size="md"
@@ -193,6 +204,18 @@ export function Navbar() {
                   Register Now
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (onOpenAdmin) onOpenAdmin();
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-acm-cyan text-xs font-mono font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <ShieldCheck className="w-4 h-4 text-acm-cyan" />
+                  <span>Admin Portal</span>
+                </button>
               </div>
             </div>
           </motion.div>

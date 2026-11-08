@@ -18,7 +18,7 @@ import { Countdown } from "../components/ui/Countdown";
 import { Card } from "../components/ui/Card";
 import { EVENT_DATA } from "../data/codeniteData";
 
-export function Hero() {
+export function Hero({ onOpenAdmin }) {
   const [glitchText, setGlitchText] = useState("CodeNite");
 
   // Glitch effect on title periodically
@@ -158,6 +158,16 @@ export function Hero() {
                 Register Your Team
                 <ArrowRight className="w-5 h-5 ml-1" />
               </Button>
+
+              <button
+                type="button"
+                onClick={() => onOpenAdmin && onOpenAdmin()}
+                className="px-5 py-3 rounded-xl bg-navy-900/90 hover:bg-navy-800 text-slate-200 hover:text-acm-cyan border border-acm-blue/30 hover:border-acm-cyan text-sm font-mono font-bold flex items-center gap-2 transition-all shadow-sm cursor-pointer"
+                title="Organizer Admin Portal"
+              >
+                <ShieldCheck className="w-4 h-4 text-acm-cyan" />
+                <span>Admin</span>
+              </button>
 
               <Button
                 variant="outline"
