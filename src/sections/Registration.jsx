@@ -40,21 +40,16 @@ const memberSchema = z.object({
   email: z.string().email("Please provide a valid email address"),
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, "Please enter a valid 10-digit mobile number"),
+    .min(10, "Phone number must have at least 10 digits")
+    .refine((val) => val.replace(/\D/g, "").length >= 10, {
+      message: "Please enter a valid 10-digit mobile number",
+    }),
   college: z.string().min(2, "College/Institute name is required"),
   enrollmentNo: z.string().min(2, "Student Enrollment / Roll No. is required"),
   year: z.string().min(1, "Please select year of study"),
   branch: z.string().min(2, "Branch / Department is required"),
-  github: z
-    .string()
-    .url("Enter a valid URL (e.g. https://github.com/...)")
-    .optional()
-    .or(z.literal("")),
-  linkedin: z
-    .string()
-    .url("Enter a valid URL (e.g. https://linkedin.com/in/...)")
-    .optional()
-    .or(z.literal("")),
+  github: z.string().optional().or(z.literal("")),
+  linkedin: z.string().optional().or(z.literal("")),
 });
 
 // Full registration schema
@@ -113,6 +108,7 @@ export function Registration() {
   const [teamRegistrationId, setTeamRegistrationId] = useState("");
   const [copiedId, setCopiedId] = useState(false);
   const [pdfDriveUrl, setPdfDriveUrl] = useState("");
+  const [step2ErrorMsg, setStep2ErrorMsg] = useState("");
 
   const steps = [
     { title: "Team Details" },
@@ -168,6 +164,82 @@ export function Registration() {
     }
   }, [selectedTeamSize, append, remove, currentMembers.length]);
 
+  // Demo Autofill for convenient testing
+  const handleFillDemoData = () => {
+    const size = parseInt(selectedTeamSize, 10);
+    const demoMembers = [
+      {
+        name: "Aarav Sharma",
+        email: "aarav.sharma@mitsgwalior.in",
+        phone: "9876543210",
+        college: "MITS Gwalior",
+        enrollmentNo: "0901CS221001",
+        year: "3rd Year",
+        branch: "Computer Science & Engineering",
+        github: "https://github.com/aarav",
+        linkedin: "https://linkedin.com/in/aarav",
+      },
+      {
+        name: "Priya Patel",
+        email: "priya.patel@mitsgwalior.in",
+        phone: "9876543211",
+        college: "MITS Gwalior",
+        enrollmentNo: "0901IT221045",
+        year: "3rd Year",
+        branch: "Information Technology",
+        github: "",
+        linkedin: "",
+      },
+      {
+        name: "Rohan Verma",
+        email: "rohan.verma@mitsgwalior.in",
+        phone: "9876543212",
+        college: "MITS Gwalior",
+        enrollmentNo: "0901AI221088",
+        year: "2nd Year",
+        branch: "Artificial Intelligence & Data Science",
+        github: "",
+        linkedin: "",
+      },
+      {
+        name: "Ananya Gupta",
+        email: "ananya.gupta@mitsgwalior.in",
+        phone: "9876543213",
+        college: "MITS Gwalior",
+        enrollmentNo: "0901EC221012",
+        year: "3rd Year",
+        branch: "Electronics & Communication",
+        github: "",
+        linkedin: "",
+      },
+      {
+        name: "Vikramaditya Singh",
+        email: "vikram.singh@mitsgwalior.in",
+        phone: "9876543214",
+        college: "MITS Gwalior",
+        enrollmentNo: "0901CS221099",
+        year: "3rd Year",
+        branch: "Computer Science & Engineering",
+        github: "",
+        linkedin: "",
+      },
+      {
+        name: "Neha Joshi",
+        email: "neha.joshi@mitsgwalior.in",
+        phone: "9876543215",
+        college: "MITS Gwalior",
+        enrollmentNo: "0901CS221102",
+        year: "2nd Year",
+        branch: "Computer Science & Engineering",
+        github: "",
+        linkedin: "",
+      },
+    ];
+
+    setValue("members", demoMembers.slice(0, size), { shouldValidate: true });
+    setStep2ErrorMsg("");
+  };
+
   // Step 1 Validation
   const handleNextFromStep1 = async () => {
     const isTeamNameValid = await trigger("teamName");
@@ -182,10 +254,23 @@ export function Registration() {
 
   // Step 2 Validation
   const handleNextFromStep2 = async () => {
+    setStep2ErrorMsg("");
     const isMembersValid = await trigger("members");
+
     if (isMembersValid) {
       setCurrentStep(3);
       window.scrollTo({ top: document.getElementById("register").offsetTop - 80, behavior: "smooth" });
+    } else {
+      setStep2ErrorMsg(
+        "Please fill in all required fields for each squad member (Full Name, valid Email, 10-digit Mobile Number, College, and Enrollment Number)."
+      );
+      // Smoothly scroll to the first element with validation error
+      setTimeout(() => {
+        const firstErr = document.querySelector(".text-rose-400, .border-rose-500, input:invalid");
+        if (firstErr) {
+          firstErr.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 80);
     }
   };
 
@@ -433,7 +518,7 @@ export function Registration() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-acm-blue/20 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-acm-blue/20 pb-4">
                   <div>
                     <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-white mb-1">
                       Step 2: Enter {selectedTeamSize} Member Profiles
@@ -443,9 +528,18 @@ export function Registration() {
                     </p>
                   </div>
 
-                  <span className="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-mono bg-sky-950 border border-sky-600/30 text-acm-cyan">
-                    Squad Size: {selectedTeamSize} Members
-                  </span>
+                  <div className="flex items-center gap-2 self-start sm:self-auto">
+                    <button
+                      type="button"
+                      onClick={handleFillDemoData}
+                      className="px-3 py-1.5 rounded-lg bg-sky-950/80 hover:bg-sky-900 border border-sky-400/30 text-sky-300 hover:text-white text-xs font-mono font-medium transition-colors cursor-pointer"
+                    >
+                      ⚡ Quick Autofill for Testing
+                    </button>
+                    <span className="px-3 py-1.5 rounded-lg text-xs font-mono bg-navy-900 border border-acm-blue/30 text-acm-cyan">
+                      {selectedTeamSize} Members
+                    </span>
+                  </div>
                 </div>
 
                 {/* Global Members Validation Error if any */}
@@ -541,7 +635,7 @@ export function Registration() {
                             </label>
                             <input
                               type="tel"
-                              maxLength={10}
+                              maxLength={15}
                               placeholder="e.g. 9876543210"
                               {...register(`members.${index}.phone`)}
                               className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
@@ -664,6 +758,23 @@ export function Registration() {
                     );
                   })}
                 </div>
+
+                {/* Validation Error Banner if any required field is missing */}
+                {step2ErrorMsg && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 rounded-xl bg-rose-950/60 border border-rose-500/60 text-rose-200 text-xs sm:text-sm flex items-start gap-3 shadow-md"
+                  >
+                    <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-heading font-bold text-white mb-0.5">
+                        Incomplete Member Details
+                      </div>
+                      <div>{step2ErrorMsg}</div>
+                    </div>
+                  </motion.div>
+                )}
 
                 {/* Step 2 Navigation Buttons */}
                 <div className="flex items-center justify-between pt-4 border-t border-acm-blue/20">
