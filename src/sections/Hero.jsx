@@ -7,8 +7,10 @@ import {
   Sparkles,
   ArrowRight,
   FileText,
-  Terminal,
-  Code2,
+  Trophy,
+  Moon,
+  Clock,
+  ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "../components/ui/Button";
@@ -21,7 +23,7 @@ export function Hero() {
 
   // Glitch effect on title periodically
   useEffect(() => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#%&";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const original = "CodeNite";
 
     const interval = setInterval(() => {
@@ -126,7 +128,7 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="flex flex-wrap gap-2.5 mb-8"
             >
-              {EVENT_DATA.chips.map((chip, index) => (
+              {EVENT_DATA.chips.map((chip) => (
                 <div
                   key={chip.label}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-navy-900/80 border border-acm-blue/30 text-xs font-mono text-slate-200 backdrop-blur-md"
@@ -180,7 +182,7 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Right Column: 3D Floating Interactive Code Card & Terminal */}
+          {/* Right Column: 3D Floating Official ACM Event Showcase Showcase Card (No raw code) */}
           <div className="lg:col-span-5 flex justify-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -191,79 +193,103 @@ export function Hero() {
               <Card
                 tilt
                 spotlight
-                className="bg-navy-900/90 border border-acm-blue/40 shadow-glow-md p-0 overflow-hidden"
+                className="bg-navy-900/95 border border-acm-blue/40 shadow-glow-lg p-7 relative overflow-hidden"
               >
-                {/* Terminal Window Header */}
-                <div className="px-4 py-3 bg-navy-950/90 border-b border-acm-blue/20 flex items-center justify-between">
+                {/* Background ambient radial glow inside card */}
+                <div className="absolute top-0 right-0 w-44 h-44 bg-acm-cyan/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-acm-blue/15 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Top Badge & Live Status */}
+                <div className="flex items-center justify-between pb-5 border-b border-acm-blue/20">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                    </span>
+                    <span className="text-xs font-mono font-bold tracking-wider uppercase text-emerald-400">
+                      Registrations Live
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 font-mono text-xs text-slate-400">
-                    <Terminal className="w-3.5 h-3.5 text-acm-cyan" />
-                    <span>codenite-config.json</span>
-                  </div>
-                  <div className="w-10" />
+
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-sky-950 text-acm-cyan border border-sky-600/30">
+                    Overnight Edition
+                  </span>
                 </div>
 
-                {/* Terminal Body Code */}
-                <div className="p-5 font-mono text-xs leading-relaxed text-slate-300 space-y-2 select-none overflow-x-auto">
-                  <div className="text-slate-500">// ACM MITS Student Chapter Hackathon Protocol</div>
-                  <div>
-                    <span className="text-purple-400">const</span>{" "}
-                    <span className="text-sky-300">hackathon</span> = &#123;
+                {/* Central ACM Chapter Emblem Display */}
+                <div className="py-6 flex flex-col items-center text-center">
+                  <div className="relative w-32 h-32 sm:w-36 sm:h-36 mb-4 flex items-center justify-center">
+                    {/* Glowing outer ring */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-acm-blue via-sky-400 to-acm-cyan opacity-40 blur-md animate-pulse-slow" />
+                    
+                    {/* Inner bordered circle */}
+                    <div className="relative w-full h-full rounded-full p-3 bg-navy-950 border-2 border-acm-cyan/50 shadow-glow-md flex items-center justify-center">
+                      <img
+                        src={EVENT_DATA.organizer.acmLogo}
+                        alt="ACM MITS Student Chapter"
+                        className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]"
+                      />
+                    </div>
                   </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">event</span>:{" "}
-                    <span className="text-emerald-300">"CodeNite 2027"</span>,
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">organizer</span>:{" "}
-                    <span className="text-emerald-300">"ACM MITS Student Chapter"</span>,
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">date</span>:{" "}
-                    <span className="text-emerald-300">"17 January 2027"</span>,
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">duration</span>:{" "}
-                    <span className="text-amber-300">12</span>, <span className="text-slate-500">// Overnight</span>
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">allowedTeamSizes</span>: [
-                    <span className="text-cyan-300 font-bold">4</span>,{" "}
-                    <span className="text-cyan-300 font-bold">6</span>
-                    ], <span className="text-slate-500">// Strictly 4 or 6 members</span>
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">femaleParticipantMandatory</span>:{" "}
-                    <span className="text-rose-400 font-bold">false</span>, <span className="text-slate-500">// Open to all</span>
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">registrationFee</span>:{" "}
-                    <span className="text-emerald-400 font-bold">0</span>, <span className="text-slate-500">// 100% Free</span>
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-sky-400">totalPrizePool</span>:{" "}
-                    <span className="text-emerald-300">"₹1,50,000+"</span>
-                  </div>
-                  <div>&#125;;</div>
 
-                  <div className="pt-2 text-slate-500">// Status check</div>
-                  <div className="flex items-center gap-2 text-emerald-400 font-semibold pt-1">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>System Online & Ready for Registrations</span>
+                  <h3 className="font-heading font-black text-2xl text-white tracking-tight">
+                    CodeNite 2027
+                  </h3>
+                  <p className="text-xs font-mono text-acm-cyan mt-1">
+                    ACM MITS Student Chapter • Est. 2014
+                  </p>
+                </div>
+
+                {/* Key Event Highlights Grid */}
+                <div className="grid grid-cols-2 gap-3 pt-2 pb-6 border-y border-acm-blue/20 text-xs">
+                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
+                    <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+                    <div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono">Prize Pool</div>
+                      <div className="font-heading font-bold text-white text-sm">₹1,50,000+</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
+                    <Clock className="w-4 h-4 text-sky-400 shrink-0" />
+                    <div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono">Duration</div>
+                      <div className="font-heading font-bold text-white text-sm">12 Hours</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
+                    <UsersRound className="w-4 h-4 text-acm-cyan shrink-0" />
+                    <div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono">Team Size</div>
+                      <div className="font-heading font-bold text-white text-sm">4 or 6 Only</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono">Registration</div>
+                      <div className="font-heading font-bold text-white text-sm">100% Free</div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Footer status bar */}
-                <div className="px-4 py-2 bg-navy-950/60 border-t border-acm-blue/20 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-acm-cyan animate-pulse" />
-                    <span>Branch: main</span>
+                {/* Bottom Quick Action */}
+                <div className="pt-5 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
+                    <MapPin className="w-3.5 h-3.5 text-acm-cyan" />
+                    <span>MITS Gwalior Campus</span>
                   </div>
-                  <span>UTF-8 • Node.js</span>
+
+                  <button
+                    type="button"
+                    onClick={() => scrollTo("register")}
+                    className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-acm-cyan hover:text-white transition-colors cursor-pointer group"
+                  >
+                    <span>Register</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
               </Card>
             </motion.div>

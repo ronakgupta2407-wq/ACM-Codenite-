@@ -3,25 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export function Loader({ onFinish }) {
   const [progress, setProgress] = useState(0);
-  const [typedText, setTypedText] = useState("");
-  const targetText = "CodeNite_2027.exe";
 
   useEffect(() => {
-    // Progress counter animation from 0 to 100 over ~2.4s
+    // Progress counter animation from 0 to 100 over ~2.2s
     const startTime = Date.now();
-    const duration = 2400;
+    const duration = 2200;
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
       const currentProgress = Math.min(Math.floor((elapsed / duration) * 100), 100);
       setProgress(currentProgress);
-
-      // Typing effect synchronized
-      const charIndex = Math.min(
-        Math.floor((elapsed / duration) * targetText.length),
-        targetText.length
-      );
-      setTypedText(targetText.slice(0, charIndex));
 
       if (currentProgress >= 100) {
         clearInterval(interval);
@@ -34,7 +25,7 @@ export function Loader({ onFinish }) {
     return () => clearInterval(interval);
   }, [onFinish]);
 
-  // Circumference for 120px radius circle = 2 * PI * 54 ≈ 339.29
+  // Circumference for 58px radius circle = 2 * PI * 58 ≈ 364.42
   const radius = 58;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
@@ -111,11 +102,9 @@ export function Loader({ onFinish }) {
           </div>
         </div>
 
-        {/* Typing Terminal Text */}
-        <div className="mt-8 flex items-center gap-1.5 font-mono text-sm sm:text-base text-acm-cyan">
-          <span className="text-slate-500">$</span>
-          <span>{typedText}</span>
-          <span className="w-2 h-4 bg-acm-electric animate-pulse inline-block" />
+        {/* Title */}
+        <div className="mt-8 font-heading font-extrabold text-lg sm:text-xl text-white tracking-wide">
+          CodeNite 2027
         </div>
 
         {/* Subtitle & Percentage Counter */}
