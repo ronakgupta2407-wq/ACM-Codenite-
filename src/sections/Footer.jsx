@@ -6,6 +6,7 @@ import {
   ArrowUp,
   Instagram,
   Linkedin,
+  Github,
   ExternalLink,
   Sparkles,
   Code2,
@@ -226,9 +227,36 @@ export function Footer() {
                     <h5 className="font-heading font-black text-sm text-white group-hover:text-cyan-300 transition-colors truncate">
                       {dev.name}
                     </h5>
-                    <p className="text-[11px] font-mono text-slate-400 truncate">
+                    <p className="text-[11px] font-mono text-slate-400 truncate mb-1">
                       {dev.role}
                     </p>
+                    {/* Direct Social Links */}
+                    <div className="flex items-center gap-1.5">
+                      {dev.socials?.github && (
+                        <a
+                          href={dev.socials.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          title={`${dev.name} on GitHub`}
+                          className="p-1 rounded-md bg-navy-900/90 hover:bg-cyan-950 text-slate-400 hover:text-cyan-300 border border-slate-700/60 hover:border-cyan-400/50 transition-colors"
+                        >
+                          <Github className="w-3 h-3" />
+                        </a>
+                      )}
+                      {dev.socials?.linkedin && (
+                        <a
+                          href={dev.socials.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          title={`${dev.name} on LinkedIn`}
+                          className="p-1 rounded-md bg-navy-900/90 hover:bg-cyan-950 text-slate-400 hover:text-cyan-300 border border-slate-700/60 hover:border-cyan-400/50 transition-colors"
+                        >
+                          <Linkedin className="w-3 h-3" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                   <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-400 group-hover:bg-cyan-400 group-hover:text-black transition-colors shrink-0">
                     <ExternalLink className="w-3.5 h-3.5" />
