@@ -10,6 +10,25 @@ import {
 const router = express.Router();
 
 /**
+ * Returns a human-readable, formatted Indian Standard Time (IST) timestamp
+ * Example: "10/11/2026, 12:18:46 am IST"
+ */
+function getIndianTimestamp() {
+  return (
+    new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    }).format(new Date()) + ' IST'
+  );
+}
+
+/**
  * GET /api/teams
  * Query params: ?status=ACTIVE|CANCELLED &search=...
  */
@@ -191,7 +210,7 @@ router.post('/register', async (req, res) => {
       members,
       paymentScreenshot: body.paymentScreenshot || null,
       notes: body.notes || null,
-      timestamp: new Date().toISOString(),
+      timestamp: getIndianTimestamp(),
     });
 
     let pdfUrl = null;

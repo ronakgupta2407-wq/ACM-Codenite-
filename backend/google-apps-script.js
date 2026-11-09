@@ -245,8 +245,34 @@ function doPost(e) {
     setupSheetHeaders(sheet);
 
     const data = JSON.parse(e.postData.contents);
+
+    // Support administrative clearing of test rows from the sheet
+    if (data.action === "CLEAR_TEST_DATA" || data.clearSheet === true) {
+      const lastRow = sheet.getLastRow();
+      if (lastRow > 1) {
+        sheet.deleteRows(2, lastRow - 1);
+      }
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          status: "success",
+          message: "All test data successfully purged from Google Sheet Registrations tab.",
+          remainingRows: sheet.getLastRow()
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     const members = data.members || [];
-    const timestamp = data.timestamp || new Date().toISOString();
+    
+    // Format timestamp in Indian Standard Time (IST)
+    let timestamp = data.timestamp;
+    if (!timestamp || typeof timestamp !== "string" || !timestamp.includes("IST")) {
+      try {
+        const d = timestamp ? new Date(timestamp) : new Date();
+        timestamp = Utilities.formatDate(d, "Asia/Kolkata", "dd/MM/yyyy, hh:mm:ss a 'IST'");
+      } catch (_) {
+        timestamp = Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy, hh:mm:ss a 'IST'");
+      }
+    }
     const registrationId = data.registrationId || `CN27-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     data.registrationId = registrationId;
 
