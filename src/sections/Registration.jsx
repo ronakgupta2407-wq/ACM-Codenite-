@@ -107,17 +107,17 @@ const registrationSchema = z
     }
   });
 
-// Initial member template
+// Initial member template - completely empty without prefilled data
 const createMemberTemplate = () => ({
   name: "",
   email: "",
   phone: "",
-  gender: "Male",
-  college: "MITS Gwalior",
+  gender: "",
+  college: "",
   enrollmentNo: "",
-  year: "3rd Year",
-  branch: "Computer Science & Engineering",
-  city: "Gwalior, MP",
+  year: "",
+  branch: "",
+  city: "",
 });
 
 export function Registration({ onOpenAdmin }) {
@@ -854,6 +854,7 @@ export function Registration({ onOpenAdmin }) {
                               {...register(`members.${index}.gender`)}
                               className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
                             >
+                              <option value="">Select Gender</option>
                               <option value="Male">Male</option>
                               <option value="Female">Female</option>
                               <option value="Other">Other / Non-Binary</option>
@@ -911,12 +912,18 @@ export function Registration({ onOpenAdmin }) {
                               {...register(`members.${index}.year`)}
                               className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
                             >
-                              <option value="1st Year">1st Year (Fresher)</option>
-                              <option value="2nd Year">2nd Year (Sophomore)</option>
-                              <option value="3rd Year">3rd Year (Junior)</option>
-                              <option value="4th Year">4th Year (Senior)</option>
-                              <option value="Postgraduate">Postgraduate (M.Tech/MCA)</option>
+                              <option value="">Select Year</option>
+                              <option value="1st Year">1st Year</option>
+                              <option value="2nd Year">2nd Year</option>
+                              <option value="3rd Year">3rd Year</option>
+                              <option value="4th Year">4th Year</option>
+                              <option value="Postgraduate">Postgraduate</option>
                             </select>
+                            {errors.members?.[index]?.year && (
+                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
+                                {errors.members[index].year.message}
+                              </p>
+                            )}
                           </div>
 
                           {/* Branch */}
