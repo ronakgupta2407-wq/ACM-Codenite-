@@ -967,21 +967,10 @@ export function Registration({ onOpenAdmin }) {
                       {formValues.teamName}
                     </h4>
                     <div className="flex flex-wrap items-center gap-3 mt-2 text-xs font-mono text-slate-300">
-                      <span className="px-2.5 py-0.5 rounded bg-navy-900 border border-acm-blue/30">
-                        Track: {formValues.track}
-                      </span>
                       <span className="px-2.5 py-0.5 rounded bg-sky-950 border border-sky-600/30 text-acm-cyan font-bold">
-                        Size: {formValues.teamSize} Members
-                      </span>
-                      <span className="px-2.5 py-0.5 rounded bg-navy-900 border border-acm-blue/30 text-slate-300">
-                        Level: {formValues.experienceLevel}
+                        Squad Size: {formValues.teamSize} Members
                       </span>
                     </div>
-                    {formValues.projectIdea && (
-                      <div className="mt-2 text-xs text-slate-300 font-mono">
-                        <span className="text-acm-cyan font-semibold">Concept:</span> {formValues.projectIdea}
-                      </div>
-                    )}
                   </div>
 
                   <Button
@@ -990,7 +979,7 @@ export function Registration({ onOpenAdmin }) {
                     onClick={() => setCurrentStep(1)}
                   >
                     <Edit2 className="w-3.5 h-3.5 mr-1" />
-                    Edit Team Name / Track
+                    Edit Team Details
                   </Button>
                 </div>
 
@@ -1024,21 +1013,12 @@ export function Registration({ onOpenAdmin }) {
                             {idx === 0 ? "LEADER" : `MEMBER ${idx + 1}`}
                           </span>
                         </div>
-                        <div className="text-slate-300">
+                        <div className="text-slate-200">
                           <strong>{m.gender || "Gender N/A"}</strong> • {m.city || "City N/A"}
                         </div>
                         <div className="text-slate-400">{m.email} • {m.phone}</div>
-                        <div className="text-slate-400">{m.college} ({m.enrollmentNo})</div>
-                        <div className="text-slate-400">{m.branch} - {m.year}</div>
-                        <div className="text-sky-300 font-mono text-[11px] pt-1 border-t border-acm-blue/15">
-                          T-Shirt: <strong>{m.tshirt || "L"}</strong> • Food: <strong>{m.dietary || "Veg"}</strong>
-                        </div>
-                        {(m.github || m.linkedin) && (
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {m.github && <span>GH: {m.github} </span>}
-                            {m.linkedin && <span>LI: {m.linkedin}</span>}
-                          </div>
-                        )}
+                        <div className="text-slate-400">{m.college} • Roll: {m.enrollmentNo}</div>
+                        <div className="text-slate-400">{m.branch} • {m.year}</div>
                       </div>
                     ))}
                   </div>

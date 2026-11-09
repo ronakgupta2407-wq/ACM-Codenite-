@@ -24,24 +24,20 @@ export function generateRegistrationSlipHtml(data, registrationId) {
             </span>
             <div>${m.name || "N/A"}</div>
             <div style="font-size: 11px; color: #64748b; font-weight: normal; margin-top: 2px;">
-              ${m.gender || "Gender N/A"} &bull; ${m.city || "City N/A"}
+              ${m.gender || "Gender N/A"}
             </div>
           </td>
           <td style="padding: 10px; font-size: 12px; color: #334155;">
             <strong>${m.college || "N/A"}</strong>
-            <div style="color: #64748b; font-size: 11px; margin-top: 2px;">Roll: ${m.enrollmentNo || "N/A"}</div>
+            <div style="color: #64748b; font-size: 11px; margin-top: 2px;">Enrollment: ${m.enrollmentNo || "N/A"}</div>
           </td>
           <td style="padding: 10px; font-size: 12px; color: #334155;">
             <div>${m.email || "N/A"}</div>
             <div style="font-family: monospace; color: #0085CA; font-weight: bold; font-size: 11px; margin-top: 2px;">${m.phone || "N/A"}</div>
           </td>
           <td style="padding: 10px; font-size: 12px; color: #334155;">
-            ${m.branch || "N/A"}
-            <div style="color: #64748b; font-size: 11px;">${m.year || "N/A"}</div>
-          </td>
-          <td style="padding: 10px; font-size: 11px; color: #334155;">
-            <div><strong>T-Shirt:</strong> ${m.tshirt || "L"}</div>
-            <div style="color: #64748b; margin-top: 2px;"><strong>Diet:</strong> ${m.dietary || "Veg"}</div>
+            <div><strong>${m.branch || "N/A"}</strong></div>
+            <div style="color: #64748b; font-size: 11px;">${m.year || "N/A"} &bull; ${m.city || "N/A"}</div>
           </td>
         </tr>
       `;
@@ -206,16 +202,16 @@ export function generateRegistrationSlipHtml(data, registrationId) {
             <div class="meta-item-value">${data.teamName}</div>
           </div>
           <div>
-            <div class="meta-item-label">Innovation Track</div>
-            <div class="meta-item-value">${data.track}</div>
-          </div>
-          <div>
             <div class="meta-item-label">Squad Size</div>
-            <div class="meta-item-value">${data.teamSize} Members</div>
+            <div class="meta-item-value">${data.teamSize || members.length} Members</div>
           </div>
           <div>
-            <div class="meta-item-label">Date & Mode</div>
-            <div class="meta-item-value">17 Jan 2027 &bull; Campus</div>
+            <div class="meta-item-label">Event Date</div>
+            <div class="meta-item-value">17 Jan 2027</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Reporting Time</div>
+            <div class="meta-item-value">06:00 PM IST</div>
           </div>
         </div>
 
@@ -223,11 +219,10 @@ export function generateRegistrationSlipHtml(data, registrationId) {
         <table class="table-members">
           <thead>
             <tr>
-              <th style="width: 24%;">Member, Gender & City</th>
-              <th style="width: 24%;">College & Roll No.</th>
-              <th style="width: 20%;">Email & Phone</th>
-              <th style="width: 16%;">Branch & Year</th>
-              <th style="width: 16%;">Swag & Diet</th>
+              <th style="width: 25%;">Member & Gender</th>
+              <th style="width: 25%;">College & Enrollment</th>
+              <th style="width: 25%;">Email & Phone</th>
+              <th style="width: 25%;">Branch, Year & City</th>
             </tr>
           </thead>
           <tbody>
