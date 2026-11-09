@@ -417,8 +417,8 @@ export const EVENT_DATA = {
         "Mobile-First Responsive Layout & Fluid Touch Interactions",
       ],
       socials: {
-        github: "https://github.com",
-        linkedin: "https://www.linkedin.com/company/mits-acm-student-chapter-2026-27/posts/?feedView=all",
+        github: "https://github.com/adityaahamana18",
+        linkedin: "https://www.linkedin.com/in/adityaahamana/",
         email: "mailto:aditya.ahamana@mitsgwalior.in",
       },
     },
