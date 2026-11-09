@@ -6,13 +6,52 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
+ * Safely parses response without throwing SyntaxError on HTML / non-JSON responses
+ */
+async function parseResponseSafe(res) {
+  const contentType = res.headers.get('content-type') || '';
+  let data = null;
+
+  if (contentType.includes('application/json')) {
+    try {
+      data = await res.json();
+    } catch (_) {
+      data = null;
+    }
+  } else {
+    try {
+      const text = await res.text();
+      // If server returned a clean string message rather than HTML error page
+      if (text && !text.includes('<html') && !text.includes('<!DOCTYPE')) {
+        data = { message: text };
+      }
+    } catch (_) {
+      data = null;
+    }
+  }
+
+  if (!res.ok) {
+    const errorMsg =
+      (data && data.message) ||
+      (data && data.error) ||
+      `Server temporarily unreachable (Status ${res.status}). Please retry in a moment.`;
+    const err = new Error(errorMsg);
+    err.status = res.status;
+    err.data = data;
+    throw err;
+  }
+
+  return data || {};
+}
+
+/**
  * Check if the backend server is reachable
  */
 export async function checkBackendHealth() {
   try {
     const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(2500) });
     if (!res.ok) return { online: false };
-    const data = await res.json();
+    const data = await parseResponseSafe(res);
     return { online: true, data };
   } catch {
     return { online: false };
@@ -31,11 +70,7 @@ export async function registerTeamApi(payload) {
     body: JSON.stringify(payload),
   });
 
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.message || `Server responded with status ${res.status}`);
-  }
-  return data;
+  return await parseResponseSafe(res);
 }
 
 /**
@@ -44,8 +79,7 @@ export async function registerTeamApi(payload) {
 export async function fetchTeamsApi(status = '') {
   const url = status ? `${API_BASE}/teams?status=${encodeURIComponent(status)}` : `${API_BASE}/teams`;
   const res = await fetch(url);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Failed to fetch teams');
+  const data = await parseResponseSafe(res);
   return data.teams || [];
 }
 
@@ -54,8 +88,7 @@ export async function fetchTeamsApi(status = '') {
  */
 export async function searchTeamsApi(query) {
   const res = await fetch(`${API_BASE}/teams/search?q=${encodeURIComponent(query)}`);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Failed to search teams');
+  const data = await parseResponseSafe(res);
   return data.teams || [];
 }
 
@@ -70,9 +103,7 @@ export async function adminLoginApi(username, password) {
     },
     body: JSON.stringify({ username, password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Invalid administrator credentials');
-  return data;
+  return await parseResponseSafe(res);
 }
 
 /**
@@ -86,9 +117,7 @@ export async function cancelTeamApi(registrationId, reason) {
     },
     body: JSON.stringify({ reason }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Failed to cancel registration');
-  return data;
+  return await parseResponseSafe(res);
 }
 
 /**
@@ -98,9 +127,7 @@ export async function reactivateTeamApi(registrationId) {
   const res = await fetch(`${API_BASE}/admin/teams/${encodeURIComponent(registrationId)}/reactivate`, {
     method: 'PATCH',
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Failed to reactivate registration');
-  return data;
+  return await parseResponseSafe(res);
 }
 
 /**
@@ -108,7 +135,6 @@ export async function reactivateTeamApi(registrationId) {
  */
 export async function fetchStatsApi() {
   const res = await fetch(`${API_BASE}/admin/stats`);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Failed to fetch stats');
+  const data = await parseResponseSafe(res);
   return data.stats;
 }

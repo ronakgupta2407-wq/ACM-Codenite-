@@ -332,12 +332,23 @@ export function Registration({ onOpenAdmin }) {
           }
         }
       } catch (apiErr) {
-        // If it's a conflict or business logic error, throw it so the user can fix the input
-        if (apiErr.message && (apiErr.message.includes("already registered") || apiErr.message.includes("valid"))) {
+        // Only re-throw if it's an explicit business logic or duplicate validation error from the backend (HTTP 400 or 409)
+        const isClientValidationError =
+          apiErr.status === 400 ||
+          apiErr.status === 409 ||
+          (apiErr.message &&
+            !apiErr.message.toLowerCase().includes("json") &&
+            (apiErr.message.includes("already registered") ||
+              apiErr.message.includes("must contain") ||
+              apiErr.message.includes("unique team name") ||
+              apiErr.message.includes("provide a valid")));
+
+        if (isClientValidationError) {
           throw apiErr;
         }
-        // Otherwise, server might be offline - proceed smoothly with local fallback & direct Google Sheets sync
-        console.warn("Backend API not reachable, falling back to local persistent store:", apiErr.message);
+
+        // Otherwise (server restarted or temporarily offline), log notice and proceed gracefully with local storage
+        console.warn("Backend API temporarily unreachable, persisting locally:", apiErr.message);
 
         const googleScriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL;
         if (googleScriptUrl) {
@@ -347,9 +358,12 @@ export function Registration({ onOpenAdmin }) {
               headers: { "Content-Type": "text/plain;charset=utf-8" },
               body: JSON.stringify(payload),
             });
-            const resData = await res.json();
-            if (resData && resData.pdfUrl) {
-              setPdfDriveUrl(resData.pdfUrl);
+            const contentType = res.headers.get("content-type") || "";
+            if (contentType.includes("application/json")) {
+              const resData = await res.json();
+              if (resData && resData.pdfUrl) {
+                setPdfDriveUrl(resData.pdfUrl);
+              }
             }
           } catch (gasErr) {
             console.warn("Direct Google Script sync notice:", gasErr);
