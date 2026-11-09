@@ -10,6 +10,7 @@ import {
   ArrowRight,
   CheckCircle2,
   ListTodo,
+  Lock,
 } from "lucide-react";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { Card } from "../components/ui/Card";
@@ -91,7 +92,10 @@ export function Tracks() {
 
                   {/* Card Footer CTA */}
                   <div className="pt-4 border-t border-acm-blue/20 flex items-center justify-between text-xs font-heading font-semibold text-sky-400 group-hover:text-white transition-colors">
-                    <span>View Problem Statements</span>
+                    <span className="flex items-center gap-1.5 text-amber-300">
+                      <Lock className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Problem Statements: Coming Soon</span>
+                    </span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </Card>
@@ -116,23 +120,51 @@ export function Tracks() {
               {selectedTrack.details}
             </div>
 
-            {/* Problem Statements Section */}
-            <div>
-              <div className="flex items-center gap-2 mb-3 text-sm font-heading font-bold text-white uppercase tracking-wider">
-                <ListTodo className="w-4 h-4 text-acm-cyan" />
-                <span>Sample Problem Statements & Scenarios</span>
+            {/* Problem Statements Section with COMING SOON Banner */}
+            <div className="space-y-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent border border-amber-500/40 flex items-start gap-3.5 shadow-sm">
+                <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 mt-0.5">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-heading font-black text-sm sm:text-base text-amber-300 uppercase tracking-wider">
+                      Problem Statements: Coming Soon
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 animate-pulse">
+                      LOCKED
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Official problem statements for this track will be unveiled live at the <strong>Opening Ceremony on 17 January 2027 (07:00 PM IST)</strong>. Form your team and secure your registration today!
+                  </p>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                {selectedTrack.sampleProblems.map((statement, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl bg-navy-950/70 border border-acm-blue/20 flex items-start gap-3 text-slate-300 text-sm leading-relaxed hover:border-acm-cyan/40 transition-colors"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-acm-cyan shrink-0 mt-0.5" />
-                    <span>{statement}</span>
-                  </div>
-                ))}
+              <div>
+                <div className="flex items-center gap-2 mb-3 text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                  <ListTodo className="w-4 h-4 text-acm-cyan" />
+                  <span>Domain Scope & Focus Areas:</span>
+                </div>
+
+                <div className="space-y-2.5">
+                  {selectedTrack.sampleProblems.map((statement, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3.5 rounded-xl bg-navy-950/70 border border-acm-blue/20 flex items-start gap-3 text-slate-300 text-xs sm:text-sm leading-relaxed hover:border-acm-cyan/40 transition-colors"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-acm-blue/20 text-acm-cyan text-[11px] font-mono flex items-center justify-center shrink-0 mt-0.5 font-bold">
+                        0{idx + 1}
+                      </span>
+                      <div>
+                        <span className="text-white font-medium">{statement}</span>
+                        <div className="text-[11px] text-amber-300/80 font-mono mt-0.5">
+                          Detailed problem statement challenge releasing on hackathon night • Stay tuned!
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
