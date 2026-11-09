@@ -6,92 +6,33 @@
 const STORAGE_KEY = "acm_codenite_registered_teams";
 const ADMIN_AUTH_KEY = "acm_codenite_admin_auth";
 
-// Initial seed teams so the admin portal is immediately rich with data
-const INITIAL_SEED_TEAMS = [
-  {
-    registrationId: "CN27-ALPHA1",
-    teamName: "Neural Ninjas",
-    track: "AI & Intelligent Systems",
-    teamSize: "4",
-    status: "ACTIVE", // "ACTIVE" | "CANCELLED"
-    timestamp: "2026-11-06T14:30:00.000Z",
-    cancelledBy: null,
-    cancelledAt: null,
-    cancellationReason: null,
-    members: [
-      { name: "Devansh Saxena", email: "devansh.cs@mitsgwalior.in", phone: "9826012345", college: "MITS Gwalior", enrollmentNo: "0901CS221034", year: "3rd Year", branch: "CSE" },
-      { name: "Ananya Sharma", email: "ananya.sh@mitsgwalior.in", phone: "9826012346", college: "MITS Gwalior", enrollmentNo: "0901CS221015", year: "3rd Year", branch: "CSE" },
-      { name: "Kabir Mehra", email: "kabir.m@mitsgwalior.in", phone: "9826012347", college: "MITS Gwalior", enrollmentNo: "0901IT221056", year: "3rd Year", branch: "IT" },
-      { name: "Ria Sengupta", email: "ria.s@mitsgwalior.in", phone: "9826012348", college: "MITS Gwalior", enrollmentNo: "0901AI221089", year: "2nd Year", branch: "AI-DS" }
-    ]
-  },
-  {
-    registrationId: "CN27-BETA88",
-    teamName: "Cipher Blockers",
-    track: "Web3 & Decentralized Futures",
-    teamSize: "6",
-    status: "ACTIVE",
-    timestamp: "2026-11-07T10:15:00.000Z",
-    cancelledBy: null,
-    cancelledAt: null,
-    cancellationReason: null,
-    members: [
-      { name: "Aditya Pratap", email: "aditya.p@mitsgwalior.in", phone: "9893112233", college: "MITS Gwalior", enrollmentNo: "0901CS211005", year: "4th Year", branch: "CSE" },
-      { name: "Tanvi Verma", email: "tanvi.v@mitsgwalior.in", phone: "9893112234", college: "MITS Gwalior", enrollmentNo: "0901IT211024", year: "4th Year", branch: "IT" },
-      { name: "Harsh Vardhan", email: "harsh.v@mitsgwalior.in", phone: "9893112235", college: "MITS Gwalior", enrollmentNo: "0901CS211054", year: "4th Year", branch: "CSE" },
-      { name: "Pooja Mishra", email: "pooja.m@mitsgwalior.in", phone: "9893112236", college: "MITS Gwalior", enrollmentNo: "0901EC211078", year: "4th Year", branch: "ECE" },
-      { name: "Yash Tiwari", email: "yash.t@mitsgwalior.in", phone: "9893112237", college: "MITS Gwalior", enrollmentNo: "0901CS221099", year: "3rd Year", branch: "CSE" },
-      { name: "Simran Kaur", email: "simran.k@mitsgwalior.in", phone: "9893112238", college: "MITS Gwalior", enrollmentNo: "0901AI221045", year: "3rd Year", branch: "AI-DS" }
-    ]
-  },
-  {
-    registrationId: "CN27-CYBER9",
-    teamName: "ZeroDay Guardians",
-    track: "Cybersecurity & Zero Trust",
-    teamSize: "4",
-    status: "ACTIVE",
-    timestamp: "2026-11-08T09:00:00.000Z",
-    cancelledBy: null,
-    cancelledAt: null,
-    cancellationReason: null,
-    members: [
-      { name: "Rishabh Jain", email: "rishabh.j@mitsgwalior.in", phone: "9755223344", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221077", year: "3rd Year", branch: "CSE", city: "Gwalior, MP", tshirt: "L", dietary: "Vegetarian" },
-      { name: "Shreya Dubey", email: "shreya.d@mitsgwalior.in", phone: "9755223345", gender: "Female", college: "MITS Gwalior", enrollmentNo: "0901IT221067", year: "3rd Year", branch: "IT", city: "Gwalior, MP", tshirt: "M", dietary: "Vegetarian" },
-      { name: "Aman Gupta", email: "aman.g@mitsgwalior.in", phone: "9755223346", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221012", year: "3rd Year", branch: "CSE", city: "Morena, MP", tshirt: "XL", dietary: "Vegetarian" },
-      { name: "Siddharth Roy", email: "siddharth.r@mitsgwalior.in", phone: "9755223347", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901EC221088", year: "3rd Year", branch: "ECE", city: "Gwalior, MP", tshirt: "L", dietary: "Non-Vegetarian" }
-    ]
-  },
-  {
-    registrationId: "CN27-VANG55",
-    teamName: "Quantum Core",
-    track: "Open Innovation & Green Tech",
-    teamSize: "5",
-    status: "ACTIVE",
-    timestamp: "2026-11-08T15:00:00.000Z",
-    cancelledBy: null,
-    cancelledAt: null,
-    cancellationReason: null,
-    members: [
-      { name: "Aayush Saxena", email: "aayush.s@mitsgwalior.in", phone: "9826119901", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221008", year: "3rd Year", branch: "CSE", city: "Gwalior, MP", tshirt: "L", dietary: "Vegetarian" },
-      { name: "Megha Soni", email: "megha.s@mitsgwalior.in", phone: "9826119902", gender: "Female", college: "MITS Gwalior", enrollmentNo: "0901IT221033", year: "3rd Year", branch: "IT", city: "Jabalpur, MP", tshirt: "S", dietary: "Vegetarian" },
-      { name: "Arjun Nair", email: "arjun.n@mitsgwalior.in", phone: "9826119903", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901AI221019", year: "2nd Year", branch: "AI-DS", city: "Indore, MP", tshirt: "XL", dietary: "Non-Vegetarian" },
-      { name: "Divya Chauhan", email: "divya.c@mitsgwalior.in", phone: "9826119904", gender: "Female", college: "MITS Gwalior", enrollmentNo: "0901EE221041", year: "3rd Year", branch: "EE", city: "Gwalior, MP", tshirt: "M", dietary: "Jain" },
-      { name: "Kunal Bansal", email: "kunal.b@mitsgwalior.in", phone: "9826119905", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221052", year: "3rd Year", branch: "CSE", city: "Bhopal, MP", tshirt: "L", dietary: "Vegetarian" }
-    ]
-  }
-];
+const LEGACY_TEST_TEAM_IDS = new Set([
+  "CN27-ALPHA1",
+  "CN27-BETA88",
+  "CN27-CYBER9",
+  "CN27-VANG55",
+]);
 
 export function getRegisteredTeams() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_SEED_TEAMS));
-      return INITIAL_SEED_TEAMS;
+    if (!raw) return [];
+
+    const storedTeams = JSON.parse(raw);
+    if (!Array.isArray(storedTeams)) {
+      throw new TypeError("Stored registrations must be an array");
     }
-    return JSON.parse(raw);
+
+    const teams = storedTeams.filter(
+      (team) => !LEGACY_TEST_TEAM_IDS.has(team.registrationId)
+    );
+    if (teams.length !== storedTeams.length) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
+    }
+    return teams;
   } catch (err) {
     console.error("Failed to read teams from storage", err);
-    return INITIAL_SEED_TEAMS;
+    return [];
   }
 }
 
@@ -112,6 +53,7 @@ export function saveRegisteredTeam(teamData) {
     return newRecord;
   } catch (err) {
     console.error("Failed to save team", err);
+    throw err;
   }
 }
 
