@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Github, Linkedin, Mail, Code2, Sparkles, CheckCircle2, Terminal, Cpu } from "lucide-react";
+import { X, Github, Linkedin, Mail, Code2, Sparkles, CheckCircle2, Terminal, Cpu, ExternalLink } from "lucide-react";
 
 /**
  * DeveloperModal
@@ -172,10 +172,11 @@ export function DeveloperModal({ developer, isOpen, onClose }) {
                   href={developer.socials.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 text-slate-200 hover:text-white border border-cyan-400/40 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
+                  className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-navy-900/90 hover:bg-cyan-950 text-slate-200 hover:text-white border border-cyan-400/40 hover:border-cyan-300 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_20px_rgba(6,182,212,0.35)]"
                 >
                   <Github className="w-4 h-4 text-cyan-300" />
-                  <span>GitHub</span>
+                  <span>GitHub Profile</span>
+                  <ExternalLink className="w-3 h-3 text-cyan-400/70" />
                 </a>
               )}
 
@@ -184,10 +185,11 @@ export function DeveloperModal({ developer, isOpen, onClose }) {
                   href={developer.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 text-slate-200 hover:text-white border border-cyan-400/40 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
+                  className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-navy-900/90 hover:bg-[#071d49] text-slate-200 hover:text-white border border-sky-400/40 hover:border-sky-300 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(14,165,233,0.15)] hover:shadow-[0_0_20px_rgba(14,165,233,0.35)]"
                 >
                   <Linkedin className="w-4 h-4 text-sky-400" />
-                  <span>LinkedIn</span>
+                  <span>LinkedIn Profile</span>
+                  <ExternalLink className="w-3 h-3 text-sky-400/70" />
                 </a>
               )}
             </div>
