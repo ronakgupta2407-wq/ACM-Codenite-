@@ -17,7 +17,7 @@ export function FAQ() {
 
         <Accordion items={EVENT_DATA.faqs} allowMultiple />
 
-        {/* Discord/Helpdesk prompt */}
+        {/* Helpdesk & Social Contact prompt */}
         <div className="mt-12 text-center p-6 rounded-2xl bg-navy-900/60 border border-acm-blue/30 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-left">
             <div className="p-2 rounded-xl bg-acm-blue/20 text-acm-cyan">
@@ -28,18 +28,18 @@ export function FAQ() {
                 Have another question not listed here?
               </div>
               <div className="text-xs text-slate-400">
-                Join our Discord community or ping the ACM MITS helpdesk.
+                Reach out to us on Instagram @acm.mits or LinkedIn, or ping the ACM MITS helpdesk.
               </div>
             </div>
           </div>
 
           <a
-            href={EVENT_DATA.contacts.socials.discord}
+            href={EVENT_DATA.contacts.socials.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-xs font-mono font-semibold text-acm-cyan border border-acm-cyan/40 hover:border-acm-cyan transition-colors"
           >
-            Ask on Discord &rarr;
+            Connect on Instagram &rarr;
           </a>
         </div>
       </div>

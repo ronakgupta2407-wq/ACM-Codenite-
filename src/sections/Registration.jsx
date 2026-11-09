@@ -782,7 +782,7 @@ export function Registration({ onOpenAdmin }) {
                       <option value="ACM Social Media / Instagram">ACM Social Media / Instagram</option>
                       <option value="College Notice Board / Faculty">College Notice Board / Faculty</option>
                       <option value="Friend or Teammate">Friend or Teammate</option>
-                      <option value="WhatsApp / Discord Community">WhatsApp / Discord Community</option>
+                      <option value="WhatsApp / Student Community">WhatsApp / Student Community</option>
                       <option value="Campus Ambassador">Campus Ambassador</option>
                     </select>
                   </div>
@@ -1478,18 +1478,18 @@ export function Registration({ onOpenAdmin }) {
                   </div>
                   <div>1. A confirmation email with the official registration PDF has been dispatched to the Team Leader.</div>
                   <div>2. Keep the downloaded PDF safe or printed for on-campus verification at MITS Gwalior.</div>
-                  <div>3. Join the official ACM Discord & WhatsApp group using the links below for announcements.</div>
+                  <div>3. Follow ACM MITS on Instagram (@acm.mits) & LinkedIn, and join the WhatsApp group for live announcements.</div>
                   <div>4. Check-in reporting begins at 06:00 PM on 17 January 2027 at the MITS Gwalior Campus.</div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
                   <a
-                    href={EVENT_DATA.contacts.socials.discord}
+                    href={EVENT_DATA.contacts.socials.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-acm-blue text-white text-xs font-heading font-bold text-center shadow-md hover:shadow-glow-sm transition-all"
+                    className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-pink-600 via-rose-600 to-amber-600 hover:opacity-95 text-white text-xs font-heading font-bold text-center shadow-md hover:shadow-glow-sm transition-all"
                   >
-                    Join Discord Server
+                    Follow on Instagram (@acm.mits)
                   </a>
                   <a
                     href={EVENT_DATA.contacts.socials.whatsapp}
