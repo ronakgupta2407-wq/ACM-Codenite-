@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { Card } from "../components/ui/Card";
+import { ChronoBot } from "../components/3d/ChronoBot";
 import { EVENT_DATA } from "../data/codeniteData";
 import { cn } from "../utils/cn";
 
@@ -51,6 +52,9 @@ export function Timeline() {
           highlight="Battleground Journey"
           subtitle="From campus reporting to midnight energy push, code freeze, and grand jury evaluation."
         />
+
+        {/* 3D Animated ChronoBot */}
+        <ChronoBot />
 
         {/* Timeline Container */}
         <div ref={containerRef} className="relative max-w-4xl mx-auto mt-12">

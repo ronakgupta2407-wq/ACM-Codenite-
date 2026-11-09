@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Trophy, Award, CheckCircle2, Cpu, Boxes, ShieldCheck, GraduationCap, Sparkles } from "lucide-react";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { Card } from "../components/ui/Card";
+import { VaultBot } from "../components/3d/VaultBot";
 import { EVENT_DATA } from "../data/codeniteData";
 import { cn } from "../utils/cn";
 
@@ -23,6 +24,9 @@ export function Prizes() {
           highlight="Championship Awards"
           subtitle="Compete for hard cash, prestigious ACM trophies, direct industry interview fast-tracks, and high-value developer swag."
         />
+
+        {/* 3D Animated Prize Vault Guardian Mascot */}
+        <VaultBot />
 
         {/* Podium Style Main Prizes (2nd, 1st, 3rd) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end max-w-5xl mx-auto mb-20">

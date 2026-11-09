@@ -16,6 +16,7 @@ import { SectionHeading } from "../components/ui/SectionHeading";
 import { Card } from "../components/ui/Card";
 import { Modal } from "../components/ui/Modal";
 import { Button } from "../components/ui/Button";
+import { TrackScannerBot } from "../components/3d/TrackScannerBot";
 import { EVENT_DATA } from "../data/codeniteData";
 
 export function Tracks() {
@@ -47,6 +48,9 @@ export function Tracks() {
           highlight="Themes & Tracks"
           subtitle="Choose the arena that sparks your passion. From artificial intelligence to decentralized systems and open innovation."
         />
+
+        {/* 3D Animated Drone Recon Scanner */}
+        <TrackScannerBot />
 
         {/* Tracks Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">

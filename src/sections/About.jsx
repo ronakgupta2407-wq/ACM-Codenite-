@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { Users, Flame, Trophy, Clock, Code, Award, Lightbulb, Rocket } from "lucide-react";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { Card } from "../components/ui/Card";
+import { RobotProfessor } from "../components/3d/RobotProfessor";
 import { EVENT_DATA } from "../data/codeniteData";
 
 function StatCounter({ value, prefix = "", suffix = "", label, icon: IconName }) {
@@ -79,6 +80,9 @@ export function About() {
           highlight="MITS Gwalior"
           subtitle="ACM MITS Student Chapter stands at the nexus of student innovation, peer mentorship, and cutting-edge software development."
         />
+
+        {/* 3D Animated Robot Professor ("Dr. Byte") */}
+        <RobotProfessor />
 
         {/* Animated Stat Counters */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-16">

@@ -32,6 +32,7 @@ import { SectionHeading } from "../components/ui/SectionHeading";
 import { Stepper } from "../components/ui/Stepper";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { FormAssistantBot } from "../components/3d/FormAssistantBot";
 import { EVENT_DATA } from "../data/codeniteData";
 import { triggerConfetti } from "../utils/confetti";
 import { openPrintSlipWindow } from "../utils/generatePdfSlip";
@@ -535,6 +536,9 @@ export function Registration({ onOpenAdmin }) {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* 3D Animated Registration Assistant Drone ("Form-Bot") */}
+        <FormAssistantBot memberCount={currentMembers.length || 4} />
 
         {/* Multi-step Stepper */}
         <Stepper
