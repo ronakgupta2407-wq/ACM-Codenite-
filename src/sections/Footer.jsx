@@ -6,9 +6,7 @@ import {
   ArrowUp,
   Instagram,
   Linkedin,
-  MessageCircle,
   ExternalLink,
-  Github,
 } from "lucide-react";
 import { EVENT_DATA } from "../data/codeniteData";
 
@@ -64,40 +62,22 @@ export function Footer() {
                 href={EVENT_DATA.contacts.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/20 transition-all"
+                className="p-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/20 transition-all flex items-center gap-2"
                 aria-label="Instagram"
               >
-                <Instagram className="w-4 h-4" />
+                <Instagram className="w-4 h-4 text-pink-400" />
+                <span className="text-xs font-mono font-medium text-slate-300 hover:text-white">@acm.mits</span>
               </a>
 
               <a
                 href={EVENT_DATA.contacts.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/20 transition-all"
+                className="p-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/20 transition-all flex items-center gap-2"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="w-4 h-4" />
-              </a>
-
-              <a
-                href={EVENT_DATA.contacts.socials.discord}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/20 transition-all"
-                aria-label="Discord"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </a>
-
-              <a
-                href={EVENT_DATA.contacts.socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-slate-300 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/20 transition-all"
-                aria-label="GitHub"
-              >
-                <Github className="w-4 h-4" />
+                <Linkedin className="w-4 h-4 text-sky-400" />
+                <span className="text-xs font-mono font-medium text-slate-300 hover:text-white">LinkedIn</span>
               </a>
             </div>
           </div>

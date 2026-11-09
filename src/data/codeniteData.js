@@ -449,7 +449,7 @@ export const EVENT_DATA = {
     {
       question: "Can I register as a solo participant or what team sizes are allowed?",
       answer:
-        "CodeNite allows team sizes of 4 to 6 members (4, 5, or 6 members). Solo participants, pairs, or teams of 3 are not permitted. If you need teammates, join our official Discord server or WhatsApp community where we have an active #find-a-team channel.",
+        "CodeNite allows team sizes of 4 to 6 members (4, 5, or 6 members). Solo participants, pairs, or teams of 3 are not permitted. If you need teammates, join our official WhatsApp community or reach out via Instagram / LinkedIn where we help connect squads.",
     },
     {
       question: "Is there a mandatory female member requirement in teams?",
@@ -482,11 +482,9 @@ export const EVENT_DATA = {
     secondaryEmail: "codenite@acm-mits.org",
     phones: ["+91 98765 43210", "+91 91234 56789"],
     socials: {
-      instagram: "https://instagram.com/acm_mits",
-      linkedin: "https://linkedin.com/company/acm-mits-student-chapter",
-      discord: "https://discord.gg/acm-mits",
+      instagram: "https://www.instagram.com/acm.mits/?hl=en#",
+      linkedin: "https://www.linkedin.com/company/mits-acm-student-chapter-2026-27/posts/?feedView=all",
       whatsapp: "https://chat.whatsapp.com/acm-mits-codenite",
-      github: "https://github.com/acmmits",
       twitter: "https://twitter.com/acm_mits",
     },
   },
