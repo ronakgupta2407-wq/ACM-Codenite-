@@ -193,8 +193,12 @@ export function Footer() {
                 <div
                   key={dev.name}
                   onClick={() => setSelectedDeveloper(dev)}
-                  className="group p-3 sm:p-4 rounded-xl bg-navy-950/90 border border-cyan-400/35 hover:border-cyan-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.3)] transition-all cursor-pointer flex items-center gap-3.5"
+                  title={`Click to view ${dev.name}'s full profile & tech stack`}
+                  className="group relative p-3.5 sm:p-4 rounded-2xl bg-gradient-to-b from-[#071338]/95 to-navy-950/95 border border-cyan-400/40 hover:border-cyan-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.35)] transition-all cursor-pointer flex items-center gap-3.5 overflow-hidden"
                 >
+                  {/* Subtle top accent beam on card hover */}
+                  <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
                   <div className={`relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr ${dev.avatarColor || "from-cyan-500 to-indigo-500"} shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.3)]`}>
                     <div className="w-full h-full rounded-[10px] bg-navy-950 flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
                       <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 to-transparent pointer-events-none" />
@@ -208,8 +212,9 @@ export function Footer() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-400/40 uppercase">
-                        {dev.badge}
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-400/40 uppercase flex items-center gap-1">
+                        <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
+                        <span>{dev.badge}</span>
                       </span>
                     </div>
                     <h5 className="font-heading font-black text-sm text-white group-hover:text-cyan-300 transition-colors truncate">
