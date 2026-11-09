@@ -46,35 +46,32 @@ import { cn } from "../utils/cn";
 
 // Single member schema - contains exactly the requested fields per person
 const memberSchema = z.object({
-  name: z.string().min(2, "Full name is required (min 2 chars)"),
-  email: z.string().email("Please provide a valid email address"),
+  name: z.string().trim().min(2, "Full name is required (min 2 chars)"),
+  email: z.string().trim().email("Please provide a valid email address"),
   phone: z
     .string()
+    .trim()
     .min(10, "Phone number must have at least 10 digits")
     .refine((val) => val.replace(/\D/g, "").length >= 10, {
       message: "Please enter a valid 10-digit mobile number",
     }),
-  gender: z.enum(["Male", "Female", "Other", "Prefer not to say"], {
-    errorMap: () => ({ message: "Please select gender" }),
-  }),
-  college: z.string().min(2, "College/Institute name is required"),
-  enrollmentNo: z.string().min(2, "Student Enrollment / Roll No. is required"),
-  year: z.string().min(1, "Please select year of study"),
-  branch: z.string().min(2, "Branch / Department is required"),
-  city: z.string().min(2, "City / State is required"),
+  gender: z.string().min(1, "Please select gender"),
+  college: z.string().trim().min(2, "College/Institute name is required"),
+  enrollmentNo: z.string().trim().min(2, "Student Enrollment / Roll No. is required"),
+  year: z.string().trim().min(1, "Please select year of study"),
+  branch: z.string().trim().min(2, "Branch / Department is required"),
+  city: z.string().trim().min(2, "City / State is required"),
 });
 
 // Full registration schema - Team Name, Team Size & Members only
 const registrationSchema = z
   .object({
-    teamName: z.string().min(3, "Team name must be at least 3 characters"),
+    teamName: z.string().trim().min(3, "Team name must be at least 3 characters"),
     teamSize: z.enum(["4", "5", "6"], {
       required_error: "Team size must be 4, 5, or 6 members",
     }),
     track: z.string().optional().default("General Track"),
-    consentRules: z.boolean().refine((val) => val === true, {
-      message: "You must accept the event rules and code of conduct",
-    }),
+    consentRules: z.boolean().optional().default(true),
     members: z.array(memberSchema),
   })
   .superRefine((data, ctx) => {
@@ -235,26 +232,60 @@ export function Registration({ onOpenAdmin }) {
     }
   };
 
-  // Step 2 Validation
+  // Step 2 Validation - Individual member checks for transparent, exact error reporting
   const handleNextFromStep2 = async () => {
     setStep2ErrorMsg("");
-    const isMembersValid = await trigger("members");
+    const membersData = watch("members") || [];
+    const targetSize = parseInt(watch("teamSize") || "4", 10);
 
-    if (isMembersValid) {
-      setCurrentStep(3);
-      window.scrollTo({ top: document.getElementById("register").offsetTop - 80, behavior: "smooth" });
-    } else {
-      setStep2ErrorMsg(
-        "Please fill in all required fields for each squad member (Full Name, valid Email, 10-digit Mobile Number, Gender, College, Enrollment Number, Year, Branch, and City)."
-      );
-      // Smoothly scroll to the first element with validation error
-      setTimeout(() => {
-        const firstErr = document.querySelector(".text-rose-400, .border-rose-500, input:invalid");
-        if (firstErr) {
-          firstErr.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 80);
+    // Validate squad count
+    if (membersData.length < targetSize) {
+      setStep2ErrorMsg(`Your squad must have ${targetSize} members. Current count: ${membersData.length}`);
+      return;
     }
+
+    // Validate each member individually so we report the EXACT field that needs attention
+    for (let i = 0; i < targetSize; i++) {
+      const m = membersData[i];
+      const memberRole = i === 0 ? "Team Leader (Member 1)" : `Member ${i + 1}`;
+      const parseResult = memberSchema.safeParse(m);
+
+      if (!parseResult.success) {
+        const firstIssue = parseResult.error.issues[0];
+        const errorText = firstIssue
+          ? `${memberRole}: ${firstIssue.message}`
+          : `${memberRole} details are incomplete.`;
+        setStep2ErrorMsg(errorText);
+
+        setTimeout(() => {
+          const firstErr = document.querySelector(".text-rose-400, .border-rose-500, input:invalid");
+          if (firstErr) {
+            firstErr.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 80);
+        return;
+      }
+    }
+
+    // Check duplicate emails
+    const emails = membersData.slice(0, targetSize).map((m) => m.email?.toLowerCase().trim()).filter(Boolean);
+    const uniqueEmails = new Set(emails);
+    if (uniqueEmails.size !== emails.length) {
+      setStep2ErrorMsg("Each team member must have a distinct, unique email address.");
+      return;
+    }
+
+    // Check duplicate phones
+    const phones = membersData.slice(0, targetSize).map((m) => m.phone?.replace(/\D/g, "")).filter(Boolean);
+    const uniquePhones = new Set(phones);
+    if (uniquePhones.size !== phones.length) {
+      setStep2ErrorMsg("Each team member must have a distinct, unique 10-digit mobile number.");
+      return;
+    }
+
+    // All members are valid! Advance to Step 3
+    setCurrentStep(3);
+    window.scrollTo({ top: document.getElementById("register").offsetTop - 80, behavior: "smooth" });
   };
 
   // Submit Handler
