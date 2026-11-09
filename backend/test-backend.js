@@ -30,10 +30,10 @@ async function runTests() {
       teamName: `Test Cyber Squadron ${Date.now()}`,
       track: 'AI & Intelligent Systems',
       members: [
-        { name: 'Aditya Leader', email: `test.leader.${Date.now()}@mitsgwalior.in`, phone: '9826011111', college: 'MITS Gwalior', enrollmentNo: '0901CS221001', year: '3rd Year', branch: 'CSE' },
-        { name: 'Member Two', email: `member2.${Date.now()}@mitsgwalior.in`, phone: '9826011112', college: 'MITS Gwalior', enrollmentNo: '0901CS221002', year: '3rd Year', branch: 'CSE' },
-        { name: 'Member Three', email: `member3.${Date.now()}@mitsgwalior.in`, phone: '9826011113', college: 'MITS Gwalior', enrollmentNo: '0901CS221003', year: '3rd Year', branch: 'CSE' },
-        { name: 'Member Four', email: `member4.${Date.now()}@mitsgwalior.in`, phone: '9826011114', college: 'MITS Gwalior', enrollmentNo: '0901CS221004', year: '3rd Year', branch: 'CSE' },
+        { name: 'Aditya Leader', email: `test.leader.${Date.now()}@mitsgwalior.in`, phone: '9826011111', gender: 'Male', college: 'MITS Gwalior', enrollmentNo: '0901CS221001', year: '3rd Year', branch: 'CSE', city: 'Gwalior, MP' },
+        { name: 'Member Two', email: `member2.${Date.now()}@mitsgwalior.in`, phone: '9826011112', gender: 'Female', college: 'MITS Gwalior', enrollmentNo: '0901CS221002', year: '3rd Year', branch: 'CSE', city: 'Gwalior, MP' },
+        { name: 'Member Three', email: `member3.${Date.now()}@mitsgwalior.in`, phone: '9826011113', gender: 'Male', college: 'MITS Gwalior', enrollmentNo: '0901CS221003', year: '3rd Year', branch: 'CSE', city: 'Gwalior, MP' },
+        { name: 'Member Four', email: `member4.${Date.now()}@mitsgwalior.in`, phone: '9826011114', gender: 'Female', college: 'MITS Gwalior', enrollmentNo: '0901CS221004', year: '3rd Year', branch: 'CSE', city: 'Gwalior, MP' },
       ],
     };
     const regRes = await fetch(`${baseUrl}/api/teams/register`, {

@@ -207,17 +207,18 @@ export function generateCSV() {
   const headers = [
     'Registration ID',
     'Team Name',
-    'Track',
     'Team Size',
     'Status',
     'Registered At',
     'Leader Name',
     'Leader Email',
     'Leader Phone',
+    'Leader Gender',
     'Leader College',
     'Leader Enrollment',
     'Leader Year',
     'Leader Branch',
+    'Leader City',
     'Cancellation Reason',
     'All Members Details'
   ];
@@ -231,23 +232,24 @@ export function generateCSV() {
   const rows = teams.map((team) => {
     const leader = team.members && team.members[0] ? team.members[0] : {};
     const allMembers = Array.isArray(team.members)
-      ? team.members.map((m, idx) => `[M${idx + 1}: ${m.name || ''} | ${m.email || ''} | ${m.phone || ''} | ${m.college || ''}]`).join('; ')
+      ? team.members.map((m, idx) => `[M${idx + 1}: ${m.name || ''} | ${m.email || ''} | ${m.phone || ''} | ${m.gender || ''} | ${m.college || ''} | ${m.enrollmentNo || ''} | ${m.year || ''} | ${m.branch || ''} | ${m.city || ''}]`).join('; ')
       : '';
 
     return [
       escapeCSV(team.registrationId),
       escapeCSV(team.teamName),
-      escapeCSV(team.track),
       escapeCSV(team.teamSize),
       escapeCSV(team.status),
       escapeCSV(team.timestamp),
       escapeCSV(leader.name),
       escapeCSV(leader.email),
       escapeCSV(leader.phone),
+      escapeCSV(leader.gender),
       escapeCSV(leader.college),
       escapeCSV(leader.enrollmentNo),
       escapeCSV(leader.year),
       escapeCSV(leader.branch),
+      escapeCSV(leader.city),
       escapeCSV(team.cancellationReason),
       escapeCSV(allMembers),
     ].join(',');

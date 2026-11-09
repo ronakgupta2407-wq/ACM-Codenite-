@@ -122,18 +122,11 @@ router.post('/register', async (req, res) => {
     const body = req.body || {};
     const { teamName, track, members, teamSize } = body;
 
-    // Basic Validation
+    // Basic Validation - Team Name and Squad Size
     if (!teamName || typeof teamName !== 'string' || teamName.trim().length < 2) {
       return res.status(400).json({
         success: false,
         message: 'A valid team name (at least 2 characters) is required.',
-      });
-    }
-
-    if (!track || typeof track !== 'string') {
-      return res.status(400).json({
-        success: false,
-        message: 'A problem track selection is required.',
       });
     }
 
@@ -144,7 +137,18 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // Validate leader
+    // Validate each member has required 9 fields
+    for (let i = 0; i < members.length; i++) {
+      const m = members[i];
+      const memberRole = i === 0 ? 'Team Leader' : `Member ${i + 1}`;
+      if (!m || !m.name || !m.email || !m.phone || !m.college || !m.enrollmentNo) {
+        return res.status(400).json({
+          success: false,
+          message: `${memberRole} must provide Name, Email, Phone, College, and Enrollment Number.`,
+        });
+      }
+    }
+
     const leader = members[0];
     if (!leader || !leader.name || !leader.email || !leader.phone) {
       return res.status(400).json({
@@ -182,7 +186,7 @@ router.post('/register', async (req, res) => {
     // Save team locally in database
     const created = createTeam({
       teamName: teamName.trim(),
-      track: track.trim(),
+      track: (track || 'General Innovation').trim(),
       teamSize: String(members.length),
       members,
       paymentScreenshot: body.paymentScreenshot || null,
