@@ -785,14 +785,12 @@ export function AdminPortalModal({ isOpen, onClose }) {
                                         <span>{m.name}</span>
                                         <span className="text-[10px] font-mono text-sky-400">{mIdx === 0 ? "LEADER" : `MEMBER ${mIdx + 1}`}</span>
                                       </div>
-                                      <div className="text-slate-400">{m.email} � {m.phone}</div>
-                                      <div className="text-slate-400">{m.college} ({m.enrollmentNo})</div>
-                                      <div className="text-slate-400">{m.branch} - {m.year} {m.city ? `� ${m.city}` : ""}</div>
-                                      {(m.gender || m.tshirt || m.dietary) && (
-                                        <div className="text-sky-300 font-mono text-[10px] mt-1 pt-1 border-t border-acm-blue/10">
-                                          {m.gender ? `${m.gender} � ` : ""}{m.tshirt ? `Size: ${m.tshirt} � ` : ""}{m.dietary ? `Diet: ${m.dietary}` : ""}
-                                        </div>
-                                      )}
+                                      <div className="text-slate-400">{m.email} &bull; {m.phone}</div>
+                                      <div className="text-slate-400">{m.college} (Roll: {m.enrollmentNo})</div>
+                                      <div className="text-slate-400">{m.branch} &bull; {m.year}</div>
+                                      <div className="text-sky-300 font-mono text-[10px] mt-1 pt-1 border-t border-acm-blue/10">
+                                        Gender: <strong>{m.gender || "N/A"}</strong> &bull; City: <strong>{m.city || "N/A"}</strong>
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
