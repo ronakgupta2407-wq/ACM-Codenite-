@@ -52,10 +52,20 @@ const memberSchema = z.object({
     .refine((val) => val.replace(/\D/g, "").length >= 10, {
       message: "Please enter a valid 10-digit mobile number",
     }),
+  gender: z.enum(["Male", "Female", "Other", "Prefer not to say"], {
+    errorMap: () => ({ message: "Please select gender (female not compulsory)" }),
+  }),
   college: z.string().min(2, "College/Institute name is required"),
   enrollmentNo: z.string().min(2, "Student Enrollment / Roll No. is required"),
   year: z.string().min(1, "Please select year of study"),
   branch: z.string().min(2, "Branch / Department is required"),
+  city: z.string().min(2, "City / State is required"),
+  tshirt: z.enum(["S", "M", "L", "XL", "XXL"], {
+    errorMap: () => ({ message: "Select T-Shirt size" }),
+  }),
+  dietary: z.enum(["Vegetarian", "Non-Vegetarian", "Jain", "Vegan"], {
+    errorMap: () => ({ message: "Select dietary preference" }),
+  }),
   github: z.string().optional().or(z.literal("")),
   linkedin: z.string().optional().or(z.literal("")),
 });
@@ -64,10 +74,13 @@ const memberSchema = z.object({
 const registrationSchema = z
   .object({
     teamName: z.string().min(3, "Team name must be at least 3 characters"),
-    teamSize: z.enum(["4", "6"], {
-      required_error: "Team size must be strictly 4 or 6 members",
+    teamSize: z.enum(["4", "5", "6"], {
+      required_error: "Team size must be 4, 5, or 6 members",
     }),
     track: z.string().min(1, "Please select a preferred innovation track"),
+    projectIdea: z.string().optional().or(z.literal("")),
+    experienceLevel: z.string().default("Intermediate"),
+    referral: z.string().default("ACM Social Media"),
     consentRules: z.boolean().refine((val) => val === true, {
       message: "You must accept the event rules and code of conduct",
     }),
@@ -93,6 +106,17 @@ const registrationSchema = z
         path: ["members"],
       });
     }
+
+    // Check unique phone numbers
+    const phones = data.members.map((m) => m.phone?.replace(/\D/g, "")).filter(Boolean);
+    const uniquePhones = new Set(phones);
+    if (uniquePhones.size !== phones.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Every team member must have a distinct, unique 10-digit mobile number",
+        path: ["members"],
+      });
+    }
   });
 
 // Initial member template
@@ -100,10 +124,14 @@ const createMemberTemplate = () => ({
   name: "",
   email: "",
   phone: "",
+  gender: "Male",
   college: "MITS Gwalior",
   enrollmentNo: "",
   year: "3rd Year",
   branch: "Computer Science & Engineering",
+  city: "Gwalior, MP",
+  tshirt: "L",
+  dietary: "Vegetarian",
   github: "",
   linkedin: "",
 });
@@ -166,6 +194,9 @@ export function Registration({ onOpenAdmin }) {
     teamName: "",
     teamSize: "4",
     track: EVENT_DATA.tracks[0].title,
+    projectIdea: "",
+    experienceLevel: "Intermediate",
+    referral: "ACM Social Media",
     consentRules: true,
     members: Array.from({ length: 4 }).map(() => createMemberTemplate()),
   };
@@ -217,10 +248,14 @@ export function Registration({ onOpenAdmin }) {
         name: "Aarav Sharma",
         email: "aarav.sharma@mitsgwalior.in",
         phone: "9876543210",
+        gender: "Male",
         college: "MITS Gwalior",
         enrollmentNo: "0901CS221001",
         year: "3rd Year",
         branch: "Computer Science & Engineering",
+        city: "Gwalior, MP",
+        tshirt: "L",
+        dietary: "Vegetarian",
         github: "https://github.com/aarav",
         linkedin: "https://linkedin.com/in/aarav",
       },
@@ -228,10 +263,14 @@ export function Registration({ onOpenAdmin }) {
         name: "Priya Patel",
         email: "priya.patel@mitsgwalior.in",
         phone: "9876543211",
+        gender: "Female",
         college: "MITS Gwalior",
         enrollmentNo: "0901IT221045",
         year: "3rd Year",
         branch: "Information Technology",
+        city: "Indore, MP",
+        tshirt: "M",
+        dietary: "Vegetarian",
         github: "",
         linkedin: "",
       },
@@ -239,10 +278,14 @@ export function Registration({ onOpenAdmin }) {
         name: "Rohan Verma",
         email: "rohan.verma@mitsgwalior.in",
         phone: "9876543212",
+        gender: "Male",
         college: "MITS Gwalior",
         enrollmentNo: "0901AI221088",
         year: "2nd Year",
         branch: "Artificial Intelligence & Data Science",
+        city: "Bhopal, MP",
+        tshirt: "XL",
+        dietary: "Non-Vegetarian",
         github: "",
         linkedin: "",
       },
@@ -250,10 +293,14 @@ export function Registration({ onOpenAdmin }) {
         name: "Ananya Gupta",
         email: "ananya.gupta@mitsgwalior.in",
         phone: "9876543213",
+        gender: "Female",
         college: "MITS Gwalior",
         enrollmentNo: "0901EC221012",
         year: "3rd Year",
         branch: "Electronics & Communication",
+        city: "Gwalior, MP",
+        tshirt: "S",
+        dietary: "Vegetarian",
         github: "",
         linkedin: "",
       },
@@ -261,10 +308,14 @@ export function Registration({ onOpenAdmin }) {
         name: "Vikramaditya Singh",
         email: "vikram.singh@mitsgwalior.in",
         phone: "9876543214",
+        gender: "Male",
         college: "MITS Gwalior",
         enrollmentNo: "0901CS221099",
         year: "3rd Year",
         branch: "Computer Science & Engineering",
+        city: "Jaipur, Rajasthan",
+        tshirt: "L",
+        dietary: "Vegetarian",
         github: "",
         linkedin: "",
       },
@@ -272,15 +323,21 @@ export function Registration({ onOpenAdmin }) {
         name: "Neha Joshi",
         email: "neha.joshi@mitsgwalior.in",
         phone: "9876543215",
+        gender: "Female",
         college: "MITS Gwalior",
         enrollmentNo: "0901CS221102",
         year: "2nd Year",
         branch: "Computer Science & Engineering",
+        city: "Delhi NCR",
+        tshirt: "M",
+        dietary: "Jain",
         github: "",
         linkedin: "",
       },
     ];
 
+    setValue("teamName", watch("teamName") || "CodeForge Alpha");
+    setValue("projectIdea", watch("projectIdea") || "Decentralized AI-powered medical dispatch assistant for emergency ambulances");
     setValue("members", demoMembers.slice(0, size), { shouldValidate: true });
     setStep2ErrorMsg("");
   };
@@ -307,7 +364,7 @@ export function Registration({ onOpenAdmin }) {
       window.scrollTo({ top: document.getElementById("register").offsetTop - 80, behavior: "smooth" });
     } else {
       setStep2ErrorMsg(
-        "Please fill in all required fields for each squad member (Full Name, valid Email, 10-digit Mobile Number, College, and Enrollment Number)."
+        "Please fill in all required fields for each squad member (Full Name, valid Email, 10-digit Mobile Number, Gender, College, Enrollment Number, Branch, Year, City, T-Shirt, and Dietary preference)."
       );
       // Smoothly scroll to the first element with validation error
       setTimeout(() => {
@@ -376,7 +433,7 @@ export function Registration({ onOpenAdmin }) {
           badge="Registration Portal"
           title="Register Your"
           highlight="CodeNite Squad"
-          subtitle="Form a team of strictly 4 or 6 members. Registration is free. No gender requirement. Lock in your spot."
+          subtitle="Form a team of 4 to 6 members. Registration is 100% free. Female participant is NOT compulsory. Lock in your spot."
         />
 
         {/* Action Header: Status Lookup & Admin Portal */}
@@ -511,8 +568,26 @@ export function Registration({ onOpenAdmin }) {
                     Step 1: Team & Track Identification
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-400 font-mono">
-                    Give your squad a battle name and select an innovation track.
+                    Provide team details, select an innovation track, and specify your squad size (4 to 6 members).
                   </p>
+                </div>
+
+                {/* Team Composition & Gender Reassurance Notice */}
+                <div className="p-4 rounded-xl bg-gradient-to-r from-sky-950/70 via-navy-900 to-navy-950 border border-sky-400/35 flex items-start gap-3.5">
+                  <div className="p-2 rounded-lg bg-sky-500/20 text-acm-cyan border border-sky-400/30 shrink-0 mt-0.5">
+                    <UsersRound className="w-5 h-5" />
+                  </div>
+                  <div className="text-xs font-mono text-slate-300 leading-relaxed">
+                    <div className="text-white font-bold text-sm mb-0.5">
+                      Squad Size & Female Participation Policy
+                    </div>
+                    <div>
+                      • Squads can consist of <strong className="text-acm-cyan">4, 5, or 6 members</strong>.
+                    </div>
+                    <div>
+                      • A female participant is <strong className="text-emerald-400 underline">NOT compulsory</strong>. Any gender combination (all-male, all-female, or co-ed) is 100% permitted.
+                    </div>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -564,17 +639,17 @@ export function Registration({ onOpenAdmin }) {
                     <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
                       Team Size Selection <span className="text-rose-400">*</span>
                     </label>
-                    <span className="text-[11px] font-mono text-acm-cyan">
-                      Strict Rule: Exactly 4 or 6 members only
+                    <span className="text-[11px] font-mono text-acm-cyan font-semibold">
+                      Allowed: 4, 5, or 6 members
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     {/* Option 4 */}
                     <div
                       onClick={() => setValue("teamSize", "4")}
                       className={cn(
-                        "p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between",
+                        "p-3.5 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between",
                         selectedTeamSize === "4"
                           ? "bg-acm-blue/20 border-acm-cyan shadow-glow-sm"
                           : "bg-navy-950/60 border-acm-blue/20 hover:border-acm-blue/50"
@@ -583,7 +658,7 @@ export function Registration({ onOpenAdmin }) {
                       <div className="flex items-center gap-3">
                         <div
                           className={cn(
-                            "w-10 h-10 rounded-xl flex items-center justify-center font-orbitron font-extrabold text-lg",
+                            "w-9 h-9 rounded-xl flex items-center justify-center font-orbitron font-extrabold text-base",
                             selectedTeamSize === "4"
                               ? "bg-acm-cyan text-navy-950"
                               : "bg-navy-800 text-slate-300"
@@ -592,17 +667,53 @@ export function Registration({ onOpenAdmin }) {
                           4
                         </div>
                         <div>
-                          <div className="font-heading font-bold text-white text-sm">
+                          <div className="font-heading font-bold text-white text-xs sm:text-sm">
                             4 Members
                           </div>
-                          <div className="text-[11px] text-slate-400">
+                          <div className="text-[10px] text-slate-400">
                             Agile Strike Squad
                           </div>
                         </div>
                       </div>
 
                       {selectedTeamSize === "4" && (
-                        <CheckCircle2 className="w-5 h-5 text-acm-cyan" />
+                        <CheckCircle2 className="w-4 h-4 text-acm-cyan shrink-0" />
+                      )}
+                    </div>
+
+                    {/* Option 5 */}
+                    <div
+                      onClick={() => setValue("teamSize", "5")}
+                      className={cn(
+                        "p-3.5 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between",
+                        selectedTeamSize === "5"
+                          ? "bg-acm-blue/20 border-acm-cyan shadow-glow-sm"
+                          : "bg-navy-950/60 border-acm-blue/20 hover:border-acm-blue/50"
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={cn(
+                            "w-9 h-9 rounded-xl flex items-center justify-center font-orbitron font-extrabold text-base",
+                            selectedTeamSize === "5"
+                              ? "bg-acm-cyan text-navy-950"
+                              : "bg-navy-800 text-slate-300"
+                          )}
+                        >
+                          5
+                        </div>
+                        <div>
+                          <div className="font-heading font-bold text-white text-xs sm:text-sm">
+                            5 Members
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            Balanced Vanguard
+                          </div>
+                        </div>
+                      </div>
+
+                      {selectedTeamSize === "5" && (
+                        <CheckCircle2 className="w-4 h-4 text-acm-cyan shrink-0" />
                       )}
                     </div>
 
@@ -610,7 +721,7 @@ export function Registration({ onOpenAdmin }) {
                     <div
                       onClick={() => setValue("teamSize", "6")}
                       className={cn(
-                        "p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between",
+                        "p-3.5 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between",
                         selectedTeamSize === "6"
                           ? "bg-acm-blue/20 border-acm-cyan shadow-glow-sm"
                           : "bg-navy-950/60 border-acm-blue/20 hover:border-acm-blue/50"
@@ -619,7 +730,7 @@ export function Registration({ onOpenAdmin }) {
                       <div className="flex items-center gap-3">
                         <div
                           className={cn(
-                            "w-10 h-10 rounded-xl flex items-center justify-center font-orbitron font-extrabold text-lg",
+                            "w-9 h-9 rounded-xl flex items-center justify-center font-orbitron font-extrabold text-base",
                             selectedTeamSize === "6"
                               ? "bg-acm-cyan text-navy-950"
                               : "bg-navy-800 text-slate-300"
@@ -628,19 +739,64 @@ export function Registration({ onOpenAdmin }) {
                           6
                         </div>
                         <div>
-                          <div className="font-heading font-bold text-white text-sm">
+                          <div className="font-heading font-bold text-white text-xs sm:text-sm">
                             6 Members
                           </div>
-                          <div className="text-[11px] text-slate-400">
-                            Powerhouse Enterprise Squad
+                          <div className="text-[10px] text-slate-400">
+                            Enterprise Powerhouse
                           </div>
                         </div>
                       </div>
 
                       {selectedTeamSize === "6" && (
-                        <CheckCircle2 className="w-5 h-5 text-acm-cyan" />
+                        <CheckCircle2 className="w-4 h-4 text-acm-cyan shrink-0" />
                       )}
                     </div>
+                  </div>
+                </div>
+
+                {/* Additional Team Details */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-acm-blue/15">
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      Experience Level
+                    </label>
+                    <select
+                      {...register("experienceLevel")}
+                      className="w-full px-4 py-3 rounded-xl bg-navy-950 border border-acm-blue/30 text-white font-medium focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all"
+                    >
+                      <option value="Beginner (First Hackathon)">Beginner (First Hackathon)</option>
+                      <option value="Intermediate">Intermediate (1-2 Hackathons)</option>
+                      <option value="Advanced / Experienced">Advanced / Experienced</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      How Did You Hear About CodeNite?
+                    </label>
+                    <select
+                      {...register("referral")}
+                      className="w-full px-4 py-3 rounded-xl bg-navy-950 border border-acm-blue/30 text-white font-medium focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all"
+                    >
+                      <option value="ACM Social Media / Instagram">ACM Social Media / Instagram</option>
+                      <option value="College Notice Board / Faculty">College Notice Board / Faculty</option>
+                      <option value="Friend or Teammate">Friend or Teammate</option>
+                      <option value="WhatsApp / Discord Community">WhatsApp / Discord Community</option>
+                      <option value="Campus Ambassador">Campus Ambassador</option>
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      Project Synopsis / Proposed Idea Concept <span className="text-slate-500 font-normal">(Optional)</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Briefly describe what problem your team aims to address (can be refined during hackathon)..."
+                      {...register("projectIdea")}
+                      className="w-full px-4 py-2.5 rounded-xl bg-navy-950 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan placeholder-slate-500"
+                    />
                   </div>
                 </div>
 
@@ -688,6 +844,16 @@ export function Registration({ onOpenAdmin }) {
                     <span className="px-3 py-1.5 rounded-lg text-xs font-mono bg-navy-900 border border-acm-blue/30 text-acm-cyan">
                       {selectedTeamSize} Members
                     </span>
+                  </div>
+                </div>
+
+                {/* Reassurance banner on female participation */}
+                <div className="p-3.5 rounded-xl bg-sky-950/40 border border-sky-400/30 flex items-center gap-3">
+                  <span className="p-1.5 rounded-lg bg-sky-500/20 text-sky-300">
+                    <UsersRound className="w-4 h-4" />
+                  </span>
+                  <div className="text-xs font-mono text-slate-300">
+                    <strong className="text-white">Participation Note:</strong> A female member is <span className="text-emerald-400 font-bold underline">NOT compulsory</span>. Squads can have any gender distribution of {selectedTeamSize} participants.
                   </div>
                 </div>
 
@@ -796,6 +962,32 @@ export function Registration({ onOpenAdmin }) {
                             )}
                           </div>
 
+                          {/* Gender */}
+                          <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300">
+                                Gender <span className="text-rose-400">*</span>
+                              </label>
+                              <span className="text-[10px] font-mono text-emerald-400 font-medium">
+                                (Female not compulsory)
+                              </span>
+                            </div>
+                            <select
+                              {...register(`members.${index}.gender`)}
+                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
+                            >
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Other">Other / Non-Binary</option>
+                              <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                            {errors.members?.[index]?.gender && (
+                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
+                                {errors.members[index].gender.message}
+                              </p>
+                            )}
+                          </div>
+
                           {/* College */}
                           <div>
                             <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
@@ -867,6 +1059,67 @@ export function Registration({ onOpenAdmin }) {
                             )}
                           </div>
 
+                          {/* City / State */}
+                          <div>
+                            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                              City & State <span className="text-rose-400">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="e.g. Gwalior, MP"
+                              {...register(`members.${index}.city`)}
+                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
+                            />
+                            {errors.members?.[index]?.city && (
+                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
+                                {errors.members[index].city.message}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* T-Shirt Size */}
+                          <div>
+                            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                              T-Shirt Size (Swag Kit) <span className="text-rose-400">*</span>
+                            </label>
+                            <select
+                              {...register(`members.${index}.tshirt`)}
+                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
+                            >
+                              <option value="S">S (Small - 38)</option>
+                              <option value="M">M (Medium - 40)</option>
+                              <option value="L">L (Large - 42)</option>
+                              <option value="XL">XL (Extra Large - 44)</option>
+                              <option value="XXL">XXL (Double Extra Large - 46)</option>
+                            </select>
+                            {errors.members?.[index]?.tshirt && (
+                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
+                                {errors.members[index].tshirt.message}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Dietary Preference */}
+                          <div>
+                            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                              Dietary Preference <span className="text-rose-400">*</span>
+                            </label>
+                            <select
+                              {...register(`members.${index}.dietary`)}
+                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
+                            >
+                              <option value="Vegetarian">Vegetarian</option>
+                              <option value="Non-Vegetarian">Non-Vegetarian</option>
+                              <option value="Jain">Jain (Pure Veg, No Root Veg)</option>
+                              <option value="Vegan">Vegan</option>
+                            </select>
+                            {errors.members?.[index]?.dietary && (
+                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
+                                {errors.members[index].dietary.message}
+                              </p>
+                            )}
+                          </div>
+
                           {/* GitHub Profile */}
                           <div>
                             <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
@@ -886,7 +1139,7 @@ export function Registration({ onOpenAdmin }) {
                           </div>
 
                           {/* LinkedIn Profile */}
-                          <div>
+                          <div className="sm:col-span-2 lg:col-span-1">
                             <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
                               LinkedIn Profile (Optional)
                             </label>
@@ -982,7 +1235,15 @@ export function Registration({ onOpenAdmin }) {
                       <span className="px-2.5 py-0.5 rounded bg-sky-950 border border-sky-600/30 text-acm-cyan font-bold">
                         Size: {formValues.teamSize} Members
                       </span>
+                      <span className="px-2.5 py-0.5 rounded bg-navy-900 border border-acm-blue/30 text-slate-300">
+                        Level: {formValues.experienceLevel}
+                      </span>
                     </div>
+                    {formValues.projectIdea && (
+                      <div className="mt-2 text-xs text-slate-300 font-mono">
+                        <span className="text-acm-cyan font-semibold">Concept:</span> {formValues.projectIdea}
+                      </div>
+                    )}
                   </div>
 
                   <Button
@@ -1014,20 +1275,32 @@ export function Registration({ onOpenAdmin }) {
                     {formValues.members?.map((m, idx) => (
                       <div
                         key={idx}
-                        className="p-4 rounded-xl bg-navy-950/60 border border-acm-blue/20 text-xs text-slate-300 space-y-1"
+                        className="p-4 rounded-xl bg-navy-950/70 border border-acm-blue/30 text-xs text-slate-300 space-y-1.5"
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-heading font-bold text-sm text-white flex items-center gap-1.5">
                             {idx === 0 && <Crown className="w-3.5 h-3.5 text-amber-400" />}
                             {m.name || "Member Name"}
                           </span>
-                          <span className="font-mono text-[10px] text-sky-400">
+                          <span className="font-mono text-[10px] text-sky-400 font-bold px-2 py-0.5 rounded bg-navy-900 border border-acm-blue/30">
                             {idx === 0 ? "LEADER" : `MEMBER ${idx + 1}`}
                           </span>
+                        </div>
+                        <div className="text-slate-300">
+                          <strong>{m.gender || "Gender N/A"}</strong> • {m.city || "City N/A"}
                         </div>
                         <div className="text-slate-400">{m.email} • {m.phone}</div>
                         <div className="text-slate-400">{m.college} ({m.enrollmentNo})</div>
                         <div className="text-slate-400">{m.branch} - {m.year}</div>
+                        <div className="text-sky-300 font-mono text-[11px] pt-1 border-t border-acm-blue/15">
+                          T-Shirt: <strong>{m.tshirt || "L"}</strong> • Food: <strong>{m.dietary || "Veg"}</strong>
+                        </div>
+                        {(m.github || m.linkedin) && (
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {m.github && <span>GH: {m.github} </span>}
+                            {m.linkedin && <span>LI: {m.linkedin}</span>}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -1042,7 +1315,7 @@ export function Registration({ onOpenAdmin }) {
                     className="mt-1 w-4 h-4 rounded text-acm-blue bg-navy-900 border-acm-blue/40 focus:ring-acm-cyan cursor-pointer"
                   />
                   <label htmlFor="consent" className="text-xs text-slate-300 leading-relaxed cursor-pointer">
-                    We certify that all member information is genuine. Our team consists of strictly {formValues.teamSize} members and all work submitted during CodeNite will be authored from scratch during the 12-hour period in full accordance with the ACM Code of Conduct.
+                    We certify that all member information is genuine. Our team consists of {formValues.teamSize} members and all work submitted during CodeNite will be authored from scratch during the 12-hour period in full accordance with the ACM Code of Conduct.
                   </label>
                 </div>
 

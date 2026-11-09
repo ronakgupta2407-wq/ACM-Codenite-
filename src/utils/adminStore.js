@@ -55,10 +55,28 @@ const INITIAL_SEED_TEAMS = [
     cancelledAt: null,
     cancellationReason: null,
     members: [
-      { name: "Rishabh Jain", email: "rishabh.j@mitsgwalior.in", phone: "9755223344", college: "MITS Gwalior", enrollmentNo: "0901CS221077", year: "3rd Year", branch: "CSE" },
-      { name: "Shreya Dubey", email: "shreya.d@mitsgwalior.in", phone: "9755223345", college: "MITS Gwalior", enrollmentNo: "0901IT221067", year: "3rd Year", branch: "IT" },
-      { name: "Aman Gupta", email: "aman.g@mitsgwalior.in", phone: "9755223346", college: "MITS Gwalior", enrollmentNo: "0901CS221012", year: "3rd Year", branch: "CSE" },
-      { name: "Siddharth Roy", email: "siddharth.r@mitsgwalior.in", phone: "9755223347", college: "MITS Gwalior", enrollmentNo: "0901EC221088", year: "3rd Year", branch: "ECE" }
+      { name: "Rishabh Jain", email: "rishabh.j@mitsgwalior.in", phone: "9755223344", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221077", year: "3rd Year", branch: "CSE", city: "Gwalior, MP", tshirt: "L", dietary: "Vegetarian" },
+      { name: "Shreya Dubey", email: "shreya.d@mitsgwalior.in", phone: "9755223345", gender: "Female", college: "MITS Gwalior", enrollmentNo: "0901IT221067", year: "3rd Year", branch: "IT", city: "Gwalior, MP", tshirt: "M", dietary: "Vegetarian" },
+      { name: "Aman Gupta", email: "aman.g@mitsgwalior.in", phone: "9755223346", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221012", year: "3rd Year", branch: "CSE", city: "Morena, MP", tshirt: "XL", dietary: "Vegetarian" },
+      { name: "Siddharth Roy", email: "siddharth.r@mitsgwalior.in", phone: "9755223347", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901EC221088", year: "3rd Year", branch: "ECE", city: "Gwalior, MP", tshirt: "L", dietary: "Non-Vegetarian" }
+    ]
+  },
+  {
+    registrationId: "CN27-VANG55",
+    teamName: "Quantum Core",
+    track: "Open Innovation & Green Tech",
+    teamSize: "5",
+    status: "ACTIVE",
+    timestamp: "2026-11-08T15:00:00.000Z",
+    cancelledBy: null,
+    cancelledAt: null,
+    cancellationReason: null,
+    members: [
+      { name: "Aayush Saxena", email: "aayush.s@mitsgwalior.in", phone: "9826119901", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221008", year: "3rd Year", branch: "CSE", city: "Gwalior, MP", tshirt: "L", dietary: "Vegetarian" },
+      { name: "Megha Soni", email: "megha.s@mitsgwalior.in", phone: "9826119902", gender: "Female", college: "MITS Gwalior", enrollmentNo: "0901IT221033", year: "3rd Year", branch: "IT", city: "Jabalpur, MP", tshirt: "S", dietary: "Vegetarian" },
+      { name: "Arjun Nair", email: "arjun.n@mitsgwalior.in", phone: "9826119903", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901AI221019", year: "2nd Year", branch: "AI-DS", city: "Indore, MP", tshirt: "XL", dietary: "Non-Vegetarian" },
+      { name: "Divya Chauhan", email: "divya.c@mitsgwalior.in", phone: "9826119904", gender: "Female", college: "MITS Gwalior", enrollmentNo: "0901EE221041", year: "3rd Year", branch: "EE", city: "Gwalior, MP", tshirt: "M", dietary: "Jain" },
+      { name: "Kunal Bansal", email: "kunal.b@mitsgwalior.in", phone: "9826119905", gender: "Male", college: "MITS Gwalior", enrollmentNo: "0901CS221052", year: "3rd Year", branch: "CSE", city: "Bhopal, MP", tshirt: "L", dietary: "Vegetarian" }
     ]
   }
 ];

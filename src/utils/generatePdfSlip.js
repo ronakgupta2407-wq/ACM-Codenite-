@@ -23,20 +23,25 @@ export function generateRegistrationSlipHtml(data, registrationId) {
               ${roleLabel}
             </span>
             <div>${m.name || "N/A"}</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: normal; margin-top: 2px;">
+              ${m.gender || "Gender N/A"} &bull; ${m.city || "City N/A"}
+            </div>
           </td>
           <td style="padding: 10px; font-size: 12px; color: #334155;">
             <strong>${m.college || "N/A"}</strong>
             <div style="color: #64748b; font-size: 11px; margin-top: 2px;">Roll: ${m.enrollmentNo || "N/A"}</div>
           </td>
           <td style="padding: 10px; font-size: 12px; color: #334155;">
-            ${m.email || "N/A"}
-          </td>
-          <td style="padding: 10px; font-size: 12px; font-family: monospace; color: #334155;">
-            ${m.phone || "N/A"}
+            <div>${m.email || "N/A"}</div>
+            <div style="font-family: monospace; color: #0085CA; font-weight: bold; font-size: 11px; margin-top: 2px;">${m.phone || "N/A"}</div>
           </td>
           <td style="padding: 10px; font-size: 12px; color: #334155;">
             ${m.branch || "N/A"}
             <div style="color: #64748b; font-size: 11px;">${m.year || "N/A"}</div>
+          </td>
+          <td style="padding: 10px; font-size: 11px; color: #334155;">
+            <div><strong>T-Shirt:</strong> ${m.tshirt || "L"}</div>
+            <div style="color: #64748b; margin-top: 2px;"><strong>Diet:</strong> ${m.dietary || "Veg"}</div>
           </td>
         </tr>
       `;
@@ -218,11 +223,11 @@ export function generateRegistrationSlipHtml(data, registrationId) {
         <table class="table-members">
           <thead>
             <tr>
-              <th style="width: 24%;">Member & Role</th>
-              <th style="width: 26%;">College & Roll No.</th>
-              <th style="width: 22%;">Email Address</th>
-              <th style="width: 14%;">Mobile Number</th>
-              <th style="width: 14%;">Branch & Year</th>
+              <th style="width: 24%;">Member, Gender & City</th>
+              <th style="width: 24%;">College & Roll No.</th>
+              <th style="width: 20%;">Email & Phone</th>
+              <th style="width: 16%;">Branch & Year</th>
+              <th style="width: 16%;">Swag & Diet</th>
             </tr>
           </thead>
           <tbody>
