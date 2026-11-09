@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Mail,
   Phone,
@@ -7,10 +7,14 @@ import {
   Instagram,
   Linkedin,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import { EVENT_DATA } from "../data/codeniteData";
+import { DeveloperModal } from "../components/ui/DeveloperModal";
 
 export function Footer() {
+  const [selectedDeveloper, setSelectedDeveloper] = useState(null);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -167,17 +171,80 @@ export function Footer() {
           </div>
         </div>
 
+        {/* ================= LEAD PLATFORM DEVELOPERS FEATURE IN FOOTER ================= */}
+        <div className="py-8 my-8 border-y border-acm-blue/20 bg-gradient-to-r from-navy-950/90 via-[#071338]/80 to-navy-950/90 rounded-2xl px-6 sm:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start gap-2 mb-1.5">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                <h4 className="font-orbitron font-extrabold text-sm sm:text-base text-white tracking-wider uppercase text-glow-cyan">
+                  &lt;Lead Platform Developers/&gt;
+                </h4>
+              </div>
+              <p className="text-xs text-slate-400 font-mono">
+                Engineered with precision for ACM MITS CodeNite 2027. Click card to view full profile & tech stack.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto">
+              {EVENT_DATA.developers.map((dev) => (
+                <div
+                  key={dev.name}
+                  onClick={() => setSelectedDeveloper(dev)}
+                  className="group p-3 sm:p-4 rounded-xl bg-navy-950/90 border border-cyan-400/35 hover:border-cyan-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.3)] transition-all cursor-pointer flex items-center gap-3.5"
+                >
+                  <div className="relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr from-cyan-500 to-indigo-500 shrink-0 group-hover:scale-105 transition-transform">
+                    <img
+                      src={dev.image}
+                      alt={dev.name}
+                      className="w-full h-full object-cover rounded-[10px]"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-400/40 uppercase">
+                        {dev.badge}
+                      </span>
+                    </div>
+                    <h5 className="font-heading font-black text-sm text-white group-hover:text-cyan-300 transition-colors truncate">
+                      {dev.name}
+                    </h5>
+                    <p className="text-[11px] font-mono text-slate-400 truncate">
+                      {dev.role}
+                    </p>
+                  </div>
+                  <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-400 group-hover:bg-cyan-400 group-hover:text-black transition-colors shrink-0">
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Bar: Copyright & Back to Top */}
-        <div className="pt-8 border-t border-acm-blue/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-mono">
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-mono">
           <div>
             &copy; {new Date().getFullYear()} ACM MITS Student Chapter. All rights reserved.
           </div>
 
           <div className="text-center sm:text-right">
             Designed & Engineered with ❤️ by{" "}
-            <span className="text-cyan-400 font-bold">
-              Aditya Ahamana & Ronak Gupta
-            </span>
+            <button
+              type="button"
+              onClick={() => setSelectedDeveloper(EVENT_DATA.developers[0])}
+              className="text-cyan-400 font-bold hover:underline cursor-pointer transition-colors"
+            >
+              Aditya Ahamana
+            </button>
+            {" & "}
+            <button
+              type="button"
+              onClick={() => setSelectedDeveloper(EVENT_DATA.developers[1])}
+              className="text-cyan-400 font-bold hover:underline cursor-pointer transition-colors"
+            >
+              Ronak Gupta
+            </button>
           </div>
 
           {/* Back to Top */}
@@ -192,6 +259,13 @@ export function Footer() {
           </button>
         </div>
       </div>
+
+      {/* Cyber Developer Profile Popup Modal */}
+      <DeveloperModal
+        developer={selectedDeveloper}
+        isOpen={!!selectedDeveloper}
+        onClose={() => setSelectedDeveloper(null)}
+      />
     </footer>
   );
 }
