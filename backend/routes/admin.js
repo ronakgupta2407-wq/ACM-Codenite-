@@ -91,7 +91,9 @@ router.patch('/teams/:id/cancel', (req, res) => {
     }
 
     const updated = updateTeamStatus(id, 'CANCELLED', {
-      cancelledBy: cancelledBy || `Admin (${ADMIN_USER})`,
+      cancelledBy: cancelledBy || (process.env.ADMIN_USERNAME
+        ? `Admin (${process.env.ADMIN_USERNAME})`
+        : 'Admin'),
       reason: reason || 'Registration cancelled by CodeNite Administrator',
     });
 
