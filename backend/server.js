@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 import teamsRouter from './routes/teams.js';
@@ -61,6 +62,16 @@ app.post('/api/register', (req, res, next) => {
   req.url = '/register';
   teamsRouter(req, res, next);
 });
+
+// Serve frontend build in production
+const distPath = path.join(__dirname, '..', 'dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
 // 404 Fallback for unhandled /api routes
 app.use('/api', (req, res) => {
