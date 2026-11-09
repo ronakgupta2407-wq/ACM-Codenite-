@@ -17,6 +17,7 @@ export function Loader({ onFinish }) {
   const [progress, setProgress] = useState(0);
   const [isOverclocked, setIsOverclocked] = useState(false);
   const [clickCount, setClickCount] = useState(0);
+  const finishedRef = React.useRef(false);
 
   // Progressive counter animation
   useEffect(() => {
@@ -30,17 +31,18 @@ export function Loader({ onFinish }) {
         const inc = Math.floor(Math.random() * 2) + 1;
         return Math.min(prev + inc, 100);
       });
-    }, 28);
+    }, 25);
 
     return () => clearInterval(timer);
   }, []);
 
-  // When progress hits 100, call onFinish after short reveal
+  // When progress hits 100, trigger onFinish strictly once
   useEffect(() => {
-    if (progress >= 100) {
+    if (progress >= 100 && !finishedRef.current) {
+      finishedRef.current = true;
       const exitTimer = setTimeout(() => {
         if (onFinish) onFinish();
-      }, 550);
+      }, 400);
       return () => clearTimeout(exitTimer);
     }
   }, [progress, onFinish]);
@@ -194,28 +196,6 @@ export function Loader({ onFinish }) {
           <span className="text-cyan-400/70">1500+ HACKERS READY</span>
         </div>
       </div>
-
-      {/* Curtain Exit Wipe Animation */}
-      <AnimatePresence>
-        {progress >= 100 && (
-          <>
-            <motion.div
-              initial={{ scaleY: 1 }}
-              animate={{ scaleY: 0 }}
-              transition={{ duration: 0.6, ease: [0.77, 0, 0.175, 1] }}
-              style={{ transformOrigin: "top" }}
-              className="absolute inset-x-0 top-0 h-1/2 bg-[#02040b] z-30"
-            />
-            <motion.div
-              initial={{ scaleY: 1 }}
-              animate={{ scaleY: 0 }}
-              transition={{ duration: 0.6, ease: [0.77, 0, 0.175, 1] }}
-              style={{ transformOrigin: "bottom" }}
-              className="absolute inset-x-0 bottom-0 h-1/2 bg-[#02040b] z-30"
-            />
-          </>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }

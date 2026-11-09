@@ -27,8 +27,23 @@ import { Registration } from "./sections/Registration";
 import { Footer } from "./sections/Footer";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !sessionStorage.getItem("codenite_loaded_once");
+    } catch {
+      return true;
+    }
+  });
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+
+  const handleFinishLoading = React.useCallback(() => {
+    try {
+      sessionStorage.setItem("codenite_loaded_once", "true");
+    } catch {
+      // ignore
+    }
+    setLoading(false);
+  }, []);
 
   // Initialize Lenis smooth scroll
   useEffect(() => {
@@ -62,7 +77,7 @@ export default function App() {
     <div className="relative min-h-screen bg-navy-950 text-slate-100 overflow-x-hidden selection:bg-acm-blue selection:text-white">
       {/* 1. Initial Interactive Loader */}
       <AnimatePresence mode="wait">
-        {loading && <Loader onFinish={() => setLoading(false)} />}
+        {loading && <Loader onFinish={handleFinishLoading} />}
       </AnimatePresence>
 
       {/* 2. Background Visual Canvas */}
