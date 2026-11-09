@@ -72,18 +72,19 @@ export function Hero({ onOpenAdmin }) {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-navy-900/90 border border-acm-blue/40 shadow-glow-sm mb-6"
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-950/80 via-navy-900 to-navy-950 border border-cyan-400/40 shadow-[0_0_20px_rgba(0,240,255,0.25)] mb-6 backdrop-blur-xl"
             >
-              <div className="w-5 h-5 rounded-full overflow-hidden bg-white flex items-center justify-center shrink-0">
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-white flex items-center justify-center shrink-0 border border-cyan-400/50 shadow-sm">
                 <img
                   src={EVENT_DATA.organizer.acmLogo}
                   alt="ACM Logo"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-xs font-mono font-semibold tracking-wider uppercase text-acm-cyan">
-                ACM MITS Student Chapter Presents
+              <span className="text-xs font-mono font-bold tracking-widest uppercase text-cyan-300">
+                ACM MITS Chapter // CodeNite 2027
               </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping ml-0.5" />
             </motion.div>
 
             {/* Glitch Headline */}
@@ -94,10 +95,10 @@ export function Hero({ onOpenAdmin }) {
               className="relative"
             >
               <h1 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl text-white tracking-tight leading-none mb-3">
-                <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent drop-shadow-[0_2px_15px_rgba(255,255,255,0.2)]">
                   {glitchText}
                 </span>{" "}
-                <span className="bg-gradient-to-r from-acm-blue via-sky-400 to-acm-cyan bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(0,240,255,0.45)]">
                   2027
                 </span>
               </h1>
@@ -108,7 +109,7 @@ export function Hero({ onOpenAdmin }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl md:text-2xl font-heading font-semibold text-sky-200 mb-4"
+              className="text-lg sm:text-xl md:text-2xl font-heading font-semibold text-cyan-200/90 mb-4 tracking-wide"
             >
               {EVENT_DATA.tagline}
             </motion.h2>
@@ -120,7 +121,7 @@ export function Hero({ onOpenAdmin }) {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl mb-6 font-normal"
             >
-              Join 1,500+ registered student hackers for 12 hours of overnight technical hacking, mentor sessions, high-octane prototyping, and a prize pool of ₹1,50,000+.
+              Join 1,500+ registered student hackers for 12 hours of overnight technical hacking, mentor checkpoints, high-octane prototyping, and a prize pool of ₹1,50,000+.
             </motion.p>
 
             {/* Event Chips */}
@@ -133,9 +134,9 @@ export function Hero({ onOpenAdmin }) {
               {EVENT_DATA.chips.map((chip) => (
                 <div
                   key={chip.label}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-navy-900/80 border border-acm-blue/30 text-xs font-mono text-slate-200 backdrop-blur-md"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-b from-[#0a1538]/80 to-[#04091e]/90 border border-cyan-500/25 text-xs font-mono text-slate-200 backdrop-blur-md hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all"
                 >
-                  <span className="text-acm-cyan font-bold">{chip.label}:</span>
+                  <span className="text-cyan-400 font-bold tracking-wider">{chip.label}:</span>
                   <span className="text-white font-medium">{chip.value}</span>
                 </div>
               ))}
@@ -205,37 +206,40 @@ export function Hero({ onOpenAdmin }) {
               <Card
                 tilt
                 spotlight
-                className="bg-navy-900/95 border border-acm-blue/40 shadow-glow-lg p-7 relative overflow-hidden"
+                className="bg-gradient-to-b from-[#09153b]/95 via-[#050c26]/95 to-[#020516]/98 border-2 border-cyan-400/40 shadow-[0_0_50px_rgba(0,240,255,0.25)] p-7 relative overflow-hidden rounded-3xl"
               >
                 {/* Background ambient radial glow inside card */}
-                <div className="absolute top-0 right-0 w-44 h-44 bg-acm-cyan/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-acm-blue/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-400/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-44 h-44 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
 
-                {/* Top Badge & Live Status */}
-                <div className="flex items-center justify-between pb-5 border-b border-acm-blue/20">
+                {/* Top Terminal Status Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-cyan-500/20">
                   <div className="flex items-center gap-2">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
                     </span>
-                    <span className="text-xs font-mono font-bold tracking-wider uppercase text-emerald-400">
-                      Registrations Live
+                    <span className="text-[11px] font-mono font-bold tracking-widest uppercase text-emerald-400">
+                      TELEMETRY // LIVE
                     </span>
                   </div>
 
-                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-sky-950 text-acm-cyan border border-sky-600/30">
-                    Overnight Edition
+                  <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-400/30 shadow-[0_0_10px_rgba(0,240,255,0.15)] font-bold">
+                    NODE • MITS-01
                   </span>
                 </div>
 
-                {/* Central ACM Chapter Emblem Display - Fitted in Frame */}
-                <div className="py-6 flex flex-col items-center text-center">
+                {/* Central ACM Chapter Emblem Display - Holographic Cyber Frame */}
+                <div className="py-6 flex flex-col items-center text-center relative">
                   <div className="relative w-36 h-36 sm:w-40 sm:h-40 mb-4 flex items-center justify-center">
-                    {/* Glowing outer ring */}
-                    <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-acm-blue via-sky-400 to-acm-cyan opacity-50 blur-md animate-pulse-slow" />
+                    {/* Glowing outer aura */}
+                    <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-cyan-400 via-sky-400 to-indigo-500 opacity-60 blur-lg animate-pulse-slow" />
+
+                    {/* Cyber ring */}
+                    <div className="absolute -inset-1 rounded-full border border-cyan-400/50 border-dashed animate-spin-slow" />
                     
                     {/* Inner bordered circle perfectly fitted */}
-                    <div className="relative w-full h-full rounded-full overflow-hidden bg-white border-2 border-acm-cyan shadow-glow-md flex items-center justify-center p-0">
+                    <div className="relative w-full h-full rounded-full overflow-hidden bg-white border-2 border-cyan-400 shadow-[0_0_25px_rgba(0,240,255,0.5)] flex items-center justify-center p-0">
                       <img
                         src={EVENT_DATA.organizer.acmLogo}
                         alt="ACM MITS Student Chapter"
@@ -244,45 +248,45 @@ export function Hero({ onOpenAdmin }) {
                     </div>
                   </div>
 
-                  <h3 className="font-heading font-black text-2xl text-white tracking-tight">
+                  <h3 className="font-heading font-black text-2xl text-white tracking-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">
                     CodeNite 2027
                   </h3>
-                  <p className="text-xs font-mono text-acm-cyan mt-1">
+                  <p className="text-xs font-mono text-cyan-300 font-bold mt-1 tracking-wider uppercase">
                     ACM MITS Student Chapter • Est. 2014
                   </p>
                 </div>
 
                 {/* Key Event Highlights Grid */}
-                <div className="grid grid-cols-2 gap-3 pt-2 pb-6 border-y border-acm-blue/20 text-xs">
-                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
-                    <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+                <div className="grid grid-cols-2 gap-3 pt-2 pb-6 border-y border-cyan-500/20 text-xs">
+                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
+                    <Trophy className="w-5 h-5 text-amber-400 shrink-0 drop-shadow-[0_0_8px_#fbbf24]" />
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">Prize Pool</div>
-                      <div className="font-heading font-bold text-white text-sm">₹1,50,000+</div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Prize Pool</div>
+                      <div className="font-heading font-black text-white text-base">₹1,50,000+</div>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
-                    <Clock className="w-4 h-4 text-sky-400 shrink-0" />
+                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
+                    <Clock className="w-5 h-5 text-sky-400 shrink-0 drop-shadow-[0_0_8px_#38bdf8]" />
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">Duration</div>
-                      <div className="font-heading font-bold text-white text-sm">12 Hours</div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Duration</div>
+                      <div className="font-heading font-black text-white text-base">12 Hours</div>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
-                    <UsersRound className="w-4 h-4 text-acm-cyan shrink-0" />
+                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
+                    <UsersRound className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_#22d3ee]" />
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">Team Size</div>
-                      <div className="font-heading font-bold text-white text-sm">4 to 6 Members</div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Team Size</div>
+                      <div className="font-heading font-black text-white text-base">4 to 6</div>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-navy-950/70 border border-acm-blue/25 flex items-center gap-2.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
+                    <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 drop-shadow-[0_0_8px_#34d399]" />
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">Registration</div>
-                      <div className="font-heading font-bold text-white text-sm">100% Free</div>
+                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Registration</div>
+                      <div className="font-heading font-black text-white text-base">100% Free</div>
                     </div>
                   </div>
                 </div>
@@ -290,16 +294,16 @@ export function Hero({ onOpenAdmin }) {
                 {/* Bottom Quick Action */}
                 <div className="pt-5 flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
-                    <MapPin className="w-3.5 h-3.5 text-acm-cyan" />
+                    <MapPin className="w-4 h-4 text-cyan-400" />
                     <span>MITS Gwalior Campus</span>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => scrollTo("register")}
-                    className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-acm-cyan hover:text-white transition-colors cursor-pointer group"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-400/50 text-xs font-heading font-bold text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-all cursor-pointer group shadow-[0_0_12px_rgba(0,240,255,0.2)]"
                   >
-                    <span>Register</span>
+                    <span>Register Squad</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>

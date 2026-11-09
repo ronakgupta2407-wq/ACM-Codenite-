@@ -65,22 +65,30 @@ export function Tracks() {
                   tilt
                   spotlight
                   onClick={() => setSelectedTrack(track)}
-                  className="h-full flex flex-col justify-between group hover:border-acm-cyan transition-all duration-300"
+                  className="h-full flex flex-col justify-between group hover:border-cyan-400 hover:shadow-[0_0_35px_rgba(0,240,255,0.25)] transition-all duration-300 relative overflow-hidden"
                 >
+                  {/* Subtle top neon ambient glow */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none group-hover:bg-cyan-400/20 transition-all" />
+
                   <div>
-                    {/* Top row with icon & badge */}
+                    {/* Top row with index, icon & badge */}
                     <div className="flex items-center justify-between mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-navy-800/80 border border-acm-blue/30 flex items-center justify-center text-acm-cyan group-hover:bg-acm-blue/20 group-hover:scale-110 group-hover:border-acm-cyan transition-all">
+                      <div className="w-12 h-12 rounded-2xl bg-cyan-950/60 border border-cyan-400/30 flex items-center justify-center text-cyan-300 group-hover:bg-cyan-500/20 group-hover:scale-110 group-hover:border-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all">
                         <Icon className="w-6 h-6" />
                       </div>
 
-                      <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-navy-800 text-sky-300 border border-sky-400/20 group-hover:border-acm-cyan/50">
-                        {track.badge}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-bold text-slate-400">
+                          // 0{index + 1}
+                        </span>
+                        <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-400/40 shadow-sm group-hover:border-cyan-400">
+                          {track.badge}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Track Title */}
-                    <h3 className="font-heading font-bold text-xl text-white group-hover:text-acm-cyan transition-colors mb-3">
+                    <h3 className="font-heading font-black text-xl text-white group-hover:text-cyan-300 transition-colors mb-3 tracking-tight">
                       {track.title}
                     </h3>
 
@@ -91,12 +99,15 @@ export function Tracks() {
                   </div>
 
                   {/* Card Footer CTA */}
-                  <div className="pt-4 border-t border-acm-blue/20 flex items-center justify-between text-xs font-heading font-semibold text-sky-400 group-hover:text-white transition-colors">
+                  <div className="pt-4 border-t border-cyan-500/20 flex items-center justify-between text-xs font-mono font-bold transition-colors">
                     <span className="flex items-center gap-1.5 text-amber-300">
-                      <Lock className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Problem Statements: Coming Soon</span>
+                      <Lock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                      <span>Challenges: Coming Soon</span>
                     </span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                    <span className="text-cyan-400 group-hover:text-white flex items-center gap-1">
+                      <span>Explore</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
+                    </span>
                   </div>
                 </Card>
               </motion.div>
