@@ -8,6 +8,8 @@ import {
   Linkedin,
   ExternalLink,
   Sparkles,
+  Code2,
+  Terminal,
 } from "lucide-react";
 import { EVENT_DATA } from "../data/codeniteData";
 import { DeveloperModal } from "../components/ui/DeveloperModal";
@@ -193,12 +195,16 @@ export function Footer() {
                   onClick={() => setSelectedDeveloper(dev)}
                   className="group p-3 sm:p-4 rounded-xl bg-navy-950/90 border border-cyan-400/35 hover:border-cyan-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.3)] transition-all cursor-pointer flex items-center gap-3.5"
                 >
-                  <div className="relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr from-cyan-500 to-indigo-500 shrink-0 group-hover:scale-105 transition-transform">
-                    <img
-                      src={dev.image}
-                      alt={dev.name}
-                      className="w-full h-full object-cover rounded-[10px]"
-                    />
+                  <div className={`relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr ${dev.avatarColor || "from-cyan-500 to-indigo-500"} shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.3)]`}>
+                    <div className="w-full h-full rounded-[10px] bg-navy-950 flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
+                      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 to-transparent pointer-events-none" />
+                      <span className="font-orbitron font-black text-xs text-white group-hover:text-cyan-300 tracking-wider">
+                        {dev.initials || dev.name.split(" ").map(n => n[0]).join("")}
+                      </span>
+                      <span className="text-[9px] font-mono text-cyan-400 font-bold leading-none">
+                        &lt;/&gt;
+                      </span>
+                    </div>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
