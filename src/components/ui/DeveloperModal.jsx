@@ -65,13 +65,33 @@ export function DeveloperModal({ developer, isOpen, onClose }) {
 
           {/* Header Profile Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 pb-6 border-b border-cyan-500/20 text-center sm:text-left">
-            {/* Avatar with Animated Gradient Ring */}
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden p-1 bg-gradient-to-tr from-cyan-400 via-sky-300 to-purple-500 shadow-[0_0_25px_rgba(6,182,212,0.4)] shrink-0">
-              <img
-                src={developer.image}
-                alt={developer.name}
-                className="w-full h-full object-cover rounded-2xl"
-              />
+            {/* High-Tech Cyber Monogram Avatar */}
+            <div
+              className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden p-1 bg-gradient-to-tr ${
+                developer.avatarColor || "from-cyan-400 via-sky-300 to-purple-500"
+              } shadow-[0_0_30px_rgba(6,182,212,0.4)] shrink-0`}
+            >
+              <div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#09153a] via-[#050c26] to-[#020514] flex flex-col items-center justify-center relative overflow-hidden border border-cyan-400/30">
+                {/* Background glow and subtle cyber brackets */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.15)_0%,transparent_70%)] pointer-events-none" />
+                <div className="absolute top-1.5 left-2 text-[9px] font-mono text-cyan-400/40 select-none">&lt;DEV&gt;</div>
+                <div className="absolute bottom-1.5 right-2 text-[9px] font-mono text-cyan-400/40 select-none">&lt;/DEV&gt;</div>
+
+                {/* Developer Tech Icon & Initials */}
+                <div className="flex items-center justify-center mb-0.5">
+                  {developer.iconType === "Terminal" ? (
+                    <Terminal className="w-5 h-5 text-purple-400" />
+                  ) : (
+                    <Code2 className="w-5 h-5 text-cyan-400" />
+                  )}
+                </div>
+                <span className="font-orbitron font-black text-2xl sm:text-3xl text-white tracking-widest text-glow-cyan leading-tight">
+                  {developer.initials || developer.name.split(" ").map((n) => n[0]).join("")}
+                </span>
+                <span className="text-[9px] font-mono text-cyan-300/80 font-bold uppercase tracking-wider mt-0.5">
+                  Core Architect
+                </span>
+              </div>
             </div>
 
             <div className="flex-1">
