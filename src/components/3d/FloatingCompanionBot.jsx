@@ -65,7 +65,7 @@ export function FloatingCompanionBot() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end select-none">
+    <div className="fixed bottom-4 right-3 sm:bottom-5 sm:right-5 z-40 flex flex-col items-end select-none">
       {/* Interactive Speech Panel */}
       <AnimatePresence>
         {isOpen && (
@@ -73,7 +73,7 @@ export function FloatingCompanionBot() {
             initial={{ opacity: 0, scale: 0.85, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 15 }}
-            className="mb-3 w-72 sm:w-80 bg-gradient-to-br from-[#0a1435]/95 via-[#060e28]/95 to-[#020514]/98 backdrop-blur-2xl border border-cyan-400/40 rounded-2xl p-4 shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
+            className="mb-2 sm:mb-3 w-[calc(100vw-1.75rem)] sm:w-80 max-w-sm bg-gradient-to-br from-[#0a1435]/95 via-[#060e28]/95 to-[#020514]/98 backdrop-blur-2xl border border-cyan-400/40 rounded-2xl p-3.5 sm:p-4 shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-2 border-b border-cyan-500/20 mb-3">

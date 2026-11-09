@@ -148,13 +148,14 @@ export function Hero({ onOpenAdmin }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-wrap items-center gap-4 mb-8"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-8 w-full sm:w-auto"
             >
               <Button
                 variant="primary"
                 size="lg"
                 pulseRing
                 magnetic
+                className="w-full sm:w-auto justify-center"
                 onClick={() => scrollTo("register")}
               >
                 Register Your Team
@@ -164,7 +165,7 @@ export function Hero({ onOpenAdmin }) {
               <button
                 type="button"
                 onClick={() => onOpenAdmin && onOpenAdmin()}
-                className="px-5 py-3 rounded-xl bg-navy-900/90 hover:bg-navy-800 text-slate-200 hover:text-acm-cyan border border-acm-blue/30 hover:border-acm-cyan text-sm font-mono font-bold flex items-center gap-2 transition-all shadow-sm cursor-pointer"
+                className="px-5 py-3 rounded-xl bg-navy-900/90 hover:bg-navy-800 text-slate-200 hover:text-acm-cyan border border-acm-blue/30 hover:border-acm-cyan text-sm font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer w-full sm:w-auto"
                 title="Organizer Admin Portal"
               >
                 <ShieldCheck className="w-4 h-4 text-acm-cyan" />
@@ -174,6 +175,7 @@ export function Hero({ onOpenAdmin }) {
               <Button
                 variant="outline"
                 size="lg"
+                className="w-full sm:w-auto justify-center"
                 onClick={() => scrollTo("rules")}
               >
                 <FileText className="w-5 h-5 mr-1" />

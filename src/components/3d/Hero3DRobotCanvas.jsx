@@ -24,7 +24,8 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
     const height = container.clientHeight || 500;
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0.5, 7.5);
+    const isMobileInit = window.innerWidth < 640;
+    camera.position.set(0, 0.4, isMobileInit ? 8.6 : 7.5);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
@@ -445,7 +446,7 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
   }, [onRobotClick]);
 
   return (
-    <div className="relative w-full h-[450px] sm:h-[520px] lg:h-[580px] flex items-center justify-center select-none">
+    <div className="relative w-full h-[350px] sm:h-[480px] lg:h-[580px] flex items-center justify-center select-none overflow-hidden">
       {/* 3D WebGL Canvas Container */}
       <div
         ref={mountRef}
@@ -457,25 +458,25 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
 
       {/* Floating Pixar-style Interactive Speech Bubble */}
       {showSpeech && (
-        <div className="absolute top-2 sm:top-6 right-2 sm:right-6 z-20 max-w-[260px] bg-gradient-to-br from-[#0c1938]/95 via-[#08122c]/95 to-[#030617]/98 backdrop-blur-xl border border-cyan-400/50 rounded-2xl p-3.5 shadow-[0_0_25px_rgba(6,182,212,0.35)] animate-bounce-subtle pointer-events-none">
-          <div className="flex items-center gap-2 mb-1">
+        <div className="absolute top-1 sm:top-6 right-2 sm:right-6 z-20 max-w-[210px] sm:max-w-[260px] bg-gradient-to-br from-[#0c1938]/95 via-[#08122c]/95 to-[#030617]/98 backdrop-blur-xl border border-cyan-400/50 rounded-2xl p-2.5 sm:p-3.5 shadow-[0_0_25px_rgba(6,182,212,0.35)] animate-bounce-subtle pointer-events-none">
+          <div className="flex items-center gap-1.5 mb-1">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-            <span className="text-[10px] font-mono font-bold tracking-widest text-cyan-300 uppercase">
+            <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-widest text-cyan-300 uppercase">
               NITEBOT // AI MASCOT
             </span>
           </div>
-          <p className="text-xs font-heading font-medium text-slate-200 leading-snug">
+          <p className="text-[11px] sm:text-xs font-heading font-medium text-slate-200 leading-snug">
             {speechText}
           </p>
           {/* Speech bubble pointer notch */}
-          <div className="absolute -bottom-2 left-6 w-3 h-3 bg-[#08122c] border-b border-r border-cyan-400/50 rotate-45" />
+          <div className="absolute -bottom-1.5 left-5 w-2.5 h-2.5 bg-[#08122c] border-b border-r border-cyan-400/50 rotate-45" />
         </div>
       )}
 
       {/* Interactive Micro-hint */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-[10px] font-mono text-cyan-300 tracking-wider shadow-sm pointer-events-none">
+      <div className="absolute bottom-1 sm:bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-[9px] sm:text-[10px] font-mono text-cyan-300 tracking-wider shadow-sm pointer-events-none whitespace-nowrap">
         <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-        <span>CLICK ME TO CHAT • EYES TRACK YOUR CURSOR</span>
+        <span>CLICK ME TO CHAT • EYES TRACK CURSOR</span>
       </div>
     </div>
   );
