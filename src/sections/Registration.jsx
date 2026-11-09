@@ -299,14 +299,34 @@ export function Registration({ onOpenAdmin }) {
         if (apiResponse && apiResponse.registrationId) {
           finalRegId = apiResponse.registrationId;
           finalTeam = apiResponse.team || { ...payload, registrationId: finalRegId };
+          if (apiResponse.pdfUrl) {
+            setPdfDriveUrl(apiResponse.pdfUrl);
+          }
         }
       } catch (apiErr) {
         // If it's a conflict or business logic error, throw it so the user can fix the input
         if (apiErr.message && (apiErr.message.includes("already registered") || apiErr.message.includes("valid"))) {
           throw apiErr;
         }
-        // Otherwise, server might be offline - proceed smoothly with local fallback
+        // Otherwise, server might be offline - proceed smoothly with local fallback & direct Google Sheets sync
         console.warn("Backend API not reachable, falling back to local persistent store:", apiErr.message);
+
+        const googleScriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL;
+        if (googleScriptUrl) {
+          try {
+            const res = await fetch(googleScriptUrl, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(payload),
+            });
+            const resData = await res.json();
+            if (resData && resData.pdfUrl) {
+              setPdfDriveUrl(resData.pdfUrl);
+            }
+          } catch (gasErr) {
+            console.warn("Direct Google Script sync notice:", gasErr);
+          }
+        }
       }
 
       // Save to local team store as well for immediate offline/hybrid availability

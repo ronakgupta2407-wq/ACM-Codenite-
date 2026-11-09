@@ -29,6 +29,7 @@ import {
   Download,
   Server,
   Activity,
+  ExternalLink,
 } from "lucide-react";
 import {
   getRegisteredTeams,
@@ -486,10 +487,15 @@ export function AdminPortalModal({ isOpen, onClose }) {
             <div className="space-y-6">
               {/* Backend Status & Sync Actions Bar */}
               <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-navy-950/60 border border-acm-blue/20">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <div className={cn("w-2.5 h-2.5 rounded-full animate-pulse", backendStatus.online ? "bg-emerald-400" : "bg-amber-400")} />
                   <span className="text-xs font-mono text-slate-300">
-                    Backend API: {backendStatus.online ? <strong className="text-emerald-400">Connected (Express :5000)</strong> : <strong className="text-amber-400">Local Cache Mode</strong>}
+                    Backend API: {backendStatus.online ? <strong className="text-emerald-400">Connected (:5000)</strong> : <strong className="text-amber-400">Local Cache Mode</strong>}
+                  </span>
+                  <span className="text-slate-600 hidden sm:inline">•</span>
+                  <span className="text-xs font-mono text-sky-300 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
+                    Google Sheets Sync: <strong className="text-emerald-400">Active ☁️</strong>
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -746,6 +752,18 @@ export function AdminPortalModal({ isOpen, onClose }) {
                                 )}
                               </div>
                               <div className="flex items-center gap-2 shrink-0">
+                                {team.pdfUrl && (
+                                  <a
+                                    href={team.pdfUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 py-1.5 rounded-xl bg-sky-950/80 hover:bg-sky-900 text-sky-300 border border-sky-500/50 text-xs font-mono font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+                                    title="View Official Registration PDF on Google Drive"
+                                  >
+                                    <ExternalLink className="w-3.5 h-3.5" />
+                                    <span>Drive PDF</span>
+                                  </a>
+                                )}
                                 <button type="button" onClick={() => setExpandedTeamId(isExpanded ? null : team.registrationId)} className="px-3 py-1.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-300 hover:text-white border border-acm-blue/30 text-xs font-mono font-bold transition-colors cursor-pointer flex items-center gap-1.5">
                                   {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                                   {isExpanded ? "Hide" : "Details"}

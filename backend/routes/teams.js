@@ -117,7 +117,7 @@ router.get('/:id', (req, res) => {
  * POST /api/teams/register
  * Validates and records a new team
  */
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const body = req.body || {};
     const { teamName, track, members, teamSize } = body;
@@ -179,7 +179,7 @@ router.post('/register', (req, res) => {
       });
     }
 
-    // Save team
+    // Save team locally in database
     const created = createTeam({
       teamName: teamName.trim(),
       track: track.trim(),
@@ -190,11 +190,34 @@ router.post('/register', (req, res) => {
       timestamp: new Date().toISOString(),
     });
 
+    let pdfUrl = null;
+    const scriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+
+    // Relay to Google Apps Script (Live Google Sheets & Drive PDF creation)
+    if (scriptUrl) {
+      try {
+        const scriptRes = await fetch(scriptUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(created),
+          signal: AbortSignal.timeout(9000),
+        });
+        const scriptData = await scriptRes.json();
+        if (scriptData && scriptData.pdfUrl) {
+          pdfUrl = scriptData.pdfUrl;
+          created.pdfUrl = pdfUrl;
+        }
+      } catch (scriptErr) {
+        console.warn('[Google Sheets Sync] Sync notice:', scriptErr.message);
+      }
+    }
+
     res.status(201).json({
       success: true,
       message: 'Team successfully registered for ACM CodeNite 2027!',
       registrationId: created.registrationId,
       team: created,
+      pdfUrl: pdfUrl || created.pdfUrl || null,
     });
   } catch (error) {
     console.error('Error during team registration:', error);
