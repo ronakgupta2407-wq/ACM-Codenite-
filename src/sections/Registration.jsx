@@ -44,7 +44,7 @@ import {
 import { registerTeamApi } from "../utils/api";
 import { cn } from "../utils/cn";
 
-// Single member schema
+// Single member schema - contains exactly the requested fields per person
 const memberSchema = z.object({
   name: z.string().min(2, "Full name is required (min 2 chars)"),
   email: z.string().email("Please provide a valid email address"),
@@ -62,27 +62,16 @@ const memberSchema = z.object({
   year: z.string().min(1, "Please select year of study"),
   branch: z.string().min(2, "Branch / Department is required"),
   city: z.string().min(2, "City / State is required"),
-  tshirt: z.enum(["S", "M", "L", "XL", "XXL"], {
-    errorMap: () => ({ message: "Select T-Shirt size" }),
-  }),
-  dietary: z.enum(["Vegetarian", "Non-Vegetarian", "Jain", "Vegan"], {
-    errorMap: () => ({ message: "Select dietary preference" }),
-  }),
-  github: z.string().optional().or(z.literal("")),
-  linkedin: z.string().optional().or(z.literal("")),
 });
 
-// Full registration schema
+// Full registration schema - Team Name, Team Size & Members only
 const registrationSchema = z
   .object({
     teamName: z.string().min(3, "Team name must be at least 3 characters"),
     teamSize: z.enum(["4", "5", "6"], {
       required_error: "Team size must be 4, 5, or 6 members",
     }),
-    track: z.string().min(1, "Please select a preferred innovation track"),
-    projectIdea: z.string().optional().or(z.literal("")),
-    experienceLevel: z.string().default("Intermediate"),
-    referral: z.string().default("ACM Social Media"),
+    track: z.string().optional().default("General Track"),
     consentRules: z.boolean().refine((val) => val === true, {
       message: "You must accept the event rules and code of conduct",
     }),
@@ -132,10 +121,6 @@ const createMemberTemplate = () => ({
   year: "3rd Year",
   branch: "Computer Science & Engineering",
   city: "Gwalior, MP",
-  tshirt: "L",
-  dietary: "Vegetarian",
-  github: "",
-  linkedin: "",
 });
 
 export function Registration({ onOpenAdmin }) {
@@ -195,10 +180,7 @@ export function Registration({ onOpenAdmin }) {
   const defaultValues = {
     teamName: "",
     teamSize: "4",
-    track: EVENT_DATA.tracks[0].title,
-    projectIdea: "",
-    experienceLevel: "Intermediate",
-    referral: "ACM Social Media",
+    track: "General Track",
     consentRules: true,
     members: Array.from({ length: 4 }).map(() => createMemberTemplate()),
   };
