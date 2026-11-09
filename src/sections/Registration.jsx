@@ -228,9 +228,8 @@ export function Registration({ onOpenAdmin }) {
   const handleNextFromStep1 = async () => {
     const isTeamNameValid = await trigger("teamName");
     const isTeamSizeValid = await trigger("teamSize");
-    const isTrackValid = await trigger("track");
 
-    if (isTeamNameValid && isTeamSizeValid && isTrackValid) {
+    if (isTeamNameValid && isTeamSizeValid) {
       setCurrentStep(2);
       window.scrollTo({ top: document.getElementById("register").offsetTop - 80, behavior: "smooth" });
     }
@@ -246,7 +245,7 @@ export function Registration({ onOpenAdmin }) {
       window.scrollTo({ top: document.getElementById("register").offsetTop - 80, behavior: "smooth" });
     } else {
       setStep2ErrorMsg(
-        "Please fill in all required fields for each squad member (Full Name, valid Email, 10-digit Mobile Number, Gender, College, Enrollment Number, Branch, Year, City, T-Shirt, and Dietary preference)."
+        "Please fill in all required fields for each squad member (Full Name, valid Email, 10-digit Mobile Number, Gender, College, Enrollment Number, Year, Branch, and City)."
       );
       // Smoothly scroll to the first element with validation error
       setTimeout(() => {
@@ -477,10 +476,10 @@ export function Registration({ onOpenAdmin }) {
               >
                 <div>
                   <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-white mb-1">
-                    Step 1: Team & Track Identification
+                    Step 1: Team Details
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-400 font-mono">
-                    Provide team details, select an innovation track, and specify your squad size (4 to 6 members).
+                    Enter your team name and select squad size (4, 5, or 6 members).
                   </p>
                 </div>
 
@@ -494,47 +493,28 @@ export function Registration({ onOpenAdmin }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Team Name Input */}
-                  <div>
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
-                      Team Name <span className="text-rose-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Midnight Synapse"
-                      {...register("teamName")}
-                      className={cn(
-                        "w-full px-4 py-3 rounded-xl bg-navy-950 border text-white font-medium placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all",
-                        errors.teamName
-                          ? "border-rose-500/60 ring-1 ring-rose-500/40"
-                          : "border-acm-blue/30 focus:border-acm-cyan"
-                      )}
-                    />
-                    {errors.teamName && (
-                      <p className="mt-1.5 text-xs text-rose-400 flex items-center gap-1 font-mono">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        {errors.teamName.message}
-                      </p>
+                {/* Team Name Input */}
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
+                    Team Name <span className="text-rose-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Midnight Synapse"
+                    {...register("teamName")}
+                    className={cn(
+                      "w-full px-4 py-3 rounded-xl bg-navy-950 border text-white font-medium placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all",
+                      errors.teamName
+                        ? "border-rose-500/60 ring-1 ring-rose-500/40"
+                        : "border-acm-blue/30 focus:border-acm-cyan"
                     )}
-                  </div>
-
-                  {/* Track Preference */}
-                  <div>
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
-                      Innovation Track <span className="text-rose-400">*</span>
-                    </label>
-                    <select
-                      {...register("track")}
-                      className="w-full px-4 py-3 rounded-xl bg-navy-950 border border-acm-blue/30 text-white font-medium focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all"
-                    >
-                      {EVENT_DATA.tracks.map((t) => (
-                        <option key={t.id} value={t.title} className="bg-navy-950 text-white">
-                          {t.title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  />
+                  {errors.teamName && (
+                    <p className="mt-1.5 text-xs text-rose-400 flex items-center gap-1 font-mono">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {errors.teamName.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Team Size Animated Segmented Control */}
@@ -656,51 +636,6 @@ export function Registration({ onOpenAdmin }) {
                         <CheckCircle2 className="w-4 h-4 text-acm-cyan shrink-0" />
                       )}
                     </div>
-                  </div>
-                </div>
-
-                {/* Additional Team Details */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-acm-blue/15">
-                  <div>
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
-                      Experience Level
-                    </label>
-                    <select
-                      {...register("experienceLevel")}
-                      className="w-full px-4 py-3 rounded-xl bg-navy-950 border border-acm-blue/30 text-white font-medium focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all"
-                    >
-                      <option value="Beginner (First Hackathon)">Beginner (First Hackathon)</option>
-                      <option value="Intermediate">Intermediate (1-2 Hackathons)</option>
-                      <option value="Advanced / Experienced">Advanced / Experienced</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
-                      How Did You Hear About CodeNite?
-                    </label>
-                    <select
-                      {...register("referral")}
-                      className="w-full px-4 py-3 rounded-xl bg-navy-950 border border-acm-blue/30 text-white font-medium focus:outline-none focus:ring-2 focus:ring-acm-electric transition-all"
-                    >
-                      <option value="ACM Social Media / Instagram">ACM Social Media / Instagram</option>
-                      <option value="College Notice Board / Faculty">College Notice Board / Faculty</option>
-                      <option value="Friend or Teammate">Friend or Teammate</option>
-                      <option value="WhatsApp / Student Community">WhatsApp / Student Community</option>
-                      <option value="Campus Ambassador">Campus Ambassador</option>
-                    </select>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2">
-                      Project Synopsis / Proposed Idea Concept <span className="text-slate-500 font-normal">(Optional)</span>
-                    </label>
-                    <textarea
-                      rows={2}
-                      placeholder="Briefly describe what problem your team aims to address (can be refined during hackathon)..."
-                      {...register("projectIdea")}
-                      className="w-full px-4 py-2.5 rounded-xl bg-navy-950 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan placeholder-slate-500"
-                    />
                   </div>
                 </div>
 
@@ -955,85 +890,6 @@ export function Registration({ onOpenAdmin }) {
                             {errors.members?.[index]?.city && (
                               <p className="mt-1 text-[11px] text-rose-400 font-mono">
                                 {errors.members[index].city.message}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* T-Shirt Size */}
-                          <div>
-                            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                              T-Shirt Size (Swag Kit) <span className="text-rose-400">*</span>
-                            </label>
-                            <select
-                              {...register(`members.${index}.tshirt`)}
-                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
-                            >
-                              <option value="S">S (Small - 38)</option>
-                              <option value="M">M (Medium - 40)</option>
-                              <option value="L">L (Large - 42)</option>
-                              <option value="XL">XL (Extra Large - 44)</option>
-                              <option value="XXL">XXL (Double Extra Large - 46)</option>
-                            </select>
-                            {errors.members?.[index]?.tshirt && (
-                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
-                                {errors.members[index].tshirt.message}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* Dietary Preference */}
-                          <div>
-                            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                              Dietary Preference <span className="text-rose-400">*</span>
-                            </label>
-                            <select
-                              {...register(`members.${index}.dietary`)}
-                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"
-                            >
-                              <option value="Vegetarian">Vegetarian</option>
-                              <option value="Non-Vegetarian">Non-Vegetarian</option>
-                              <option value="Jain">Jain (Pure Veg, No Root Veg)</option>
-                              <option value="Vegan">Vegan</option>
-                            </select>
-                            {errors.members?.[index]?.dietary && (
-                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
-                                {errors.members[index].dietary.message}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* GitHub Profile */}
-                          <div>
-                            <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                              GitHub Profile (Optional)
-                            </label>
-                            <input
-                              type="url"
-                              placeholder="https://github.com/..."
-                              {...register(`members.${index}.github`)}
-                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/20 text-white text-sm focus:outline-none focus:border-acm-cyan"
-                            />
-                            {errors.members?.[index]?.github && (
-                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
-                                {errors.members[index].github.message}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* LinkedIn Profile */}
-                          <div className="sm:col-span-2 lg:col-span-1">
-                            <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                              LinkedIn Profile (Optional)
-                            </label>
-                            <input
-                              type="url"
-                              placeholder="https://linkedin.com/in/..."
-                              {...register(`members.${index}.linkedin`)}
-                              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/20 text-white text-sm focus:outline-none focus:border-acm-cyan"
-                            />
-                            {errors.members?.[index]?.linkedin && (
-                              <p className="mt-1 text-[11px] text-rose-400 font-mono">
-                                {errors.members[index].linkedin.message}
                               </p>
                             )}
                           </div>
