@@ -3,7 +3,23 @@
  * Seamlessly interfaces with the Express backend server with graceful fallback.
  */
 
+import { getAdminToken, setAdminToken } from './adminStore.js';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+
+function withAdminToken(headers = {}) {
+  const token = getAdminToken();
+  return token ? { ...headers, Authorization: `Bearer ${token}` } : headers;
+}
+
+async function adminFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: withAdminToken(options.headers),
+  });
+  if (res.status === 401) setAdminToken(null);
+  return res;
+}
 
 /**
  * Safely parses response without throwing SyntaxError on HTML / non-JSON responses
@@ -78,7 +94,7 @@ export async function registerTeamApi(payload) {
  */
 export async function fetchTeamsApi(status = '') {
   const url = status ? `${API_BASE}/teams?status=${encodeURIComponent(status)}` : `${API_BASE}/teams`;
-  const res = await fetch(url);
+  const res = await adminFetch(url);
   const data = await parseResponseSafe(res);
   return data.teams || [];
 }
@@ -87,7 +103,7 @@ export async function fetchTeamsApi(status = '') {
  * Search teams by query
  */
 export async function searchTeamsApi(query) {
-  const res = await fetch(`${API_BASE}/teams/search?q=${encodeURIComponent(query)}`);
+  const res = await adminFetch(`${API_BASE}/teams/search?q=${encodeURIComponent(query)}`);
   const data = await parseResponseSafe(res);
   return data.teams || [];
 }
@@ -110,11 +126,11 @@ export async function adminLoginApi(username, password) {
  * Cancel a team registration
  */
 export async function cancelTeamApi(registrationId, reason) {
-  const res = await fetch(`${API_BASE}/admin/teams/${encodeURIComponent(registrationId)}/cancel`, {
+  const res = await adminFetch(`${API_BASE}/admin/teams/${encodeURIComponent(registrationId)}/cancel`, {
     method: 'PATCH',
-    headers: {
+    headers: withAdminToken({
       'Content-Type': 'application/json',
-    },
+    }),
     body: JSON.stringify({ reason }),
   });
   return await parseResponseSafe(res);
@@ -124,17 +140,33 @@ export async function cancelTeamApi(registrationId, reason) {
  * Reactivate a team registration
  */
 export async function reactivateTeamApi(registrationId) {
-  const res = await fetch(`${API_BASE}/admin/teams/${encodeURIComponent(registrationId)}/reactivate`, {
+  const res = await adminFetch(`${API_BASE}/admin/teams/${encodeURIComponent(registrationId)}/reactivate`, {
     method: 'PATCH',
   });
   return await parseResponseSafe(res);
+}
+
+export async function fetchTeamStatusApi(registrationId, email) {
+  const res = await fetch(`${API_BASE}/teams/status`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    cache: 'no-store',
+    body: JSON.stringify({ registrationId, email }),
+  });
+  return await parseResponseSafe(res);
+}
+
+export async function downloadTeamsCsvApi() {
+  const res = await adminFetch(`${API_BASE}/teams/export/csv`);
+  if (!res.ok) await parseResponseSafe(res);
+  return res.blob();
 }
 
 /**
  * Fetch Admin Stats
  */
 export async function fetchStatsApi() {
-  const res = await fetch(`${API_BASE}/admin/stats`);
+  const res = await adminFetch(`${API_BASE}/admin/stats`);
   const data = await parseResponseSafe(res);
   return data.stats;
 }

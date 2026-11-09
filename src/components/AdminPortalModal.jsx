@@ -27,7 +27,6 @@ import {
   Filter,
   TrendingUp,
   Download,
-  Server,
   Activity,
   ExternalLink,
 } from "lucide-react";
@@ -36,13 +35,14 @@ import {
   cancelTeamRegistration,
   reactivateTeamRegistration,
   isAdminAuthenticated,
-  setAdminAuthenticated,
+  setAdminToken,
   searchTeamById,
 } from "../utils/adminStore";
 import {
   fetchTeamsApi,
   cancelTeamApi,
   reactivateTeamApi,
+  downloadTeamsCsvApi,
   checkBackendHealth,
   adminLoginApi,
 } from "../utils/api";
@@ -132,6 +132,7 @@ export function AdminPortalModal({ isOpen, onClose }) {
   const [lookupError, setLookupError] = useState("");
   const [participantQuery, setParticipantQuery] = useState("");
   const [backendStatus, setBackendStatus] = useState({ checked: false, online: false });
+  const [actionError, setActionError] = useState("");
 
   // Sync teams state from Backend API or local storage fallback
   const refreshTeams = async () => {
@@ -147,6 +148,12 @@ export function AdminPortalModal({ isOpen, onClose }) {
     }
     setTeams(getRegisteredTeams());
   };
+
+  useEffect(() => {
+    const handleAuthChange = () => setIsAuthenticated(isAdminAuthenticated());
+    window.addEventListener("acm_admin_auth_changed", handleAuthChange);
+    return () => window.removeEventListener("acm_admin_auth_changed", handleAuthChange);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -170,9 +177,10 @@ export function AdminPortalModal({ isOpen, onClose }) {
     e.preventDefault();
     setLoginError("");
     try {
-      await adminLoginApi(username.trim(), password);
+      const result = await adminLoginApi(username.trim(), password);
+      if (!result.token) throw new Error("The server did not issue an admin session.");
+      setAdminToken(result.token);
       setIsAuthenticated(true);
-      setAdminAuthenticated(true);
       refreshTeams();
     } catch (error) {
       setLoginError(error.message || "Unable to authenticate. Please try again.");
@@ -181,7 +189,7 @@ export function AdminPortalModal({ isOpen, onClose }) {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    setAdminAuthenticated(false);
+    setAdminToken(null);
     setUsername("");
     setPassword("");
   };
@@ -191,8 +199,10 @@ export function AdminPortalModal({ isOpen, onClose }) {
     try {
       await cancelTeamApi(teamId, cancelReason);
     } catch (err) {
-      console.warn("Backend API cancel failed, using local store:", err.message);
+      setActionError(err.message || "Unable to cancel this registration.");
+      return;
     }
+    setActionError("");
     cancelTeamRegistration(teamId, cancelReason);
     setConfirmCancelTeam(null);
     refreshTeams();
@@ -203,16 +213,28 @@ export function AdminPortalModal({ isOpen, onClose }) {
     try {
       await reactivateTeamApi(teamId);
     } catch (err) {
-      console.warn("Backend API reactivate failed, using local store:", err.message);
+      setActionError(err.message || "Unable to reactivate this registration.");
+      return;
     }
+    setActionError("");
     reactivateTeamRegistration(teamId);
     refreshTeams();
   };
 
   // Download CSV export handler
-  const handleDownloadCSV = () => {
+  const handleDownloadCSV = async () => {
     if (backendStatus.online) {
-      window.open("/api/teams/export/csv", "_blank");
+      try {
+        const blob = await downloadTeamsCsvApi();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `acm-codenite-teams-${Date.now()}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        setActionError(err.message || "Unable to export registrations.");
+      }
     } else {
       // Offline fallback CSV generator
       const headers = ["Registration ID", "Team Name", "Track", "Team Size", "Status", "Timestamp", "Leader Name", "Leader Email", "Leader Phone", "Leader College"];
@@ -487,39 +509,30 @@ export function AdminPortalModal({ isOpen, onClose }) {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Backend Status & Sync Actions Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-navy-950/60 border border-acm-blue/20">
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className={cn("w-2.5 h-2.5 rounded-full animate-pulse", backendStatus.online ? "bg-emerald-400" : "bg-amber-400")} />
-                  <span className="text-xs font-mono text-slate-300">
-                    Backend API: {backendStatus.online ? <strong className="text-emerald-400">Connected (:5000)</strong> : <strong className="text-amber-400">Local Cache Mode</strong>}
-                  </span>
-                  <span className="text-slate-600 hidden sm:inline">•</span>
-                  <span className="text-xs font-mono text-sky-300 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
-                    Google Sheets Sync: <strong className="text-emerald-400">Active ☁️</strong>
-                  </span>
+              {actionError && (
+                <div role="alert" className="p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-rose-200 text-sm">
+                  {actionError}
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={refreshTeams}
-                    className="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 border border-acm-blue/30 transition-colors cursor-pointer"
-                    title="Refresh live registrations"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Sync</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleDownloadCSV}
-                    className="px-3 py-1.5 rounded-lg bg-acm-blue/30 hover:bg-acm-blue/50 text-acm-cyan text-xs font-mono font-bold flex items-center gap-1.5 border border-acm-cyan/40 transition-colors cursor-pointer shadow-sm"
-                    title="Download spreadsheet of all registered squads"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Export CSV</span>
-                  </button>
-                </div>
+              )}
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={refreshTeams}
+                  className="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 border border-acm-blue/30 transition-colors cursor-pointer"
+                  title="Refresh live registrations"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Refresh</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadCSV}
+                  className="px-3 py-1.5 rounded-lg bg-acm-blue/30 hover:bg-acm-blue/50 text-acm-cyan text-xs font-mono font-bold flex items-center gap-1.5 border border-acm-cyan/40 transition-colors cursor-pointer shadow-sm"
+                  title="Download spreadsheet of all registered squads"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export CSV</span>
+                </button>
               </div>
 
               {/* Stat Counters Row */}

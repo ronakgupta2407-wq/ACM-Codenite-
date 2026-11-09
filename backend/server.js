@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import teamsRouter from './routes/teams.js';
 import adminRouter from './routes/admin.js';
 import { getAllTeams } from './db.js';
+import { createRateLimiter } from './security.js';
 
 // Load environment variables
 dotenv.config();
@@ -17,17 +18,34 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+app.disable('x-powered-by');
+if (process.env.RENDER) app.set('trust proxy', 1);
 
-// Enable Cross-Origin Resource Sharing
+const allowedOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: '*',
+  origin: (origin, callback) => callback(null, !origin || allowedOrigins.includes(origin)),
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// Body parsers with support for base64 screenshots up to 10MB
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  if (req.path.startsWith('/api')) res.setHeader('Cache-Control', 'no-store');
+  if (req.secure || req.get('x-forwarded-proto') === 'https') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb', parameterLimit: 100 }));
 
 // Lightweight request logging
 app.use((req, res, next) => {
@@ -58,7 +76,7 @@ app.use('/api/teams', teamsRouter);
 app.use('/api/admin', adminRouter);
 
 // Convenient alias for direct POST /api/register
-app.post('/api/register', (req, res, next) => {
+app.post('/api/register', createRateLimiter({ limit: 10, windowMs: 10 * 60 * 1000 }), (req, res, next) => {
   req.url = '/register';
   teamsRouter(req, res, next);
 });

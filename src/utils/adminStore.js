@@ -4,7 +4,7 @@
  */
 
 const STORAGE_KEY = "acm_codenite_registered_teams";
-const ADMIN_AUTH_KEY = "acm_codenite_admin_auth_v2";
+const ADMIN_AUTH_KEY = "acm_codenite_admin_token";
 
 const LEGACY_TEST_TEAM_IDS = new Set([
   "CN27-ALPHA1",
@@ -118,18 +118,22 @@ export function searchTeamById(query) {
 }
 
 export function isAdminAuthenticated() {
+  return Boolean(getAdminToken());
+}
+
+export function getAdminToken() {
   try {
-    return sessionStorage.getItem(ADMIN_AUTH_KEY) === "true";
+    return sessionStorage.getItem(ADMIN_AUTH_KEY);
   } catch {
-    return false;
+    return null;
   }
 }
 
-export function setAdminAuthenticated(val) {
+export function setAdminToken(token) {
   try {
-    if (val) sessionStorage.setItem(ADMIN_AUTH_KEY, "true");
+    if (token) sessionStorage.setItem(ADMIN_AUTH_KEY, token);
     else sessionStorage.removeItem(ADMIN_AUTH_KEY);
-    window.dispatchEvent(new CustomEvent("acm_admin_auth_changed", { detail: val }));
+    window.dispatchEvent(new CustomEvent("acm_admin_auth_changed", { detail: Boolean(token) }));
   } catch (err) {
     console.error("Auth state error", err);
   }

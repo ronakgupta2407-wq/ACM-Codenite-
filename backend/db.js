@@ -225,7 +225,11 @@ export function generateCSV() {
 
   const escapeCSV = (str) => {
     if (str === null || str === undefined) return '""';
-    const s = String(str).replace(/"/g, '""');
+    const value = String(str);
+    const safeValue = /^[\s\u0000-\u001f\u007f-\u009f]*[=+\-@]/u.test(value)
+      ? `'${value}`
+      : value;
+    const s = safeValue.replace(/"/g, '""');
     return `"${s}"`;
   };
 

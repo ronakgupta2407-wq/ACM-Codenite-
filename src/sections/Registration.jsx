@@ -38,10 +38,9 @@ import { triggerConfetti } from "../utils/confetti";
 import { openPrintSlipWindow } from "../utils/generatePdfSlip";
 import {
   saveRegisteredTeam,
-  searchTeamById,
   getRegisteredTeams,
 } from "../utils/adminStore";
-import { registerTeamApi } from "../utils/api";
+import { fetchTeamStatusApi, registerTeamApi } from "../utils/api";
 import { cn } from "../utils/cn";
 
 // Single member schema - contains exactly the requested fields per person
@@ -135,8 +134,11 @@ export function Registration({ onOpenAdmin }) {
   // Team live status search state
   const [showStatusLookup, setShowStatusLookup] = useState(false);
   const [lookupQuery, setLookupQuery] = useState("");
+  const [lookupEmail, setLookupEmail] = useState("");
   const [lookupResult, setLookupResult] = useState(null);
   const [lookupExecuted, setLookupExecuted] = useState(false);
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupError, setLookupError] = useState("");
 
   // Sync with admin cancellations in real-time
   useEffect(() => {
@@ -159,11 +161,23 @@ export function Registration({ onOpenAdmin }) {
     return () => window.removeEventListener("acm_teams_updated", handleUpdate);
   }, [teamRegistrationId]);
 
-  const handleLookupSubmit = (e) => {
+  const handleLookupSubmit = async (e) => {
     e.preventDefault();
-    if (!lookupQuery.trim()) return;
-    const res = searchTeamById(lookupQuery);
-    setLookupResult(res || null);
+    if (!lookupQuery.trim() || !lookupEmail.trim()) return;
+    setLookupLoading(true);
+    setLookupError("");
+    try {
+      const { team } = await fetchTeamStatusApi(lookupQuery.trim(), lookupEmail.trim());
+      setLookupResult(team);
+    } catch (error) {
+      setLookupResult(null);
+      setLookupError(error.status === 404
+        ? "No registration found for those details."
+        : "Unable to verify your registration right now. Please try again later.");
+    } finally {
+      setLookupExecuted(true);
+      setLookupLoading(false);
+    }
     setLookupExecuted(true);
   };
 
@@ -410,6 +424,7 @@ export function Registration({ onOpenAdmin }) {
             onClick={() => {
               setShowStatusLookup(!showStatusLookup);
               setLookupExecuted(false);
+              setLookupError("");
             }}
             className="px-4 py-2 rounded-xl bg-navy-900 border border-acm-blue/30 hover:border-acm-cyan text-slate-300 hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-colors cursor-pointer"
           >
@@ -440,22 +455,34 @@ export function Registration({ onOpenAdmin }) {
                 Lookup Live Squad Registration Status
               </h4>
               <p className="text-xs text-slate-400 font-mono mb-4">
-                Enter your Team Registration ID (e.g. <code>CN27-XXXXXX</code>) to check your real-time status.
+                Enter your Registration ID and the Team Leader email to verify status.
               </p>
 
-              <form onSubmit={handleLookupSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
+              <form onSubmit={handleLookupSubmit} className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 mb-4">
                 <input
                   type="text"
                   value={lookupQuery}
                   onChange={(e) => setLookupQuery(e.target.value)}
-                  placeholder="Enter Team ID or Leader Email (e.g. CN27-ALPHA1)"
+                  placeholder="Registration ID (e.g. CN27-XXXXXX)"
                   className="flex-1 px-4 py-2.5 rounded-xl bg-navy-950 border border-acm-blue/30 text-white text-xs font-mono focus:outline-none focus:border-acm-cyan"
+                  required
+                  maxLength={32}
+                />
+                <input
+                  type="email"
+                  value={lookupEmail}
+                  onChange={(e) => setLookupEmail(e.target.value)}
+                  placeholder="Team Leader email"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-navy-950 border border-acm-blue/30 text-white text-xs font-mono focus:outline-none focus:border-acm-cyan"
+                  required
+                  maxLength={254}
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-acm-blue hover:bg-sky-500 text-white font-heading font-bold text-xs transition-colors cursor-pointer"
+                  disabled={lookupLoading}
+                  className="px-5 py-2.5 rounded-xl bg-acm-blue hover:bg-sky-500 disabled:opacity-60 text-white font-heading font-bold text-xs transition-colors cursor-pointer"
                 >
-                  Verify Status
+                  {lookupLoading ? "Checking..." : "Verify Status"}
                 </button>
               </form>
 
@@ -470,11 +497,6 @@ export function Registration({ onOpenAdmin }) {
                           <span>REGISTRATION CANCELLED BY ADMIN</span>
                         </div>
                         <div>Team: <strong>{lookupResult.teamName}</strong> (ID: {lookupResult.registrationId})</div>
-                        {lookupResult.cancellationReason && (
-                          <div className="mt-1 text-rose-300">
-                            Reason: {lookupResult.cancellationReason}
-                          </div>
-                        )}
                         <div className="mt-2 text-slate-300">
                           Notice: Your team registration was revoked by the ACM MITS Administrator. For inquiries, email: acmmits@mitsgwalior.in.
                         </div>
@@ -493,8 +515,8 @@ export function Registration({ onOpenAdmin }) {
                       </div>
                     )
                   ) : (
-                    <div className="p-3 rounded-xl bg-navy-950/60 border border-slate-700 text-slate-400 text-xs font-mono">
-                      No registered squad found matching "{lookupQuery}". Please check the ID and retry.
+                    <div role="status" className="p-3 rounded-xl bg-navy-950/60 border border-slate-700 text-slate-400 text-xs font-mono">
+                      {lookupError || "No registration found for those details."}
                     </div>
                   )}
                 </div>

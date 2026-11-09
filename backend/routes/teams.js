@@ -6,8 +6,11 @@ import {
   createTeam,
   generateCSV,
 } from '../db.js';
+import { createRateLimiter, requireAdmin } from '../security.js';
 
 const router = express.Router();
+const registrationRateLimiter = createRateLimiter({ limit: 10, windowMs: 10 * 60 * 1000 });
+const statusRateLimiter = createRateLimiter({ limit: 10, windowMs: 10 * 60 * 1000 });
 
 /**
  * Returns a human-readable, formatted Indian Standard Time (IST) timestamp
@@ -32,7 +35,7 @@ function getIndianTimestamp() {
  * GET /api/teams
  * Query params: ?status=ACTIVE|CANCELLED &search=...
  */
-router.get('/', (req, res) => {
+router.get('/', requireAdmin, (req, res) => {
   try {
     const { status, search } = req.query;
     let teams = getAllTeams();
@@ -72,7 +75,7 @@ router.get('/', (req, res) => {
  * GET /api/teams/search
  * Query params: ?q=...
  */
-router.get('/search', (req, res) => {
+router.get('/search', requireAdmin, (req, res) => {
   try {
     const query = req.query.q || req.query.query || '';
     if (!query) {
@@ -94,7 +97,7 @@ router.get('/search', (req, res) => {
  * GET /api/teams/export/csv
  * Downloads a spreadsheet-compatible CSV of all teams
  */
-router.get('/export/csv', (req, res) => {
+router.get('/export/csv', requireAdmin, (req, res) => {
   try {
     const csvData = generateCSV();
     res.setHeader('Content-Type', 'text/csv');
@@ -110,7 +113,41 @@ router.get('/export/csv', (req, res) => {
  * GET /api/teams/:id
  * Retrieve a specific team by registration ID
  */
-router.get('/:id', (req, res) => {
+router.post('/status', statusRateLimiter, (req, res) => {
+  const registrationId = typeof req.body?.registrationId === 'string'
+    ? req.body.registrationId.trim()
+    : '';
+  const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+  if (!registrationId || !email || registrationId.length > 32 || email.length > 254) {
+    return res.status(400).json({
+      success: false,
+      message: 'Registration ID and team leader email are required.',
+    });
+  }
+
+  const team = getTeamById(registrationId);
+  const leaderEmail = team?.members?.[0]?.email;
+  if (!team || typeof leaderEmail !== 'string' || leaderEmail.trim().toLowerCase() !== email) {
+    return res.status(404).json({
+      success: false,
+      message: 'No registration found for those details.',
+    });
+  }
+
+  res.setHeader('Cache-Control', 'no-store');
+  return res.json({
+    success: true,
+    team: {
+      registrationId: team.registrationId,
+      teamName: team.teamName,
+      track: team.track,
+      teamSize: team.teamSize,
+      status: team.status,
+    },
+  });
+});
+
+router.get('/:id', requireAdmin, (req, res) => {
   try {
     const { id } = req.params;
     const team = getTeamById(id);
@@ -136,13 +173,13 @@ router.get('/:id', (req, res) => {
  * POST /api/teams/register
  * Validates and records a new team
  */
-router.post('/register', async (req, res) => {
+router.post('/register', registrationRateLimiter, async (req, res) => {
   try {
     const body = req.body || {};
     const { teamName, track, members, teamSize } = body;
 
     // Basic Validation - Team Name and Squad Size
-    if (!teamName || typeof teamName !== 'string' || teamName.trim().length < 2) {
+    if (!teamName || typeof teamName !== 'string' || teamName.trim().length < 2 || teamName.length > 80) {
       return res.status(400).json({
         success: false,
         message: 'A valid team name (at least 2 characters) is required.',
@@ -156,19 +193,42 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // Validate each member has required 9 fields
+    const memberFields = ['name', 'email', 'phone', 'gender', 'college', 'enrollmentNo', 'year', 'branch', 'city'];
+    const cleanMembers = [];
     for (let i = 0; i < members.length; i++) {
       const m = members[i];
       const memberRole = i === 0 ? 'Team Leader' : `Member ${i + 1}`;
-      if (!m || !m.name || !m.email || !m.phone || !m.college || !m.enrollmentNo) {
+      if (!m || typeof m !== 'object' || Array.isArray(m) ||
+        memberFields.some((field) => typeof m[field] !== 'string' || m[field].trim().length === 0 || m[field].length > 254)) {
         return res.status(400).json({
           success: false,
-          message: `${memberRole} must provide Name, Email, Phone, College, and Enrollment Number.`,
+          message: `${memberRole} details are invalid or incomplete.`,
         });
       }
+      const member = Object.fromEntries(memberFields.map((field) => [field, m[field].trim()]));
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email) ||
+        member.name.length < 2 || member.college.length < 2 || member.enrollmentNo.length < 2 ||
+        member.branch.length < 2 || member.city.length < 2 ||
+        member.phone.replace(/\D/g, '').length < 10) {
+        return res.status(400).json({
+          success: false,
+          message: `${memberRole} details are invalid.`,
+        });
+      }
+      cleanMembers.push(member);
     }
 
-    const leader = members[0];
+    const memberEmails = cleanMembers.map((member) => member.email.toLowerCase());
+    const memberPhones = cleanMembers.map((member) => member.phone.replace(/\D/g, ''));
+    if (new Set(memberEmails).size !== memberEmails.length ||
+      new Set(memberPhones).size !== memberPhones.length) {
+      return res.status(400).json({
+        success: false,
+        message: 'Each team member must have a unique email address and phone number.',
+      });
+    }
+
+    const leader = cleanMembers[0];
     if (!leader || !leader.name || !leader.email || !leader.phone) {
       return res.status(400).json({
         success: false,
@@ -189,27 +249,29 @@ router.post('/register', async (req, res) => {
     }
 
     // Check if leader email is already used in an active team
-    const duplicateLeader = existingTeams.find(
+    const duplicateMember = existingTeams.find(
       (t) =>
         t.status === 'ACTIVE' &&
         Array.isArray(t.members) &&
-        t.members.some((m) => m.email && m.email.trim().toLowerCase() === leader.email.trim().toLowerCase())
+        t.members.some((m) =>
+          cleanMembers.some((member) => m.email && m.email.trim().toLowerCase() === member.email.toLowerCase())
+        )
     );
-    if (duplicateLeader) {
+    if (duplicateMember) {
       return res.status(409).json({
         success: false,
-        message: `Member email '${leader.email}' is already registered with team '${duplicateLeader.teamName}' (${duplicateLeader.registrationId}).`,
+        message: 'One or more team member email addresses are already registered.',
       });
     }
 
     // Save team locally in database
     const created = createTeam({
       teamName: teamName.trim(),
-      track: (track || 'General Innovation').trim(),
-      teamSize: String(members.length),
-      members,
-      paymentScreenshot: body.paymentScreenshot || null,
-      notes: body.notes || null,
+      track: typeof track === 'string' && track.trim() ? track.trim().slice(0, 100) : 'General Innovation',
+      teamSize: String(cleanMembers.length),
+      members: cleanMembers,
+      paymentScreenshot: null,
+      notes: null,
       timestamp: getIndianTimestamp(),
     });
 

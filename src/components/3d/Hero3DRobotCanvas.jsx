@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 /**
@@ -10,9 +10,6 @@ import * as THREE from "three";
  */
 export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
   const mountRef = useRef(null);
-  const [hovered, setHovered] = useState(false);
-  const [speechText, setSpeechText] = useState("System Online! Welcome to CodeNite 2027 ⚡");
-  const [showSpeech, setShowSpeech] = useState(true);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -319,20 +316,7 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
     let isBlinking = false;
     let blinkTimer = 0;
 
-    // --- Speech Reaction Quotes ---
-    const quotes = [
-      "⚡ 1500+ Hackers Synced! Are you ready?",
-      "🚀 Squad size 4 to 6 confirmed. Let's build!",
-      "☕ Midnight caffeine modules fully loaded!",
-      "🏆 ₹1,50,000+ Prize Pool detected!",
-      "💻 Problem statements dropping soon... Stay alert!",
-    ];
-
     const handleClick = () => {
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      setSpeechText(randomQuote);
-      setShowSpeech(true);
-
       // Trigger wave animation on right arm
       waveArm = 1.0;
 
@@ -496,34 +480,9 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
       {/* 3D WebGL Canvas Container */}
       <div
         ref={mountRef}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         className="w-full h-full cursor-pointer relative z-10"
-        title="Click NiteBot Prime to interact!"
+        title="NiteBot Prime"
       />
-
-      {/* Floating Pixar-style Interactive Speech Bubble */}
-      {showSpeech && (
-        <div className="absolute top-1 sm:top-6 right-2 sm:right-6 z-20 max-w-[210px] sm:max-w-[260px] bg-gradient-to-br from-[#0c1938]/95 via-[#08122c]/95 to-[#030617]/98 backdrop-blur-xl border border-cyan-400/50 rounded-2xl p-2.5 sm:p-3.5 shadow-[0_0_25px_rgba(6,182,212,0.35)] animate-bounce-subtle pointer-events-none">
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-            <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-widest text-cyan-300 uppercase">
-              NITEBOT // AI MASCOT
-            </span>
-          </div>
-          <p className="text-[11px] sm:text-xs font-heading font-medium text-slate-200 leading-snug">
-            {speechText}
-          </p>
-          {/* Speech bubble pointer notch */}
-          <div className="absolute -bottom-1.5 left-5 w-2.5 h-2.5 bg-[#08122c] border-b border-r border-cyan-400/50 rotate-45" />
-        </div>
-      )}
-
-      {/* Interactive Micro-hint */}
-      <div className="absolute bottom-1 sm:bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-[9px] sm:text-[10px] font-mono text-cyan-300 tracking-wider shadow-sm pointer-events-none whitespace-nowrap">
-        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-        <span>CLICK ME TO CHAT • EYES TRACK CURSOR</span>
-      </div>
     </div>
   );
 }

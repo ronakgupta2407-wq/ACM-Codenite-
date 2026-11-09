@@ -5,18 +5,25 @@ import {
   getStats,
   getTeamById,
 } from '../db.js';
+import {
+  createAdminToken,
+  createRateLimiter,
+  isAdminAuthConfigured,
+  requireAdmin,
+} from '../security.js';
 
 const router = express.Router();
+const loginRateLimiter = createRateLimiter({ limit: 5, windowMs: 15 * 60 * 1000 });
 
 /**
  * POST /api/admin/login
  * Validates admin credentials
  */
-router.post('/login', (req, res) => {
+router.post('/login', loginRateLimiter, (req, res) => {
   try {
     const { username, password } = req.body || {};
 
-    if (!username || !password) {
+    if (typeof username !== 'string' || typeof password !== 'string' || !username || !password) {
       return res.status(400).json({
         success: false,
         message: 'Username and password are required',
@@ -25,16 +32,15 @@ router.post('/login', (req, res) => {
 
     const adminUser = process.env.ADMIN_USERNAME;
     const adminPass = process.env.ADMIN_PASSWORD;
-    if (!adminUser || !adminPass) {
+    if (!isAdminAuthConfigured()) {
       return res.status(503).json({
         success: false,
-        message: 'Administrator login is not configured on this server.',
+        message: 'Administrator authentication is not securely configured.',
       });
     }
 
-    if (username.trim() === adminUser && password.trim() === adminPass) {
-      // Simple signed token simulation or session token
-      const token = `acm_auth_${Buffer.from(`${username}:${Date.now()}`).toString('base64')}`;
+    if (username.trim() === adminUser && password === adminPass) {
+      const token = createAdminToken(adminUser);
       return res.json({
         success: true,
         message: 'Admin authentication successful',
@@ -55,6 +61,8 @@ router.post('/login', (req, res) => {
     res.status(500).json({ success: false, message: 'Internal authentication error' });
   }
 });
+
+router.use(requireAdmin);
 
 /**
  * GET /api/admin/stats
@@ -80,7 +88,10 @@ router.get('/stats', (req, res) => {
 router.patch('/teams/:id/cancel', (req, res) => {
   try {
     const { id } = req.params;
-    const { reason, cancelledBy } = req.body || {};
+    const { reason } = req.body || {};
+    if (reason !== undefined && (typeof reason !== 'string' || reason.length > 500)) {
+      return res.status(400).json({ success: false, message: 'Cancellation reason must be 500 characters or fewer.' });
+    }
 
     const existing = getTeamById(id);
     if (!existing) {
@@ -91,10 +102,8 @@ router.patch('/teams/:id/cancel', (req, res) => {
     }
 
     const updated = updateTeamStatus(id, 'CANCELLED', {
-      cancelledBy: cancelledBy || (process.env.ADMIN_USERNAME
-        ? `Admin (${process.env.ADMIN_USERNAME})`
-        : 'Admin'),
-      reason: reason || 'Registration cancelled by CodeNite Administrator',
+      cancelledBy: `Admin (${process.env.ADMIN_USERNAME})`,
+      reason: reason?.trim() || 'Registration cancelled by CodeNite Administrator',
     });
 
     res.json({

@@ -6,7 +6,9 @@ This directory contains the production-ready backend infrastructure for the **AC
 
 ## ⚡ Quick Start
 
-Set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in the repository-root `.env` file before using organizer login. Start from `.env.example`, replace its placeholders locally, and never commit `.env` or put credentials in frontend code. Production deployments must set both values in the backend host's secret environment settings.
+Set `ADMIN_USERNAME`, a unique `ADMIN_PASSWORD` of at least 12 characters, and a random `AUTH_TOKEN_SECRET` of at least 32 characters in the repository-root `.env` file before using organizer login. Generate the token secret with `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`. Start from `.env.example`, replace its placeholders locally, and never commit `.env` or put credentials in frontend code. Production deployments must set all three values in the backend host's secret environment settings. Set `CORS_ORIGINS` to a comma-separated list of exact frontend origins only when frontend and API are hosted on different origins.
+
+Admin sessions use signed bearer tokens that expire after 30 minutes. Team lists, searches, exports, lookups, statistics, and changes require a valid admin token. Public registration-status lookup requires both the registration ID and team leader email and returns only limited status details.
 
 ### 1. Install Dependencies
 ```bash
