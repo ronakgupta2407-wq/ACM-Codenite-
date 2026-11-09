@@ -27,11 +27,13 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
     const isMobileInit = window.innerWidth < 640;
     camera.position.set(0, 0.4, isMobileInit ? 8.6 : 7.5);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: window.innerWidth >= 768,
+      powerPreference: "low-power",
+    });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobileInit ? 1 : 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
 
@@ -340,13 +342,21 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
     container.addEventListener("click", handleClick);
 
     let waveArm = 0;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     // --- Animation Loop ---
     let reqId;
+    let lastFrameTime = 0;
+    let isRunning = false;
+    let isInView = false;
+    let isPageVisible = !document.hidden;
     const animate = () => {
+      if (!isRunning) return;
       reqId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
+      if (elapsedTime - lastFrameTime < 1 / 30) return;
+      const frameScale = Math.min((elapsedTime - lastFrameTime) * 60, 2);
+      lastFrameTime = elapsedTime;
 
       // Smooth mouse lerp
       mouse.x += (mouse.targetX - mouse.x) * 0.06;
@@ -366,7 +376,7 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
       eyesGroup.position.y = mouse.y * 0.08 - 0.02;
 
       // 3. Eye Blinking Logic
-      blinkTimer += 0.016;
+      blinkTimer += frameScale / 60;
       if (blinkTimer > 3.8) {
         isBlinking = true;
         eyeL.scale.y = 0.1;
@@ -380,7 +390,7 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
       }
 
       // 4. Chest Reactor Spin & Pulse
-      coreTorus.rotation.z += 0.04;
+      coreTorus.rotation.z += 0.04 * frameScale;
       coreInner.scale.setScalar(1 + Math.sin(elapsedTime * 5) * 0.08);
 
       // 5. Thruster Plasma Pulse
@@ -392,7 +402,7 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
       if (waveArm > 0.01) {
         armRGroup.position.y = 0.5 + Math.sin(elapsedTime * 12) * 0.1;
         armRGroup.rotation.z = -1.2 + Math.sin(elapsedTime * 14) * 0.4;
-        waveArm -= 0.008;
+        waveArm -= 0.008 * frameScale;
       } else {
         armRGroup.position.y = 0.2 + Math.sin(elapsedTime * 2.2 + 1) * 0.05;
         armRGroup.rotation.z = Math.sin(elapsedTime * 2.2) * 0.08;
@@ -401,10 +411,10 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
       armLGroup.rotation.z = -Math.sin(elapsedTime * 2.2) * 0.08;
 
       // 7. Rotating Holographic Rings
-      holoRing1.rotation.z += 0.008;
-      holoRing1.rotation.y += 0.005;
-      holoRing2.rotation.z -= 0.01;
-      holoRing2.rotation.x += 0.007;
+      holoRing1.rotation.z += 0.008 * frameScale;
+      holoRing1.rotation.y += 0.005 * frameScale;
+      holoRing2.rotation.z -= 0.01 * frameScale;
+      holoRing2.rotation.x += 0.007 * frameScale;
 
       // 8. Orbiting Data Cubes
       cubes.forEach((cube, i) => {
@@ -413,14 +423,35 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
         cube.position.x = Math.cos(angle) * radius;
         cube.position.z = Math.sin(angle) * radius;
         cube.position.y = Math.sin(angle * 2) * 0.7;
-        cube.rotation.x += 0.02;
-        cube.rotation.y += 0.03;
+        cube.rotation.x += 0.02 * frameScale;
+        cube.rotation.y += 0.03 * frameScale;
       });
 
       renderer.render(scene, camera);
     };
 
-    animate();
+    const updateAnimationState = () => {
+      const shouldRun = isInView && isPageVisible;
+      if (shouldRun && !isRunning) {
+        isRunning = true;
+        clock.start();
+        lastFrameTime = 0;
+        reqId = requestAnimationFrame(animate);
+      } else if (!shouldRun && isRunning) {
+        isRunning = false;
+        cancelAnimationFrame(reqId);
+      }
+    };
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      isInView = entry.isIntersecting;
+      updateAnimationState();
+    });
+    visibilityObserver.observe(container);
+    const handleVisibilityChange = () => {
+      isPageVisible = !document.hidden;
+      updateAnimationState();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // Resize Handler
     const handleResize = () => {
@@ -430,14 +461,29 @@ export function Hero3DRobotCanvas({ onRobotClick, currentMood = "happy" }) {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio || 1, window.innerWidth < 640 ? 1 : 1.5)
+      );
     };
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      visibilityObserver.disconnect();
       container.removeEventListener("click", handleClick);
+      isRunning = false;
       cancelAnimationFrame(reqId);
+      scene.traverse((object) => {
+        if (object.geometry) object.geometry.dispose();
+        if (object.material) {
+          const materials = Array.isArray(object.material)
+            ? object.material
+            : [object.material];
+          materials.forEach((material) => material.dispose());
+        }
+      });
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }

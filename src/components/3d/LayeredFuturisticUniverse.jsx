@@ -14,19 +14,29 @@ export function LayeredFuturisticUniverse() {
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
     let animationFrameId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let lastFrameTime = 0;
+    const isMobile = window.innerWidth < 640;
+    const renderScale = isMobile ? 0.65 : 0.8;
+    const motionAllowed = !window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * renderScale);
+      canvas.height = Math.round(height * renderScale);
+      ctx.setTransform(renderScale, 0, 0, renderScale, 0, 0);
     };
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     // 1. Floating Robotic Circuit Nodes
-    const numNodes = 40;
+    const numNodes = isMobile ? 16 : 28;
     const nodes = [];
     for (let i = 0; i < numNodes; i++) {
       nodes.push({
@@ -40,7 +50,7 @@ export function LayeredFuturisticUniverse() {
     }
 
     // 2. Subtle Matrix Rain Code Streams
-    const numStreams = 22;
+    const numStreams = isMobile ? 8 : 14;
     const streams = [];
     const glyphs = "0101<>{}[]_/#$%*ACM";
     for (let i = 0; i < numStreams; i++) {
@@ -53,9 +63,14 @@ export function LayeredFuturisticUniverse() {
       });
     }
 
-    let time = 0;
-    const render = () => {
-      time += 0.015;
+    let isRunning = false;
+    const render = (frameTime) => {
+      if (!isRunning) return;
+      if (frameTime - lastFrameTime < 1000 / 30) {
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+      lastFrameTime = frameTime;
       ctx.clearRect(0, 0, width, height);
 
       // Render Circuit Network Lines
@@ -112,11 +127,26 @@ export function LayeredFuturisticUniverse() {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    const startAnimation = () => {
+      if (isRunning || document.hidden) return;
+      isRunning = true;
+      animationFrameId = requestAnimationFrame(render);
+    };
+    const stopAnimation = () => {
+      isRunning = false;
+      cancelAnimationFrame(animationFrameId);
+    };
+    const handleVisibilityChange = () => {
+      if (document.hidden || !motionAllowed) stopAnimation();
+      else startAnimation();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    if (motionAllowed) startAnimation();
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stopAnimation();
     };
   }, []);
 
