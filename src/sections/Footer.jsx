@@ -175,8 +175,8 @@ export function Footer() {
 
           <div className="text-center sm:text-right">
             Designed & Engineered with ❤️ by{" "}
-            <span className="text-acm-cyan font-semibold">
-              ACM MITS Technical Team
+            <span className="text-cyan-400 font-bold">
+              Aditya Ahamana & Ronak Gupta
             </span>
           </div>
 
