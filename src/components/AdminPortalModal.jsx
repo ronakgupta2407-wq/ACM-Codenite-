@@ -23,10 +23,12 @@ import {
   BarChart3,
   PieChart,
   Table2,
-  Activity,
   UserCircle2,
   Filter,
   TrendingUp,
+  Download,
+  Server,
+  Activity,
 } from "lucide-react";
 import {
   getRegisteredTeams,
@@ -36,6 +38,12 @@ import {
   setAdminAuthenticated,
   searchTeamById,
 } from "../utils/adminStore";
+import {
+  fetchTeamsApi,
+  cancelTeamApi,
+  reactivateTeamApi,
+  checkBackendHealth,
+} from "../utils/api";
 import { cn } from "../utils/cn";
 
 // ---------- Mini Chart Components ----------
@@ -121,23 +129,40 @@ export function AdminPortalModal({ isOpen, onClose }) {
   const [lookedUpTeam, setLookedUpTeam] = useState(null);
   const [lookupError, setLookupError] = useState("");
   const [participantQuery, setParticipantQuery] = useState("");
+  const [backendStatus, setBackendStatus] = useState({ checked: false, online: false });
 
-  const refreshTeams = () => {
+  // Sync teams state from Backend API or local storage fallback
+  const refreshTeams = async () => {
+    try {
+      const apiTeams = await fetchTeamsApi();
+      if (Array.isArray(apiTeams)) {
+        setTeams(apiTeams);
+        setBackendStatus({ checked: true, online: true });
+        return;
+      }
+    } catch {
+      // Backend offline or error -> smoothly use local store
+    }
     setTeams(getRegisteredTeams());
   };
 
   useEffect(() => {
-    refreshTeams();
+    if (isOpen) {
+      checkBackendHealth().then((health) => {
+        setBackendStatus({ checked: true, online: health.online });
+      });
+      refreshTeams();
+    }
     const handleUpdate = () => refreshTeams();
     window.addEventListener("acm_teams_updated", handleUpdate);
     window.addEventListener("storage", handleUpdate);
-    const interval = setInterval(refreshTeams, 4000);
+    const interval = isOpen ? setInterval(refreshTeams, 4000) : null;
     return () => {
       window.removeEventListener("acm_teams_updated", handleUpdate);
       window.removeEventListener("storage", handleUpdate);
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [isOpen]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -158,15 +183,60 @@ export function AdminPortalModal({ isOpen, onClose }) {
     setPassword("");
   };
 
-  const handleExecuteCancel = (teamId) => {
+  // Cancel team registration
+  const handleExecuteCancel = async (teamId) => {
+    try {
+      await cancelTeamApi(teamId, cancelReason);
+    } catch (err) {
+      console.warn("Backend API cancel failed, using local store:", err.message);
+    }
     cancelTeamRegistration(teamId, cancelReason);
     setConfirmCancelTeam(null);
     refreshTeams();
   };
 
-  const handleExecuteReactivate = (teamId) => {
+  // Reactivate team registration
+  const handleExecuteReactivate = async (teamId) => {
+    try {
+      await reactivateTeamApi(teamId);
+    } catch (err) {
+      console.warn("Backend API reactivate failed, using local store:", err.message);
+    }
     reactivateTeamRegistration(teamId);
     refreshTeams();
+  };
+
+  // Download CSV export handler
+  const handleDownloadCSV = () => {
+    if (backendStatus.online) {
+      window.open("/api/teams/export/csv", "_blank");
+    } else {
+      // Offline fallback CSV generator
+      const headers = ["Registration ID", "Team Name", "Track", "Team Size", "Status", "Timestamp", "Leader Name", "Leader Email", "Leader Phone", "Leader College"];
+      const rows = teams.map((t) => {
+        const leader = t.members?.[0] || {};
+        return [
+          `"${t.registrationId || ''}"`,
+          `"${t.teamName || ''}"`,
+          `"${t.track || ''}"`,
+          `"${t.teamSize || ''}"`,
+          `"${t.status || ''}"`,
+          `"${t.timestamp || ''}"`,
+          `"${leader.name || ''}"`,
+          `"${leader.email || ''}"`,
+          `"${leader.phone || ''}"`,
+          `"${leader.college || ''}"`
+        ].join(",");
+      });
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `acm-codenite-teams-${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   const handleCopy = (id) => {
@@ -414,6 +484,36 @@ export function AdminPortalModal({ isOpen, onClose }) {
             </div>
           ) : (
             <div className="space-y-6">
+              {/* Backend Status & Sync Actions Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-navy-950/60 border border-acm-blue/20">
+                <div className="flex items-center gap-2">
+                  <div className={cn("w-2.5 h-2.5 rounded-full animate-pulse", backendStatus.online ? "bg-emerald-400" : "bg-amber-400")} />
+                  <span className="text-xs font-mono text-slate-300">
+                    Backend API: {backendStatus.online ? <strong className="text-emerald-400">Connected (Express :5000)</strong> : <strong className="text-amber-400">Local Cache Mode</strong>}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={refreshTeams}
+                    className="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 border border-acm-blue/30 transition-colors cursor-pointer"
+                    title="Refresh live registrations"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Sync</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDownloadCSV}
+                    className="px-3 py-1.5 rounded-lg bg-acm-blue/30 hover:bg-acm-blue/50 text-acm-cyan text-xs font-mono font-bold flex items-center gap-1.5 border border-acm-cyan/40 transition-colors cursor-pointer shadow-sm"
+                    title="Download spreadsheet of all registered squads"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Stat Counters Row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="p-4 rounded-xl bg-navy-950/80 border border-acm-blue/30">
@@ -557,7 +657,7 @@ export function AdminPortalModal({ isOpen, onClose }) {
                           <div key={t.registrationId} className="flex items-center justify-between p-2.5 rounded-xl bg-navy-900/80 border border-acm-blue/10">
                             <div>
                               <div className="text-xs font-bold text-white">{t.teamName}</div>
-                              <div className="text-[10px] font-mono text-slate-400">{t.registrationId} • {t.track}</div>
+                              <div className="text-[10px] font-mono text-slate-400">{t.registrationId} ï¿½ {t.track}</div>
                             </div>
                             <span className={cn("text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border", t.status === "ACTIVE" ? "bg-emerald-950 text-emerald-300 border-emerald-500/40" : "bg-rose-950 text-rose-300 border-rose-500/40")}>
                               {t.status}
@@ -667,12 +767,12 @@ export function AdminPortalModal({ isOpen, onClose }) {
                                         <span>{m.name}</span>
                                         <span className="text-[10px] font-mono text-sky-400">{mIdx === 0 ? "LEADER" : `MEMBER ${mIdx + 1}`}</span>
                                       </div>
-                                      <div className="text-slate-400">{m.email} • {m.phone}</div>
+                                      <div className="text-slate-400">{m.email} ï¿½ {m.phone}</div>
                                       <div className="text-slate-400">{m.college} ({m.enrollmentNo})</div>
-                                      <div className="text-slate-400">{m.branch} - {m.year} {m.city ? `• ${m.city}` : ""}</div>
+                                      <div className="text-slate-400">{m.branch} - {m.year} {m.city ? `ï¿½ ${m.city}` : ""}</div>
                                       {(m.gender || m.tshirt || m.dietary) && (
                                         <div className="text-sky-300 font-mono text-[10px] mt-1 pt-1 border-t border-acm-blue/10">
-                                          {m.gender ? `${m.gender} • ` : ""}{m.tshirt ? `Size: ${m.tshirt} • ` : ""}{m.dietary ? `Diet: ${m.dietary}` : ""}
+                                          {m.gender ? `${m.gender} ï¿½ ` : ""}{m.tshirt ? `Size: ${m.tshirt} ï¿½ ` : ""}{m.dietary ? `Diet: ${m.dietary}` : ""}
                                         </div>
                                       )}
                                     </div>
@@ -728,7 +828,7 @@ export function AdminPortalModal({ isOpen, onClose }) {
                             <td className="py-2 px-2 text-slate-300">{p.member.email}</td>
                             <td className="py-2 px-2 text-slate-300 font-mono">{p.member.phone}</td>
                             <td className="py-2 px-2 text-slate-300">{p.member.college} <span className="text-slate-500">({p.member.enrollmentNo})</span></td>
-                            <td className="py-2 px-2 text-slate-300">{p.member.branch} • {p.member.year}</td>
+                            <td className="py-2 px-2 text-slate-300">{p.member.branch} ï¿½ {p.member.year}</td>
                             <td className="py-2 px-2">
                               <span className={cn("text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border", p.team.status === "ACTIVE" ? "bg-emerald-950 text-emerald-300 border-emerald-500/40" : "bg-rose-950 text-rose-300 border-rose-500/40")}>
                                 {p.team.status}
@@ -787,9 +887,9 @@ export function AdminPortalModal({ isOpen, onClose }) {
                             </span>
                           </div>
                           <h4 className="font-heading font-extrabold text-xl text-white">{lookedUpTeam.teamName}</h4>
-                          <p className="text-xs text-slate-300 font-mono mt-1">Track: <strong className="text-acm-cyan">{lookedUpTeam.track}</strong> • {lookedUpTeam.teamSize} Members</p>
+                          <p className="text-xs text-slate-300 font-mono mt-1">Track: <strong className="text-acm-cyan">{lookedUpTeam.track}</strong> ï¿½ {lookedUpTeam.teamSize} Members</p>
                           {lookedUpTeam.cancelledAt && (
-                            <p className="text-xs text-rose-300 font-mono mt-1">Cancelled at {new Date(lookedUpTeam.cancelledAt).toLocaleString()} — {lookedUpTeam.cancellationReason}</p>
+                            <p className="text-xs text-rose-300 font-mono mt-1">Cancelled at {new Date(lookedUpTeam.cancelledAt).toLocaleString()} ï¿½ {lookedUpTeam.cancellationReason}</p>
                           )}
                         </div>
                         <div className="text-[10px] font-mono text-slate-400">Registered: {new Date(lookedUpTeam.timestamp).toLocaleString()}</div>
@@ -803,12 +903,12 @@ export function AdminPortalModal({ isOpen, onClose }) {
                                 <span>{m.name}</span>
                                 <span className="text-[10px] font-mono text-sky-400">{mIdx === 0 ? "LEADER" : `MEMBER ${mIdx + 1}`}</span>
                               </div>
-                              <div className="text-slate-400">{m.email} • {m.phone}</div>
+                              <div className="text-slate-400">{m.email} ï¿½ {m.phone}</div>
                               <div className="text-slate-400">{m.college} ({m.enrollmentNo})</div>
-                              <div className="text-slate-400">{m.branch} - {m.year} {m.city ? `• ${m.city}` : ""}</div>
+                              <div className="text-slate-400">{m.branch} - {m.year} {m.city ? `ï¿½ ${m.city}` : ""}</div>
                               {(m.gender || m.tshirt || m.dietary) && (
                                 <div className="text-sky-300 font-mono text-[10px] mt-1 pt-1 border-t border-acm-blue/10">
-                                  {m.gender ? `${m.gender} • ` : ""}{m.tshirt ? `Size: ${m.tshirt} • ` : ""}{m.dietary ? `Diet: ${m.dietary}` : ""}
+                                  {m.gender ? `${m.gender} ï¿½ ` : ""}{m.tshirt ? `Size: ${m.tshirt} ï¿½ ` : ""}{m.dietary ? `Diet: ${m.dietary}` : ""}
                                 </div>
                               )}
                               {(m.github || m.linkedin) && (
