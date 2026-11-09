@@ -64,16 +64,6 @@ export function BackgroundEffects() {
         ))}
       </div>
 
-      {/* Futuristic Telemetry HUD Watermarks (Fixed Corners) */}
-      <div className="hidden xl:flex absolute top-20 left-8 items-center gap-2 text-[10px] font-mono text-cyan-400/40 uppercase tracking-widest pointer-events-none">
-        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/60 animate-ping" />
-        <span>SYS.STATUS // LAT 26.2302°N • LONG 78.2046°E // NODE.MITS.01</span>
-      </div>
-
-      <div className="hidden xl:flex absolute top-20 right-8 items-center gap-2 text-[10px] font-mono text-cyan-400/40 uppercase tracking-widest pointer-events-none">
-        <span>// ACM MITS CHAPTER • CODENITE 2027 • T-MINUS 12H //</span>
-      </div>
-
       {/* Circuit trace accent lines top right */}
       <svg
         className="absolute right-0 top-0 w-96 h-96 opacity-15 text-cyan-400 pointer-events-none"
