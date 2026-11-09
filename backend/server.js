@@ -121,6 +121,26 @@ const server = app.listen(PORT, () => {
   console.log(`📊 Stats:     http://localhost:${PORT}/api/admin/stats`);
   console.log(`📥 CSV:       http://localhost:${PORT}/api/teams/export/csv`);
   console.log(`======================================================\n`);
+
+  // Automatic Keep-Alive Ping for Render Free Tier (Prevents 15-minute Sleep / Cold Start)
+  // Render automatically injects RENDER_EXTERNAL_URL (e.g. https://acm-codenite.onrender.com)
+  const externalUrl = process.env.RENDER_EXTERNAL_URL || process.env.SERVER_URL;
+  if (externalUrl) {
+    console.log(`⚡ Keep-Alive active: Pinging ${externalUrl}/api/health every 13 minutes`);
+    const PING_INTERVAL = 13 * 60 * 1000;
+    setInterval(async () => {
+      try {
+        const pingRes = await fetch(`${externalUrl}/api/health`, {
+          signal: AbortSignal.timeout(10000),
+        });
+        if (pingRes.ok) {
+          console.log(`[Keep-Alive] Self-ping successful at ${new Date().toLocaleTimeString('en-IN')}`);
+        }
+      } catch (err) {
+        console.warn(`[Keep-Alive] Notice: ${err.message}`);
+      }
+    }, PING_INTERVAL);
+  }
 });
 
 export default app;
