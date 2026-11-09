@@ -56,8 +56,8 @@ export function ToastNotification() {
               </div>
 
               <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                Slots are filling up fast for CodeNite 2027. Teams require{" "}
-                <span className="text-acm-cyan font-semibold">4 to 6 members</span> (female not compulsory).
+                Slots are filling up fast for CodeNite 2027. Form your squad of{" "}
+                <span className="text-acm-cyan font-semibold">4 to 6 members</span> and lock in your registration.
               </p>
 
               <div className="mt-3 flex items-center gap-2">

@@ -68,7 +68,7 @@ export function WelcomeModal({ showAfterLoader }) {
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Female Not Compulsory:</strong> Open to all genders, zero mandatory quotas.
+              <strong>Open Eligibility:</strong> Open to all undergraduate & postgraduate students.
             </span>
           </div>
 

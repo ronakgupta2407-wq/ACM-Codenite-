@@ -156,7 +156,7 @@ export function About() {
               </div>
               <div className="flex items-center gap-2 text-xs font-mono text-sky-300">
                 <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                <span>Female Not Compulsory</span>
+                <span>Cross-College Squads Allowed</span>
               </div>
             </div>
           </Card>

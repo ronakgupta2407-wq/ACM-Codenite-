@@ -53,7 +53,7 @@ const memberSchema = z.object({
       message: "Please enter a valid 10-digit mobile number",
     }),
   gender: z.enum(["Male", "Female", "Other", "Prefer not to say"], {
-    errorMap: () => ({ message: "Please select gender (female not compulsory)" }),
+    errorMap: () => ({ message: "Please select gender" }),
   }),
   college: z.string().min(2, "College/Institute name is required"),
   enrollmentNo: z.string().min(2, "Student Enrollment / Roll No. is required"),
@@ -433,7 +433,7 @@ export function Registration({ onOpenAdmin }) {
           badge="Registration Portal"
           title="Register Your"
           highlight="CodeNite Squad"
-          subtitle="Form a team of 4 to 6 members. Registration is 100% free. Female participant is NOT compulsory. Lock in your spot."
+          subtitle="Form a team of 4 to 6 members. Registration is 100% free with meals, swag, and trophies included on campus."
         />
 
         {/* Action Header: Status Lookup & Admin Portal */}
@@ -572,21 +572,13 @@ export function Registration({ onOpenAdmin }) {
                   </p>
                 </div>
 
-                {/* Team Composition & Gender Reassurance Notice */}
-                <div className="p-4 rounded-xl bg-gradient-to-r from-sky-950/70 via-navy-900 to-navy-950 border border-sky-400/35 flex items-start gap-3.5">
-                  <div className="p-2 rounded-lg bg-sky-500/20 text-acm-cyan border border-sky-400/30 shrink-0 mt-0.5">
-                    <UsersRound className="w-5 h-5" />
+                {/* Team Guidelines Info Strip */}
+                <div className="p-3.5 rounded-xl bg-navy-950/70 border border-acm-blue/30 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-acm-blue/15 text-acm-cyan border border-acm-cyan/30 shrink-0">
+                    <UsersRound className="w-4 h-4" />
                   </div>
-                  <div className="text-xs font-mono text-slate-300 leading-relaxed">
-                    <div className="text-white font-bold text-sm mb-0.5">
-                      Squad Size & Female Participation Policy
-                    </div>
-                    <div>
-                      • Squads can consist of <strong className="text-acm-cyan">4, 5, or 6 members</strong>.
-                    </div>
-                    <div>
-                      • A female participant is <strong className="text-emerald-400 underline">NOT compulsory</strong>. Any gender combination (all-male, all-female, or co-ed) is 100% permitted.
-                    </div>
+                  <div className="text-xs font-mono text-slate-300">
+                    <span className="text-white font-bold">Squad Guidelines:</span> Teams can consist of <strong className="text-acm-cyan">4, 5, or 6 members</strong>. Inter-college and multi-department collaborations are welcomed.
                   </div>
                 </div>
 
@@ -847,16 +839,6 @@ export function Registration({ onOpenAdmin }) {
                   </div>
                 </div>
 
-                {/* Reassurance banner on female participation */}
-                <div className="p-3.5 rounded-xl bg-sky-950/40 border border-sky-400/30 flex items-center gap-3">
-                  <span className="p-1.5 rounded-lg bg-sky-500/20 text-sky-300">
-                    <UsersRound className="w-4 h-4" />
-                  </span>
-                  <div className="text-xs font-mono text-slate-300">
-                    <strong className="text-white">Participation Note:</strong> A female member is <span className="text-emerald-400 font-bold underline">NOT compulsory</span>. Squads can have any gender distribution of {selectedTeamSize} participants.
-                  </div>
-                </div>
-
                 {/* Global Members Validation Error if any */}
                 {errors.members?.message && (
                   <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-500/40 text-rose-300 text-xs sm:text-sm flex items-center gap-2">
@@ -964,14 +946,9 @@ export function Registration({ onOpenAdmin }) {
 
                           {/* Gender */}
                           <div>
-                            <div className="flex items-center justify-between mb-1.5">
-                              <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300">
-                                Gender <span className="text-rose-400">*</span>
-                              </label>
-                              <span className="text-[10px] font-mono text-emerald-400 font-medium">
-                                (Female not compulsory)
-                              </span>
-                            </div>
+                            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                              Gender <span className="text-rose-400">*</span>
+                            </label>
                             <select
                               {...register(`members.${index}.gender`)}
                               className="w-full px-3.5 py-2.5 rounded-xl bg-navy-900 border border-acm-blue/30 text-white text-sm focus:outline-none focus:border-acm-cyan"

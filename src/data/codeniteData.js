@@ -297,15 +297,15 @@ export const EVENT_DATA = {
       id: "team-size",
       question: "What is the Team Size requirement?",
       answer:
-        "Every participating team MUST consist of 4 to 6 members (4, 5, or 6 members). Individual registrations (solo), 2-person, or 3-person squads are not permitted. This ensures balanced competitive dynamics and rigorous division of engineering roles.",
+        "Participating teams can consist of 4 to 6 members (4, 5, or 6 members). Solo participants, pairs, or teams of 3 are not permitted. This ensures balanced division of development and design roles.",
       highlight: true,
     },
     {
-      id: "gender-rule",
-      question: "Is there any mandatory female participant requirement?",
+      id: "team-composition",
+      question: "What are the squad composition guidelines?",
       answer:
-        "NO. A female participant is NOT compulsory. There is absolutely NO mandatory female participant quota or restriction. Teams can be formed freely with any mix of individuals (all-male, all-female, or mixed) based purely on talent, choice, and collaboration. All genders are wholeheartedly welcome to participate.",
-      highlight: true,
+        "Teams can be formed freely with any mix of individuals based on talent, skill synergy, and collaboration. Cross-college, cross-branch, and cross-year teams from any recognized Indian institute are fully permitted.",
+      highlight: false,
     },
     {
       id: "eligibility",
@@ -452,9 +452,9 @@ export const EVENT_DATA = {
         "CodeNite allows team sizes of 4 to 6 members (4, 5, or 6 members). Solo participants, pairs, or teams of 3 are not permitted. If you need teammates, join our official WhatsApp community or reach out via Instagram / LinkedIn where we help connect squads.",
     },
     {
-      question: "Is there a mandatory female member requirement in teams?",
+      question: "Are there any gender composition restrictions for teams?",
       answer:
-        "No! A female participant is NOT compulsory. There is NO mandatory gender composition requirement. Teams may consist of any combination of male, female, or non-binary participants. Diversity is encouraged, but not enforced by rule.",
+        "No, squads may consist of any combination of students. Diversity and collaboration are encouraged with zero restrictive quotas.",
     },
     {
       question: "Can students from different colleges or years form a team?",
