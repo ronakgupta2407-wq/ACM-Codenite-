@@ -11,6 +11,10 @@
   --color-accent-indigo: #6366f1;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom Cyber Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;

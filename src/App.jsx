@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Lenis from "lenis";
+import React, { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 
 // UI Components
@@ -43,36 +42,6 @@ export default function App() {
       // ignore
     }
     setLoading(false);
-  }, []);
-
-  // Initialize Lenis smooth scroll
-  useEffect(() => {
-    // Only enable Lenis if user does not prefer reduced motion
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (!prefersReducedMotion) {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: "vertical",
-        smoothWheel: true,
-      });
-
-      let animationFrameId;
-      function raf(time) {
-        lenis.raf(time);
-        animationFrameId = requestAnimationFrame(raf);
-      }
-
-      animationFrameId = requestAnimationFrame(raf);
-
-      return () => {
-        cancelAnimationFrame(animationFrameId);
-        lenis.destroy();
-      };
-    }
   }, []);
 
   return (
