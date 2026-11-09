@@ -33,15 +33,15 @@ export const EVENT_DATA = {
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.966601815332!2d78.20456177595568!3d26.230232477060163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3976c6b38c0352ef%3A0xea8f7c9e0a0d9c4c!2sMadhav%20Institute%20of%20Technology%20%26%20Science%20(MITS)!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
   },
   stats: [
-    { label: "Participants Expected", value: 500, suffix: "+", icon: "Users" },
-    { label: "Teams Competing", value: 100, suffix: "+", icon: "Flame" },
+    { label: "Registrations Expected", value: 1500, suffix: "+", icon: "Users" },
+    { label: "Teams Competing", value: 300, suffix: "+", icon: "Flame" },
     { label: "Prize Pool", value: 150000, prefix: "₹", suffix: "+", icon: "Trophy" },
     { label: "Hours of Hacking", value: 12, suffix: " hrs", icon: "Clock" },
   ],
   chips: [
     { label: "Date", value: "17 Jan 2027", icon: "Calendar" },
     { label: "Duration", value: "12 Hours Overnight", icon: "Moon" },
-    { label: "Team Size", value: "Strictly 4 or 6 Members", icon: "UsersRound" },
+    { label: "Team Size", value: "4 to 6 Members", icon: "UsersRound" },
     { label: "Registration", value: "100% Free", icon: "Sparkles" },
     { label: "Venue", value: "MITS Gwalior Campus", icon: "MapPin" },
   ],
@@ -295,16 +295,16 @@ export const EVENT_DATA = {
   rules: [
     {
       id: "team-size",
-      question: "What is the mandatory Team Size requirement?",
+      question: "What is the Team Size requirement?",
       answer:
-        "Every participating team MUST consist of EXACTLY 4 members or EXACTLY 6 members. No individual registrations (solo), 2-person, 3-person, or 5-person squads are permitted. This ensures balanced competitive dynamics and rigorous division of engineering roles.",
+        "Every participating team MUST consist of 4 to 6 members (4, 5, or 6 members). Individual registrations (solo), 2-person, or 3-person squads are not permitted. This ensures balanced competitive dynamics and rigorous division of engineering roles.",
       highlight: true,
     },
     {
       id: "gender-rule",
       question: "Is there any mandatory female participant requirement?",
       answer:
-        "NO. There is absolutely NO mandatory female participant quota or restriction. Teams can be formed freely with any mix of individuals based purely on talent, choice, and collaboration. All genders are wholeheartedly welcome to participate.",
+        "NO. A female participant is NOT compulsory. There is absolutely NO mandatory female participant quota or restriction. Teams can be formed freely with any mix of individuals (all-male, all-female, or mixed) based purely on talent, choice, and collaboration. All genders are wholeheartedly welcome to participate.",
       highlight: true,
     },
     {
@@ -345,7 +345,7 @@ export const EVENT_DATA = {
   ],
   teamGuide: {
     title: "Choose Your Squad Blueprint",
-    subtitle: "CodeNite strictly permits teams of either 4 or 6 members. Select your team formation strategy.",
+    subtitle: "CodeNite permits squads of 4 to 6 members. Select your team formation strategy.",
     models: [
       {
         size: 4,
@@ -358,6 +358,19 @@ export const EVENT_DATA = {
           { role: "1x AI/Domain Specialist or Pitch Lead", desc: "Focuses on ML models, smart contracts, pitch presentation, and demo." },
         ],
         idealFor: "Squads looking for minimal coordination overhead and high-velocity shipping.",
+      },
+      {
+        size: 5,
+        badge: "Balanced 5-Member Core Squad",
+        tagline: "Optimal role balance, dedicated domain specialist, robust execution.",
+        roles: [
+          { role: "1x Team Leader & Fullstack Lead", desc: "Architecture roadmap, repository workflow, and integration." },
+          { role: "1x Frontend & Visual Designer", desc: "Responsive UI, real-time interactivity, and component polish." },
+          { role: "1x Backend & API Specialist", desc: "Database models, serverless functions, and security." },
+          { role: "1x Track / AI / Web3 Domain Specialist", desc: "Model fine-tuning, smart contract engineering, or hardware logic." },
+          { role: "1x QA, Pitch & Documentation Lead", desc: "Jury presentation, edge-case testing, and live demo rehearsal." },
+        ],
+        idealFor: "Squads wanting dedicated domain focus and polished presentation without excess overhead.",
       },
       {
         size: 6,
@@ -434,14 +447,14 @@ export const EVENT_DATA = {
         "No! Registration for CodeNite 2027 is 100% free of cost for all approved participants. Food, snacks, midnight refreshments, high-speed campus internet, power outlets, and swag kits are fully provided on-campus by ACM MITS.",
     },
     {
-      question: "Can I register as a solo participant or as a team of 3 or 5?",
+      question: "Can I register as a solo participant or what team sizes are allowed?",
       answer:
-        "No. CodeNite strictly enforces team sizes of EXACTLY 4 members or EXACTLY 6 members. If you need teammates, join our official Discord server or WhatsApp community where we have an active #find-a-team channel.",
+        "CodeNite allows team sizes of 4 to 6 members (4, 5, or 6 members). Solo participants, pairs, or teams of 3 are not permitted. If you need teammates, join our official Discord server or WhatsApp community where we have an active #find-a-team channel.",
     },
     {
       question: "Is there a mandatory female member requirement in teams?",
       answer:
-        "No, there is NO mandatory gender composition requirement. Teams may consist of any combination of male, female, or non-binary participants. Diversity is encouraged, but not enforced by rule.",
+        "No! A female participant is NOT compulsory. There is NO mandatory gender composition requirement. Teams may consist of any combination of male, female, or non-binary participants. Diversity is encouraged, but not enforced by rule.",
     },
     {
       question: "Can students from different colleges or years form a team?",

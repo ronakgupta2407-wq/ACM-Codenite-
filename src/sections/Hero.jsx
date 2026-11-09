@@ -120,7 +120,7 @@ export function Hero({ onOpenAdmin }) {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl mb-6 font-normal"
             >
-              Join 500+ student developers for 12 hours of overnight technical hacking, mentor sessions, high-octane prototyping, and a prize pool of ₹1,50,000+.
+              Join 1,500+ registered student hackers for 12 hours of overnight technical hacking, mentor sessions, high-octane prototyping, and a prize pool of ₹1,50,000+.
             </motion.p>
 
             {/* Event Chips */}
@@ -274,7 +274,7 @@ export function Hero({ onOpenAdmin }) {
                     <UsersRound className="w-4 h-4 text-acm-cyan shrink-0" />
                     <div>
                       <div className="text-[10px] text-slate-400 uppercase font-mono">Team Size</div>
-                      <div className="font-heading font-bold text-white text-sm">4 or 6 Only</div>
+                      <div className="font-heading font-bold text-white text-sm">4 to 6 Members</div>
                     </div>
                   </div>
 

@@ -152,11 +152,11 @@ export function About() {
             <div className="grid grid-cols-2 gap-3 pt-4 border-t border-acm-blue/20">
               <div className="flex items-center gap-2 text-xs font-mono text-sky-300">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span>Strictly 4 or 6 Members</span>
+                <span>4 to 6 Members / Squad</span>
               </div>
               <div className="flex items-center gap-2 text-xs font-mono text-sky-300">
                 <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                <span>Zero Gender Restrictions</span>
+                <span>Female Not Compulsory</span>
               </div>
             </div>
           </Card>

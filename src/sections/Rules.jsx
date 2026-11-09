@@ -26,7 +26,7 @@ export function Rules() {
                 Key Participation Essentials
               </h4>
               <p className="text-xs sm:text-sm text-slate-300 mt-0.5 leading-relaxed">
-                Teams must consist of <strong>strictly 4 or 6 members</strong>. There is <strong>no mandatory female requirement</strong>. Cross-college teams are completely allowed.
+                Teams must consist of <strong>4 to 6 members</strong> (4, 5, or 6 members). A <strong>female participant is NOT compulsory</strong> (any gender combination is permitted). Cross-college teams are completely allowed.
               </p>
             </div>
           </div>

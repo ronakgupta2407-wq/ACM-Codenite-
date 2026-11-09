@@ -21,10 +21,10 @@ export function TeamGuide() {
           badge="Squad Formation Blueprint"
           title="Team Sizing"
           highlight="Visual Explainer"
-          subtitle="CodeNite strictly mandates squads of either 4 or 6 members. Review role architectures to pick what suits your team best."
+          subtitle="CodeNite permits squads of 4 to 6 members. Review role architectures to pick what suits your team best."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {EVENT_DATA.teamGuide.models.map((model, idx) => (
             <motion.div
               key={model.size}
@@ -85,7 +85,7 @@ export function TeamGuide() {
                   </div>
 
                   <Button
-                    variant={model.size === 4 ? "secondary" : "primary"}
+                    variant={model.size === 5 ? "primary" : model.size === 4 ? "secondary" : "outline"}
                     size="sm"
                     className="w-full"
                     onClick={() => scrollToRegisterWithSize(model.size)}

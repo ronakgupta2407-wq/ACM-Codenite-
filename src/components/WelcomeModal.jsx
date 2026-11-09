@@ -61,14 +61,14 @@ export function WelcomeModal({ showAfterLoader }) {
           <div className="flex items-center gap-2.5">
             <Users className="w-4 h-4 text-acm-cyan shrink-0" />
             <span>
-              <strong>Team Size:</strong> Strictly <strong>4 or 6 members</strong> only.
+              <strong>Team Size:</strong> <strong>4 to 6 members</strong> (4, 5, or 6 members).
             </span>
           </div>
 
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Zero Gender Quotas:</strong> Open to all, no female requirement.
+              <strong>Female Not Compulsory:</strong> Open to all genders, zero mandatory quotas.
             </span>
           </div>
 
