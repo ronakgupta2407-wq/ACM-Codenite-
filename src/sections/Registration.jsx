@@ -241,108 +241,6 @@ export function Registration({ onOpenAdmin }) {
     }
   }, [selectedTeamSize, append, remove, currentMembers.length]);
 
-  // Demo Autofill for convenient testing
-  const handleFillDemoData = () => {
-    const size = parseInt(selectedTeamSize, 10);
-    const demoMembers = [
-      {
-        name: "Aarav Sharma",
-        email: "aarav.sharma@mitsgwalior.in",
-        phone: "9876543210",
-        gender: "Male",
-        college: "MITS Gwalior",
-        enrollmentNo: "0901CS221001",
-        year: "3rd Year",
-        branch: "Computer Science & Engineering",
-        city: "Gwalior, MP",
-        tshirt: "L",
-        dietary: "Vegetarian",
-        github: "https://github.com/aarav",
-        linkedin: "https://linkedin.com/in/aarav",
-      },
-      {
-        name: "Priya Patel",
-        email: "priya.patel@mitsgwalior.in",
-        phone: "9876543211",
-        gender: "Female",
-        college: "MITS Gwalior",
-        enrollmentNo: "0901IT221045",
-        year: "3rd Year",
-        branch: "Information Technology",
-        city: "Indore, MP",
-        tshirt: "M",
-        dietary: "Vegetarian",
-        github: "",
-        linkedin: "",
-      },
-      {
-        name: "Rohan Verma",
-        email: "rohan.verma@mitsgwalior.in",
-        phone: "9876543212",
-        gender: "Male",
-        college: "MITS Gwalior",
-        enrollmentNo: "0901AI221088",
-        year: "2nd Year",
-        branch: "Artificial Intelligence & Data Science",
-        city: "Bhopal, MP",
-        tshirt: "XL",
-        dietary: "Non-Vegetarian",
-        github: "",
-        linkedin: "",
-      },
-      {
-        name: "Ananya Gupta",
-        email: "ananya.gupta@mitsgwalior.in",
-        phone: "9876543213",
-        gender: "Female",
-        college: "MITS Gwalior",
-        enrollmentNo: "0901EC221012",
-        year: "3rd Year",
-        branch: "Electronics & Communication",
-        city: "Gwalior, MP",
-        tshirt: "S",
-        dietary: "Vegetarian",
-        github: "",
-        linkedin: "",
-      },
-      {
-        name: "Vikramaditya Singh",
-        email: "vikram.singh@mitsgwalior.in",
-        phone: "9876543214",
-        gender: "Male",
-        college: "MITS Gwalior",
-        enrollmentNo: "0901CS221099",
-        year: "3rd Year",
-        branch: "Computer Science & Engineering",
-        city: "Jaipur, Rajasthan",
-        tshirt: "L",
-        dietary: "Vegetarian",
-        github: "",
-        linkedin: "",
-      },
-      {
-        name: "Neha Joshi",
-        email: "neha.joshi@mitsgwalior.in",
-        phone: "9876543215",
-        gender: "Female",
-        college: "MITS Gwalior",
-        enrollmentNo: "0901CS221102",
-        year: "2nd Year",
-        branch: "Computer Science & Engineering",
-        city: "Delhi NCR",
-        tshirt: "M",
-        dietary: "Jain",
-        github: "",
-        linkedin: "",
-      },
-    ];
-
-    setValue("teamName", watch("teamName") || "CodeForge Alpha");
-    setValue("projectIdea", watch("projectIdea") || "Decentralized AI-powered medical dispatch assistant for emergency ambulances");
-    setValue("members", demoMembers.slice(0, size), { shouldValidate: true });
-    setStep2ErrorMsg("");
-  };
-
   // Step 1 Validation
   const handleNextFromStep1 = async () => {
     const isTeamNameValid = await trigger("teamName");
@@ -832,13 +730,6 @@ export function Registration({ onOpenAdmin }) {
                   </div>
 
                   <div className="flex items-center gap-2 self-start sm:self-auto">
-                    <button
-                      type="button"
-                      onClick={handleFillDemoData}
-                      className="px-3 py-1.5 rounded-lg bg-sky-950/80 hover:bg-sky-900 border border-sky-400/30 text-sky-300 hover:text-white text-xs font-mono font-medium transition-colors cursor-pointer"
-                    >
-                      ⚡ Quick Autofill for Testing
-                    </button>
                     <span className="px-3 py-1.5 rounded-lg text-xs font-mono bg-navy-900 border border-acm-blue/30 text-acm-cyan">
                       {selectedTeamSize} Members
                     </span>
