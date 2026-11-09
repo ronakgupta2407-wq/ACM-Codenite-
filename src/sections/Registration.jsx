@@ -551,8 +551,10 @@ export function Registration({ onOpenAdmin }) {
         <Card
           tilt={false}
           spotlight={false}
-          className="p-6 sm:p-10 bg-navy-900/90 border border-acm-blue/30 shadow-glow-md backdrop-blur-2xl"
+          className="p-6 sm:p-10 bg-gradient-to-b from-[#09153b]/95 via-[#050c26]/95 to-[#020412]/98 border-2 border-cyan-400/35 shadow-[0_0_50px_rgba(0,240,255,0.2)] backdrop-blur-3xl rounded-3xl relative overflow-hidden"
         >
+          {/* Top glowing neon beam */}
+          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#00f0ff]" />
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* ================= STEP 1: TEAM DETAILS ================= */}
             {currentStep === 1 && (

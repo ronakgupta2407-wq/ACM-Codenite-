@@ -38,16 +38,31 @@ export function Prizes() {
               >
                 <div
                   className={cn(
-                    "relative rounded-2xl p-6 sm:p-7 backdrop-blur-xl border transition-all duration-300 flex flex-col justify-between overflow-hidden",
-                    prize.cardColor,
-                    prize.isPopular ? "md:-translate-y-4 ring-2 ring-acm-cyan/40 shadow-glow-lg" : "hover:border-slate-300/40"
+                    "relative rounded-2xl p-6 sm:p-7 backdrop-blur-xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group",
+                    prize.isPopular 
+                      ? "bg-gradient-to-b from-[#1c1506]/90 via-[#0d0918]/95 to-[#050410]/95 border-amber-500/50 md:-translate-y-5 shadow-[0_0_35px_rgba(245,158,11,0.22)] ring-1 ring-amber-400/40" 
+                      : "bg-gradient-to-b from-[#0b132b]/80 via-[#070b1f]/90 to-[#020412]/95 border-cyan-500/25 hover:border-cyan-400/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.18)]"
                   )}
                 >
+                  {/* Top Neon Accent Line */}
+                  <div className={cn(
+                    "absolute top-0 left-0 right-0 h-0.5",
+                    prize.isPopular
+                      ? "bg-gradient-to-r from-transparent via-amber-400 to-transparent"
+                      : "bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                  )} />
+
+                  {/* Corner cyber ticks */}
+                  <span className="absolute top-2 left-2 text-[8px] font-mono text-cyan-500/30">┌</span>
+                  <span className="absolute top-2 right-2 text-[8px] font-mono text-cyan-500/30">┐</span>
+                  <span className="absolute bottom-2 left-2 text-[8px] font-mono text-cyan-500/30">└</span>
+                  <span className="absolute bottom-2 right-2 text-[8px] font-mono text-cyan-500/30">┘</span>
+
                   {/* Popular Banner for 1st Place */}
                   {prize.isPopular && (
                     <div className="absolute top-0 right-0">
-                      <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-navy-950 text-[10px] font-heading font-black tracking-widest uppercase px-3 py-1 rounded-bl-xl shadow-md">
-                        GRAND WINNER
+                      <div className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-300 text-black text-[10px] font-heading font-black tracking-widest uppercase px-3.5 py-1 rounded-bl-xl shadow-lg">
+                        ★ GRAND WINNER
                       </div>
                     </div>
                   )}

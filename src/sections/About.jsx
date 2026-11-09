@@ -43,13 +43,20 @@ function StatCounter({ value, prefix = "", suffix = "", label, icon: IconName })
   return (
     <div
       ref={ref}
-      className="p-6 rounded-2xl bg-navy-900/60 border border-acm-blue/30 backdrop-blur-xl flex flex-col items-center text-center group hover:border-acm-cyan transition-all duration-300 hover:shadow-glow-sm"
+      className="relative p-6 rounded-2xl cyber-panel group hover:border-cyan-400/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.18)] flex flex-col items-center text-center overflow-hidden"
     >
-      <div className="w-12 h-12 rounded-xl bg-acm-blue/15 border border-acm-cyan/30 flex items-center justify-center text-acm-cyan mb-4 group-hover:scale-110 transition-transform">
+      {/* Top micro-line */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent group-hover:via-cyan-400 transition-colors" />
+
+      {/* Cyber Corner Crosshairs */}
+      <span className="absolute top-2 left-2 text-[9px] font-mono text-cyan-500/30 group-hover:text-cyan-400/70 transition-colors">+</span>
+      <span className="absolute top-2 right-2 text-[9px] font-mono text-cyan-500/30 group-hover:text-cyan-400/70 transition-colors">+</span>
+
+      <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-acm-cyan mb-4 group-hover:scale-110 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all">
         <Icon className="w-6 h-6" />
       </div>
 
-      <div className="font-orbitron font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-1 bg-gradient-to-b from-white via-slate-100 to-sky-300 bg-clip-text text-transparent">
+      <div className="font-orbitron font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-1 bg-gradient-to-b from-white via-slate-100 to-cyan-300 bg-clip-text text-transparent">
         {prefix}
         {count.toLocaleString()}
         {suffix}

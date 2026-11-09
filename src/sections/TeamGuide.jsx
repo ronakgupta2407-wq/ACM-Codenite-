@@ -48,7 +48,7 @@ export function TeamGuide() {
                   </div>
 
                   <h3 className="font-heading font-extrabold text-2xl text-white mb-2">
-                    Squad of Exactly {model.size}
+                    Squad of {model.size} Members
                   </h3>
 
                   <p className="text-slate-300 text-sm leading-relaxed mb-6 font-normal">
