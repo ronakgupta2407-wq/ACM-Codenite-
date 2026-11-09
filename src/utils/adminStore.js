@@ -4,7 +4,7 @@
  */
 
 const STORAGE_KEY = "acm_codenite_registered_teams";
-const ADMIN_AUTH_KEY = "acm_codenite_admin_auth";
+const ADMIN_AUTH_KEY = "acm_codenite_admin_auth_v2";
 
 const LEGACY_TEST_TEAM_IDS = new Set([
   "CN27-ALPHA1",
@@ -65,7 +65,7 @@ export function cancelTeamRegistration(registrationId, reason = "Cancelled by Ad
         return {
           ...team,
           status: "CANCELLED",
-          cancelledBy: "Admin (ACMCODENITE)",
+          cancelledBy: "Admin",
           cancelledAt: new Date().toISOString(),
           cancellationReason: reason,
         };

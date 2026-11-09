@@ -10,6 +10,10 @@ async function runTests() {
   console.log('🧪 Starting Backend API Automated Verification Suite...\n');
 
   try {
+    if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+      throw new Error('Set ADMIN_USERNAME and ADMIN_PASSWORD in the environment before running API tests.');
+    }
+
     // 1. Health Check
     console.log('1. Testing GET /api/health');
     const healthRes = await fetch(`${baseUrl}/api/health`);
@@ -59,7 +63,10 @@ async function runTests() {
     const loginRes = await fetch(`${baseUrl}/api/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: 'ACMCODENITE', password: 'RONAK12' }),
+      body: JSON.stringify({
+        username: process.env.ADMIN_USERNAME,
+        password: process.env.ADMIN_PASSWORD,
+      }),
     });
     const loginData = await loginRes.json();
     console.log('   Status:', loginRes.status, 'Token:', loginData.token ? 'YES' : 'NO');

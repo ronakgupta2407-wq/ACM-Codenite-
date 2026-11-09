@@ -8,9 +8,6 @@ import {
 
 const router = express.Router();
 
-const ADMIN_USER = process.env.ADMIN_USERNAME || 'ACMCODENITE';
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'RONAK12';
-
 /**
  * POST /api/admin/login
  * Validates admin credentials
@@ -26,7 +23,16 @@ router.post('/login', (req, res) => {
       });
     }
 
-    if (username.trim() === ADMIN_USER && password.trim() === ADMIN_PASS) {
+    const adminUser = process.env.ADMIN_USERNAME;
+    const adminPass = process.env.ADMIN_PASSWORD;
+    if (!adminUser || !adminPass) {
+      return res.status(503).json({
+        success: false,
+        message: 'Administrator login is not configured on this server.',
+      });
+    }
+
+    if (username.trim() === adminUser && password.trim() === adminPass) {
       // Simple signed token simulation or session token
       const token = `acm_auth_${Buffer.from(`${username}:${Date.now()}`).toString('base64')}`;
       return res.json({
@@ -34,7 +40,7 @@ router.post('/login', (req, res) => {
         message: 'Admin authentication successful',
         token,
         admin: {
-          username: ADMIN_USER,
+          username: adminUser,
           role: 'administrator',
         },
       });

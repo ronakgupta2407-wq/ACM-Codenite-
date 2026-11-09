@@ -6,6 +6,8 @@ This directory contains the production-ready backend infrastructure for the **AC
 
 ## ⚡ Quick Start
 
+Set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in the repository-root `.env` file before using organizer login. Start from `.env.example`, replace its placeholders locally, and never commit `.env` or put credentials in frontend code. Production deployments must set both values in the backend host's secret environment settings.
+
 ### 1. Install Dependencies
 ```bash
 npm install
@@ -115,7 +117,7 @@ npm run dev:all
 
 ### 4. Admin Portal & Management
 - **Admin Login:** `POST /api/admin/login`
-  - Body: `{ "username": "ACMCODENITE", "password": "RONAK12" }`
+  - Body: `{ "username": "<ADMIN_USERNAME>", "password": "<ADMIN_PASSWORD>" }`
 - **Live Stats & Analytics:** `GET /api/admin/stats`
   - Returns counts of active/cancelled teams, total participants, track popularity, and college distributions.
 - **Cancel Team Registration:** `PATCH /api/admin/teams/:id/cancel`

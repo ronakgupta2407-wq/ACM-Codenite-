@@ -44,6 +44,7 @@ import {
   cancelTeamApi,
   reactivateTeamApi,
   checkBackendHealth,
+  adminLoginApi,
 } from "../utils/api";
 import { cn } from "../utils/cn";
 
@@ -165,15 +166,16 @@ export function AdminPortalModal({ isOpen, onClose }) {
     };
   }, [isOpen]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError("");
-    if (username.trim() === "ACMCODENITE" && password.trim() === "RONAK12") {
+    try {
+      await adminLoginApi(username.trim(), password);
       setIsAuthenticated(true);
       setAdminAuthenticated(true);
       refreshTeams();
-    } else {
-      setLoginError("Invalid Admin credentials. Access restricted to authorized ACM organizers.");
+    } catch (error) {
+      setLoginError(error.message || "Unable to authenticate. Please try again.");
     }
   };
 
