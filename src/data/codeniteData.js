@@ -442,7 +442,7 @@ export const EVENT_DATA = {
         "Form Validation Engine supporting 4 to 6 Member Squad Customization",
       ],
       socials: {
-        github: "https://github.com/ronakgupta2407-wq/ACM-Codenite-",
+        github: "https://github.com/ronakgupta2407-wq",
         linkedin: "https://www.linkedin.com/company/mits-acm-student-chapter-2026-27/posts/?feedView=all",
         email: "mailto:ronak.gupta@mitsgwalior.in",
       },
