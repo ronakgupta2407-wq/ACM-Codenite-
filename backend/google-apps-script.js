@@ -48,47 +48,57 @@ function setupSheetHeaders(sheet) {
     "Leader Name",
     "Leader Email",
     "Leader Phone",
+    "Leader Gender",
     "Leader College",
     "Leader Enrollment",
     "Leader Year",
     "Leader Branch",
-    "Leader GitHub",
-    "Leader LinkedIn",
+    "Leader City",
     "Member 2 Name",
     "Member 2 Email",
     "Member 2 Phone",
+    "Member 2 Gender",
     "Member 2 College",
     "Member 2 Enrollment",
     "Member 2 Year",
     "Member 2 Branch",
+    "Member 2 City",
     "Member 3 Name",
     "Member 3 Email",
     "Member 3 Phone",
+    "Member 3 Gender",
     "Member 3 College",
     "Member 3 Enrollment",
     "Member 3 Year",
     "Member 3 Branch",
+    "Member 3 City",
     "Member 4 Name",
     "Member 4 Email",
     "Member 4 Phone",
+    "Member 4 Gender",
     "Member 4 College",
     "Member 4 Enrollment",
     "Member 4 Year",
     "Member 4 Branch",
-    "Member 5 Name (If 6-member squad)",
+    "Member 4 City",
+    "Member 5 Name (If applicable)",
     "Member 5 Email",
     "Member 5 Phone",
+    "Member 5 Gender",
     "Member 5 College",
     "Member 5 Enrollment",
     "Member 5 Year",
     "Member 5 Branch",
-    "Member 6 Name (If 6-member squad)",
+    "Member 5 City",
+    "Member 6 Name (If applicable)",
     "Member 6 Email",
     "Member 6 Phone",
+    "Member 6 Gender",
     "Member 6 College",
     "Member 6 Enrollment",
     "Member 6 Year",
     "Member 6 Branch",
+    "Member 6 City",
     "Raw JSON Payload"
   ];
 
@@ -112,13 +122,13 @@ function generateRegistrationPdfHtml(data) {
       '<span style="background-color: #0284c7; color: #ffffff; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 11px;">TEAM LEADER</span>' : 
       '<span style="background-color: #e2e8f0; color: #334155; padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 11px;">MEMBER ' + (idx + 1) + '</span>';
 
+    const genderBadge = m.gender ? `<span style="display:inline-block; font-size:10px; color:#0284c7; background:#e0f2fe; padding:1px 6px; border-radius:3px; margin-left:4px;">${m.gender}</span>` : '';
     memberRowsHtml += `
       <tr style="border-bottom: 1px solid #cbd5e1; background-color: ${idx % 2 === 0 ? '#f8fafc' : '#ffffff'};">
-        <td style="padding: 10px; font-weight: bold; color: #0f172a;">${roleBadge}<br><div style="margin-top: 4px; font-size: 13px;">${m.name || 'N/A'}</div></td>
+        <td style="padding: 10px; font-weight: bold; color: #0f172a;">${roleBadge}${genderBadge}<br><div style="margin-top: 4px; font-size: 13px;">${m.name || 'N/A'}</div></td>
         <td style="padding: 10px; font-size: 12px; color: #334155;"><strong>${m.college || 'N/A'}</strong><br><span style="color: #64748b;">Roll: ${m.enrollmentNo || 'N/A'}</span></td>
-        <td style="padding: 10px; font-size: 12px; color: #334155;">${m.email || 'N/A'}</td>
-        <td style="padding: 10px; font-size: 12px; color: #334155; font-family: monospace;">${m.phone || 'N/A'}</td>
-        <td style="padding: 10px; font-size: 12px; color: #334155;">${m.branch || 'N/A'}<br><span style="color: #64748b;">${m.year || 'N/A'}</span></td>
+        <td style="padding: 10px; font-size: 12px; color: #334155;">${m.email || 'N/A'}<br><span style="color: #64748b; font-family: monospace;">${m.phone || 'N/A'}</span></td>
+        <td style="padding: 10px; font-size: 12px; color: #334155;">${m.branch || 'N/A'}<br><span style="color: #64748b;">${m.year || 'N/A'} • ${m.city || 'N/A'}</span></td>
       </tr>
     `;
   });
@@ -187,11 +197,10 @@ function generateRegistrationPdfHtml(data) {
         <table class="members-table">
           <thead>
             <tr>
-              <th class="members-th" style="width: 24%;">Member & Role</th>
+              <th class="members-th" style="width: 25%;">Member & Gender</th>
               <th class="members-th" style="width: 25%;">College & Roll No.</th>
-              <th class="members-th" style="width: 23%;">Email Address</th>
-              <th class="members-th" style="width: 14%;">Mobile Number</th>
-              <th class="members-th" style="width: 14%;">Branch & Year</th>
+              <th class="members-th" style="width: 25%;">Email & Phone</th>
+              <th class="members-th" style="width: 25%;">Branch, Year & City</th>
             </tr>
           </thead>
           <tbody>
@@ -271,27 +280,22 @@ function doPost(e) {
       pdfUrl // Dedicated Drive PDF URL Column
     ];
 
-    // Append up to 6 members sequentially
+    // Append up to 6 members sequentially (9 fields per member: name, email, phone, gender, college, enrollmentNo, year, branch, city)
     for (let i = 0; i < 6; i++) {
       if (members[i]) {
         row.push(
           members[i].name || "",
           members[i].email || "",
           members[i].phone || "",
+          members[i].gender || "",
           members[i].college || "",
           members[i].enrollmentNo || "",
           members[i].year || "",
-          members[i].branch || ""
+          members[i].branch || "",
+          members[i].city || ""
         );
-        if (i === 0) {
-          row.push(members[0].github || "", members[0].linkedin || "");
-        }
       } else {
-        if (i === 0) {
-          row.push("", "", "", "", "", "", "", "", "");
-        } else {
-          row.push("", "", "", "", "", "", "");
-        }
+        row.push("", "", "", "", "", "", "", "", "");
       }
     }
 
