@@ -12,7 +12,7 @@ export function Stepper({ steps, currentStep, onStepClick }) {
 
         {/* Animated Active Line */}
         <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-gradient-to-r from-acm-blue via-sky-400 to-acm-cyan -z-0"
+          className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-cyan-500 via-sky-400 to-cyan-300 shadow-[0_0_15px_#00f0ff] -z-0 rounded-full"
           initial={{ width: "0%" }}
           animate={{
             width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
@@ -35,19 +35,19 @@ export function Stepper({ steps, currentStep, onStepClick }) {
               <motion.div
                 initial={false}
                 animate={{
-                  scale: isActive ? 1.15 : 1,
+                  scale: isActive ? 1.18 : 1,
                   backgroundColor: isCompleted
                     ? "#0085CA"
                     : isActive
-                    ? "#0A1128"
-                    : "#020617",
-                  borderColor: isCompleted || isActive ? "#22D3EE" : "#1e293b",
+                    ? "#040d28"
+                    : "#02040b",
+                  borderColor: isCompleted || isActive ? "#00f0ff" : "#1e293b",
                 }}
                 transition={{ duration: 0.3 }}
                 className={cn(
-                  "w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 flex items-center justify-center font-mono text-xs sm:text-sm font-bold shadow-md transition-shadow",
-                  isActive && "shadow-glow-cyan ring-4 ring-acm-cyan/20",
-                  isCompleted && "shadow-glow-sm"
+                  "w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center font-mono text-xs sm:text-sm font-bold shadow-md transition-shadow",
+                  isActive && "shadow-[0_0_25px_rgba(0,240,255,0.7)] ring-4 ring-cyan-400/30",
+                  isCompleted && "shadow-[0_0_15px_rgba(0,133,202,0.5)]"
                 )}
               >
                 {isCompleted ? (
@@ -55,10 +55,10 @@ export function Stepper({ steps, currentStep, onStepClick }) {
                 ) : (
                   <span
                     className={cn(
-                      isActive ? "text-acm-cyan font-extrabold" : "text-slate-400"
+                      isActive ? "text-cyan-300 font-extrabold" : "text-slate-400"
                     )}
                   >
-                    {stepNumber}
+                    0{stepNumber}
                   </span>
                 )}
               </motion.div>
@@ -66,9 +66,9 @@ export function Stepper({ steps, currentStep, onStepClick }) {
               {/* Step Label */}
               <span
                 className={cn(
-                  "mt-2 text-[10px] sm:text-xs font-heading font-medium tracking-wide text-center whitespace-nowrap transition-colors",
+                  "mt-2 text-[10px] sm:text-xs font-mono font-bold tracking-wider uppercase text-center whitespace-nowrap transition-colors",
                   isActive
-                    ? "text-acm-cyan font-bold"
+                    ? "text-cyan-300 font-extrabold drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]"
                     : isCompleted
                     ? "text-slate-200"
                     : "text-slate-400"

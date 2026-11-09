@@ -3,45 +3,46 @@
 @tailwind utilities;
 
 :root {
-  --color-bg-base: #020617;
-  --color-bg-surface: #0a1128;
+  --color-bg-base: #02040b;
+  --color-bg-surface: #070e24;
   --color-acm-blue: #0085ca;
   --color-acm-electric: #38bdf8;
-  --color-acm-cyan: #22d3ee;
+  --color-acm-cyan: #00f0ff;
   --color-accent-indigo: #6366f1;
 }
 
-/* Custom Scrollbar */
+/* Custom Cyber Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: #02040b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0f1c3f;
+  background: #0e1e47;
   border-radius: 4px;
-  border: 1px solid rgba(0, 133, 202, 0.3);
+  border: 1px solid rgba(0, 240, 255, 0.25);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #0085ca;
-  box-shadow: 0 0 10px #22d3ee;
+  box-shadow: 0 0 12px #00f0ff;
 }
 
 /* Custom scrollbar class for inner modals */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #070f26;
+  background: #04091a;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #162854;
+  background: #142552;
   border-radius: 3px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 /* Text Selection */
@@ -53,7 +54,7 @@
 /* Hardware accelerated smooth rendering */
 body {
   margin: 0;
-  background-color: #020617;
+  background-color: #02040b;
   color: #f8fafc;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   text-rendering: optimizeLegibility;
@@ -61,12 +62,43 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glassmorphism utility */
-.glass-panel {
-  background: rgba(10, 17, 40, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 133, 202, 0.25);
+/* Cyber Theme Utilities */
+.cyber-panel {
+  background: linear-gradient(180deg, rgba(10, 20, 50, 0.75) 0%, rgba(4, 9, 26, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.cyber-panel-hover:hover {
+  border-color: rgba(0, 240, 255, 0.55);
+  box-shadow: 0 0 30px -5px rgba(0, 240, 255, 0.3), inset 0 1px 0 rgba(0, 240, 255, 0.25);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.65), 0 0 30px rgba(0, 133, 202, 0.4);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 16px rgba(168, 85, 247, 0.65), 0 0 30px rgba(99, 102, 241, 0.4);
+}
+
+.cyber-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(0, 133, 202, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: #22d3ee;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
 }
 
 /* Accessibility: Respect Reduced Motion */
