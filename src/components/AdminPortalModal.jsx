@@ -20,6 +20,9 @@ import {
   Copy,
   Check,
   Calendar,
+  Download,
+  Server,
+  Activity,
 } from "lucide-react";
 import {
   getRegisteredTeams,
@@ -28,6 +31,12 @@ import {
   isAdminAuthenticated,
   setAdminAuthenticated,
 } from "../utils/adminStore";
+import {
+  fetchTeamsApi,
+  cancelTeamApi,
+  reactivateTeamApi,
+  checkBackendHealth,
+} from "../utils/api";
 import { cn } from "../utils/cn";
 
 export function AdminPortalModal({ isOpen, onClose }) {
@@ -43,18 +52,34 @@ export function AdminPortalModal({ isOpen, onClose }) {
   const [confirmCancelTeam, setConfirmCancelTeam] = useState(null);
   const [cancelReason, setCancelReason] = useState("Disqualified / Rule violation or requested by team");
   const [copiedId, setCopiedId] = useState("");
+  const [backendStatus, setBackendStatus] = useState({ checked: false, online: false });
 
-  // Sync teams state
-  const refreshTeams = () => {
+  // Sync teams state from Backend API or local storage fallback
+  const refreshTeams = async () => {
+    try {
+      const apiTeams = await fetchTeamsApi();
+      if (Array.isArray(apiTeams) && apiTeams.length > 0) {
+        setTeams(apiTeams);
+        setBackendStatus({ checked: true, online: true });
+        return;
+      }
+    } catch {
+      // Backend offline or error -> smoothly use local store
+    }
     setTeams(getRegisteredTeams());
   };
 
   useEffect(() => {
-    refreshTeams();
+    if (isOpen) {
+      checkBackendHealth().then((health) => {
+        setBackendStatus({ checked: true, online: health.online });
+      });
+      refreshTeams();
+    }
     const handleUpdate = () => refreshTeams();
     window.addEventListener("acm_teams_updated", handleUpdate);
     return () => window.removeEventListener("acm_teams_updated", handleUpdate);
-  }, []);
+  }, [isOpen]);
 
   // Login handler
   const handleLogin = (e) => {
@@ -79,16 +104,59 @@ export function AdminPortalModal({ isOpen, onClose }) {
   };
 
   // Cancel team registration
-  const handleExecuteCancel = (teamId) => {
+  const handleExecuteCancel = async (teamId) => {
+    try {
+      await cancelTeamApi(teamId, cancelReason);
+    } catch (err) {
+      console.warn("Backend API cancel failed, using local store:", err.message);
+    }
     cancelTeamRegistration(teamId, cancelReason);
     setConfirmCancelTeam(null);
     refreshTeams();
   };
 
   // Reactivate team registration
-  const handleExecuteReactivate = (teamId) => {
+  const handleExecuteReactivate = async (teamId) => {
+    try {
+      await reactivateTeamApi(teamId);
+    } catch (err) {
+      console.warn("Backend API reactivate failed, using local store:", err.message);
+    }
     reactivateTeamRegistration(teamId);
     refreshTeams();
+  };
+
+  // Download CSV export handler
+  const handleDownloadCSV = () => {
+    if (backendStatus.online) {
+      window.open("/api/teams/export/csv", "_blank");
+    } else {
+      // Offline fallback CSV generator
+      const headers = ["Registration ID", "Team Name", "Track", "Team Size", "Status", "Timestamp", "Leader Name", "Leader Email", "Leader Phone", "Leader College"];
+      const rows = teams.map((t) => {
+        const leader = t.members?.[0] || {};
+        return [
+          `"${t.registrationId || ''}"`,
+          `"${t.teamName || ''}"`,
+          `"${t.track || ''}"`,
+          `"${t.teamSize || ''}"`,
+          `"${t.status || ''}"`,
+          `"${t.timestamp || ''}"`,
+          `"${leader.name || ''}"`,
+          `"${leader.email || ''}"`,
+          `"${leader.phone || ''}"`,
+          `"${leader.college || ''}"`
+        ].join(",");
+      });
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `acm-codenite-teams-${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   const handleCopy = (id) => {
@@ -265,6 +333,36 @@ export function AdminPortalModal({ isOpen, onClose }) {
           ) : (
             /* ================= VIEW 2: AUTHENTICATED DASHBOARD ================= */
             <div className="space-y-6">
+              {/* Backend Status & Sync Actions Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-navy-950/60 border border-acm-blue/20">
+                <div className="flex items-center gap-2">
+                  <div className={cn("w-2.5 h-2.5 rounded-full animate-pulse", backendStatus.online ? "bg-emerald-400" : "bg-amber-400")} />
+                  <span className="text-xs font-mono text-slate-300">
+                    Backend API: {backendStatus.online ? <strong className="text-emerald-400">Connected (Express :5000)</strong> : <strong className="text-amber-400">Local Cache Mode</strong>}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={refreshTeams}
+                    className="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 border border-acm-blue/30 transition-colors cursor-pointer"
+                    title="Refresh live registrations"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Sync</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDownloadCSV}
+                    className="px-3 py-1.5 rounded-lg bg-acm-blue/30 hover:bg-acm-blue/50 text-acm-cyan text-xs font-mono font-bold flex items-center gap-1.5 border border-acm-cyan/40 transition-colors cursor-pointer shadow-sm"
+                    title="Download spreadsheet of all registered squads"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Stat Counters Row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="p-4 rounded-xl bg-navy-950/80 border border-acm-blue/30">

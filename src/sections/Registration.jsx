@@ -41,6 +41,7 @@ import {
   searchTeamById,
   getRegisteredTeams,
 } from "../utils/adminStore";
+import { registerTeamApi } from "../utils/api";
 import { cn } from "../utils/cn";
 
 // Single member schema
@@ -391,31 +392,36 @@ export function Registration({ onOpenAdmin }) {
         ...data,
       };
 
-      // If user has set their Google Apps Script URL in an env or custom var, attempt POST
-      // Example:
-      // const scriptUrl = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
-      // const response = await fetch(scriptUrl, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "text/plain;charset=utf-8" },
-      //   body: JSON.stringify(payload)
-      // });
-      // const resData = await response.json();
-      // if (resData.pdfUrl) setPdfDriveUrl(resData.pdfUrl);
+      let finalRegId = generatedRegId;
+      let finalTeam = payload;
 
-      // Simulated network sync (1.2s delay)
-      await new Promise((resolve) => setTimeout(resolve, 1400));
+      try {
+        // Attempt transmission to real backend API server
+        const apiResponse = await registerTeamApi(payload);
+        if (apiResponse && apiResponse.registrationId) {
+          finalRegId = apiResponse.registrationId;
+          finalTeam = apiResponse.team || { ...payload, registrationId: finalRegId };
+        }
+      } catch (apiErr) {
+        // If it's a conflict or business logic error, throw it so the user can fix the input
+        if (apiErr.message && (apiErr.message.includes("already registered") || apiErr.message.includes("valid"))) {
+          throw apiErr;
+        }
+        // Otherwise, server might be offline - proceed smoothly with local fallback
+        console.warn("Backend API not reachable, falling back to local persistent store:", apiErr.message);
+      }
 
-      // Save to persistent team store for Admin portal & team lookup
-      saveRegisteredTeam(payload);
+      // Save to local team store as well for immediate offline/hybrid availability
+      saveRegisteredTeam(finalTeam);
 
-      setTeamRegistrationId(generatedRegId);
+      setTeamRegistrationId(finalRegId);
       setLiveTeamStatus("ACTIVE");
       setIsSubmitted(true);
       setCurrentStep(4);
       triggerConfetti();
     } catch (err) {
       console.error("Submission failed:", err);
-      setSubmitError("Failed to transmit registration. Please retry or contact ACM technical support.");
+      setSubmitError(err.message || "Failed to transmit registration. Please retry or contact ACM technical support.");
     } finally {
       setIsSubmitting(false);
     }
