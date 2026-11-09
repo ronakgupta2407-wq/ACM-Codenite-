@@ -5,6 +5,8 @@ import { AnimatePresence } from "framer-motion";
 // UI Components
 import { Loader } from "./components/ui/Loader";
 import { BackgroundEffects } from "./components/BackgroundEffects";
+import { LayeredFuturisticUniverse } from "./components/3d/LayeredFuturisticUniverse";
+import { FloatingCompanionBot } from "./components/3d/FloatingCompanionBot";
 import { CustomCursor } from "./components/CustomCursor";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { Navbar } from "./components/Navbar";
@@ -65,12 +67,16 @@ export default function App() {
 
       {/* 2. Background Visual Canvas */}
       <BackgroundEffects />
+      <LayeredFuturisticUniverse />
 
       {/* 3. Top Glowing Scroll Progress */}
       <ScrollProgress />
 
       {/* 4. Desktop Custom Neon Cursor */}
       <CustomCursor />
+
+      {/* 4.1. 3D Floating Companion Drone ("Sparky") */}
+      <FloatingCompanionBot />
 
       {/* 5. Sticky Navigation Bar */}
       <Navbar onOpenAdmin={() => setAdminModalOpen(true)} />

@@ -16,6 +16,7 @@ import {
 import { Button } from "../components/ui/Button";
 import { Countdown } from "../components/ui/Countdown";
 import { Card } from "../components/ui/Card";
+import { Hero3DRobotCanvas } from "../components/3d/Hero3DRobotCanvas";
 import { EVENT_DATA } from "../data/codeniteData";
 
 export function Hero({ onOpenAdmin }) {
@@ -195,119 +196,51 @@ export function Hero({ onOpenAdmin }) {
             </motion.div>
           </div>
 
-          {/* Right Column: 3D Floating Official ACM Event Showcase Showcase Card (No raw code) */}
-          <div className="lg:col-span-5 flex justify-center">
+          {/* Right Column: 3D Animated Cartoon Robot Mascot ("NiteBot Prime") */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
+            {/* Outer Holographic Ambient Aura */}
+            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-cyan-500/20 via-sky-500/20 to-purple-600/25 blur-3xl pointer-events-none" />
+
+            {/* Three.js Interactive 3D Cartoon Robot */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="w-full max-w-md"
+              transition={{ duration: 0.9, delay: 0.25 }}
+              className="w-full relative z-10"
             >
-              <Card
-                tilt
-                spotlight
-                className="bg-gradient-to-b from-[#09153b]/95 via-[#050c26]/95 to-[#020516]/98 border-2 border-cyan-400/40 shadow-[0_0_50px_rgba(0,240,255,0.25)] p-7 relative overflow-hidden rounded-3xl"
-              >
-                {/* Background ambient radial glow inside card */}
-                <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-400/15 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-44 h-44 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+              <Hero3DRobotCanvas />
+            </motion.div>
 
-                {/* Top Terminal Status Header */}
-                <div className="flex items-center justify-between pb-4 border-b border-cyan-500/20">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
-                    </span>
-                    <span className="text-[11px] font-mono font-bold tracking-widest uppercase text-emerald-400">
-                      TELEMETRY // LIVE
-                    </span>
-                  </div>
+            {/* Floating 3D HUD Telemetry Cards Array */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="w-full max-w-md grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-2 z-20"
+            >
+              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
+                <Trophy className="w-4 h-4 text-amber-400 mb-1" />
+                <span className="text-[9px] font-mono text-slate-400 uppercase">Prize Pool</span>
+                <span className="font-orbitron font-bold text-xs text-white">₹1,50,000+</span>
+              </div>
 
-                  <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-400/30 shadow-[0_0_10px_rgba(0,240,255,0.15)] font-bold">
-                    NODE • MITS-01
-                  </span>
-                </div>
+              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
+                <Clock className="w-4 h-4 text-sky-400 mb-1" />
+                <span className="text-[9px] font-mono text-slate-400 uppercase">Duration</span>
+                <span className="font-orbitron font-bold text-xs text-white">12 Hours</span>
+              </div>
 
-                {/* Central ACM Chapter Emblem Display - Holographic Cyber Frame */}
-                <div className="py-6 flex flex-col items-center text-center relative">
-                  <div className="relative w-36 h-36 sm:w-40 sm:h-40 mb-4 flex items-center justify-center">
-                    {/* Glowing outer aura */}
-                    <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-cyan-400 via-sky-400 to-indigo-500 opacity-60 blur-lg animate-pulse-slow" />
+              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
+                <UsersRound className="w-4 h-4 text-cyan-400 mb-1" />
+                <span className="text-[9px] font-mono text-slate-400 uppercase">Squad</span>
+                <span className="font-orbitron font-bold text-xs text-white">4 to 6</span>
+              </div>
 
-                    {/* Cyber ring */}
-                    <div className="absolute -inset-1 rounded-full border border-cyan-400/50 border-dashed animate-spin-slow" />
-                    
-                    {/* Inner bordered circle perfectly fitted */}
-                    <div className="relative w-full h-full rounded-full overflow-hidden bg-white border-2 border-cyan-400 shadow-[0_0_25px_rgba(0,240,255,0.5)] flex items-center justify-center p-0">
-                      <img
-                        src={EVENT_DATA.organizer.acmLogo}
-                        alt="ACM MITS Student Chapter"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  <h3 className="font-heading font-black text-2xl text-white tracking-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">
-                    CodeNite 2027
-                  </h3>
-                  <p className="text-xs font-mono text-cyan-300 font-bold mt-1 tracking-wider uppercase">
-                    ACM MITS Student Chapter • Est. 2014
-                  </p>
-                </div>
-
-                {/* Key Event Highlights Grid */}
-                <div className="grid grid-cols-2 gap-3 pt-2 pb-6 border-y border-cyan-500/20 text-xs">
-                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
-                    <Trophy className="w-5 h-5 text-amber-400 shrink-0 drop-shadow-[0_0_8px_#fbbf24]" />
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Prize Pool</div>
-                      <div className="font-heading font-black text-white text-base">₹1,50,000+</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
-                    <Clock className="w-5 h-5 text-sky-400 shrink-0 drop-shadow-[0_0_8px_#38bdf8]" />
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Duration</div>
-                      <div className="font-heading font-black text-white text-base">12 Hours</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
-                    <UsersRound className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_#22d3ee]" />
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Team Size</div>
-                      <div className="font-heading font-black text-white text-base">4 to 6</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#04091f]/80 border border-cyan-500/25 flex items-center gap-2.5 hover:border-cyan-400/50 transition-colors">
-                    <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 drop-shadow-[0_0_8px_#34d399]" />
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono font-semibold">Registration</div>
-                      <div className="font-heading font-black text-white text-base">100% Free</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Quick Action */}
-                <div className="pt-5 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
-                    <MapPin className="w-4 h-4 text-cyan-400" />
-                    <span>MITS Gwalior Campus</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => scrollTo("register")}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-400/50 text-xs font-heading font-bold text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-all cursor-pointer group shadow-[0_0_12px_rgba(0,240,255,0.2)]"
-                  >
-                    <span>Register Squad</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </Card>
+              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mb-1" />
+                <span className="text-[9px] font-mono text-slate-400 uppercase">Entry</span>
+                <span className="font-orbitron font-bold text-xs text-emerald-300">100% Free</span>
+              </div>
             </motion.div>
           </div>
         </div>
