@@ -21,7 +21,7 @@ export function ScrollProgress() {
   return (
     <div className="fixed top-0 left-0 right-0 h-[3px] bg-transparent z-[100] pointer-events-none">
       <motion.div
-        className="h-full bg-gradient-to-r from-acm-blue via-sky-400 to-acm-cyan shadow-[0_0_8px_#22D3EE]"
+        className="h-full bg-gradient-to-r from-tech-blue via-tech-electric to-tech-cyan shadow-[0_0_12px_#38BDF8]"
         style={{ width: `${scrollPercentage}%` }}
         transition={{ ease: "easeOut", duration: 0.1 }}
       />

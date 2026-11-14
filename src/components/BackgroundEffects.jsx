@@ -1,52 +1,52 @@
 import React, { useMemo } from "react";
 
 export function BackgroundEffects() {
-  // Generate random twinkling cyber stars
+  // Generate random twinkling stars
   const stars = useMemo(() => {
-    return Array.from({ length: 55 }).map((_, i) => ({
+    return Array.from({ length: 60 }).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: Math.random() * 2 + 1,
       duration: Math.random() * 4 + 3,
       delay: Math.random() * 5,
-      color: i % 3 === 0 ? "bg-cyan-400" : i % 3 === 1 ? "bg-sky-300" : "bg-indigo-300",
+      color: i % 3 === 0 ? "bg-tech-cyan" : i % 3 === 1 ? "bg-tech-electric" : "bg-tech-violet",
     }));
   }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Deep Space Obsidian Base */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#02040d] via-[#050b1d] to-[#020308]" />
+      {/* TechForge Deep Midnight Navy Base (#050B1E) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050B1E] via-[#0A1530] to-[#050B1E]" />
 
-      {/* Cyber Grid Pattern */}
+      {/* Cyber Grid Pattern with Smooth Perspective Radial Mask */}
       <div
-        className="absolute inset-0 opacity-[0.13]"
+        className="absolute inset-0 opacity-[0.16]"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(0, 240, 255, 0.3) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(0, 240, 255, 0.3) 1px, transparent 1px)
+            linear-gradient(to right, rgba(96, 165, 250, 0.25) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(96, 165, 250, 0.25) 1px, transparent 1px)
           `,
-          backgroundSize: "64px 64px",
-          maskImage: "radial-gradient(ellipse at 50% 50%, black 40%, transparent 85%)",
-          WebkitMaskImage: "radial-gradient(ellipse at 50% 50%, black 40%, transparent 85%)",
+          backgroundSize: "60px 60px",
+          maskImage: "radial-gradient(ellipse at 50% 40%, black 35%, transparent 80%)",
+          WebkitMaskImage: "radial-gradient(ellipse at 50% 40%, black 35%, transparent 80%)",
         }}
       />
 
-      {/* Luminous Ambient Nebula Orbs */}
-      <div className="absolute -top-[15%] left-[12%] w-[750px] h-[750px] rounded-full bg-cyan-500/15 blur-[160px] animate-pulse-slow" />
-      <div className="absolute top-[30%] -right-[12%] w-[650px] h-[650px] rounded-full bg-sky-600/15 blur-[150px] animate-float" />
-      <div className="absolute bottom-[25%] left-[3%] w-[680px] h-[680px] rounded-full bg-indigo-600/15 blur-[160px] animate-float-reverse" />
-      <div className="absolute -bottom-[12%] right-[20%] w-[800px] h-[800px] rounded-full bg-acm-blue/15 blur-[180px]" />
+      {/* Atmospheric Radial Gradient Lighting - Electric Blue & Violet */}
+      <div className="absolute -top-[15%] left-[10%] w-[800px] h-[800px] rounded-full bg-tech-electric/15 blur-[160px] animate-pulse-slow" />
+      <div className="absolute top-[32%] -right-[15%] w-[700px] h-[700px] rounded-full bg-tech-cyan/12 blur-[170px] animate-float" />
+      <div className="absolute bottom-[20%] left-[2%] w-[720px] h-[720px] rounded-full bg-tech-violet/15 blur-[180px] animate-float-reverse" />
+      <div className="absolute -bottom-[10%] right-[25%] w-[850px] h-[850px] rounded-full bg-tech-blue/15 blur-[190px]" />
 
-      {/* High-Tech Perspective Horizon Glow (Top Beam) */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-28 bg-gradient-to-b from-cyan-500/10 to-transparent blur-2xl" />
+      {/* Top Cyber Glow Line */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-tech-cyan/60 to-transparent shadow-[0_0_12px_rgba(56,189,248,0.5)]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gradient-to-b from-tech-cyan/10 to-transparent blur-3xl pointer-events-none" />
 
       {/* Subtle Dot Matrix Micro Grid */}
-      <div className="absolute inset-0 bg-repeat opacity-[0.025] pointer-events-none bg-[radial-gradient(#22d3ee_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div className="absolute inset-0 bg-repeat opacity-[0.04] pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
 
-      {/* Twinkling Cyber Stars */}
+      {/* Twinkling Tech Stars */}
       <div className="absolute inset-0">
         {stars.map((star) => (
           <div
@@ -64,9 +64,9 @@ export function BackgroundEffects() {
         ))}
       </div>
 
-      {/* Circuit trace accent lines top right */}
+      {/* Cyber Circuit Accent Traces */}
       <svg
-        className="absolute right-0 top-0 w-96 h-96 opacity-15 text-cyan-400 pointer-events-none"
+        className="absolute right-0 top-0 w-96 h-96 opacity-20 text-tech-cyan pointer-events-none"
         viewBox="0 0 400 400"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
