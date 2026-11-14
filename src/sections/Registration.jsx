@@ -426,18 +426,18 @@ export function Registration({ onOpenAdmin }) {
               setLookupExecuted(false);
               setLookupError("");
             }}
-            className="px-4 py-2 rounded-xl bg-navy-900 border border-acm-blue/30 hover:border-acm-cyan text-slate-300 hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#101D3D] border border-[rgba(96,165,250,0.25)] hover:border-tech-cyan text-slate-300 hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer shadow-md"
           >
-            <Search className="w-3.5 h-3.5 text-acm-cyan" />
+            <Search className="w-3.5 h-3.5 text-tech-cyan" />
             <span>{showStatusLookup ? "Close Status Lookup" : "Check Team Registration Status"}</span>
           </button>
 
           <button
             type="button"
             onClick={() => onOpenAdmin && onOpenAdmin()}
-            className="px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-sky-400/40 text-acm-cyan hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
+            className="px-4 py-2 rounded-xl bg-[#101D3D] hover:bg-[#15244C] border border-tech-cyan/40 text-tech-cyan hover:text-white text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer shadow-md"
           >
-            <ShieldCheck className="w-4 h-4" />
+            <ShieldCheck className="w-4 h-4 text-tech-cyan" />
             <span>Admin Portal</span>
           </button>
         </div>
@@ -543,10 +543,10 @@ export function Registration({ onOpenAdmin }) {
         <Card
           tilt={false}
           spotlight={false}
-          className="p-6 sm:p-10 bg-gradient-to-b from-[#09153b]/95 via-[#050c26]/95 to-[#020412]/98 border-2 border-cyan-400/35 shadow-[0_0_50px_rgba(0,240,255,0.2)] backdrop-blur-3xl rounded-3xl relative overflow-hidden"
+          className="p-6 sm:p-10 bg-gradient-to-b from-[#101D3D]/95 via-[#0A1530]/95 to-[#050B1E]/98 border border-[rgba(96,165,250,0.3)] shadow-[0_15px_45px_rgba(5,11,30,0.9),0_0_30px_rgba(56,189,248,0.2)] backdrop-blur-3xl rounded-3xl relative overflow-hidden"
         >
           {/* Top glowing neon beam */}
-          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#00f0ff]" />
+          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-tech-cyan to-transparent shadow-[0_0_15px_#38BDF8]" />
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* ================= STEP 1: TEAM DETAILS ================= */}
             {currentStep === 1 && (
