@@ -16,9 +16,9 @@ export function AccordionItem({
       className={cn(
         "rounded-2xl border transition-all duration-300 overflow-hidden backdrop-blur-md mb-3.5",
         isOpen
-          ? "bg-navy-900/80 border-acm-cyan/50 shadow-glow-sm"
-          : "bg-navy-900/40 border-acm-blue/20 hover:border-acm-blue/50 hover:bg-navy-900/60",
-        highlight && !isOpen && "border-sky-400/35 bg-sky-950/20"
+          ? "bg-[#101D3D]/90 border-tech-cyan/50 shadow-[0_0_20px_rgba(56,189,248,0.2)]"
+          : "bg-[#101D3D]/50 border-[rgba(96,165,250,0.2)] hover:border-[rgba(96,165,250,0.45)] hover:bg-[#101D3D]/70",
+        highlight && !isOpen && "border-tech-cyan/40 bg-[#101D3D]/80"
       )}
     >
       <button
@@ -27,9 +27,9 @@ export function AccordionItem({
         aria-expanded={isOpen}
         className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer select-none group"
       >
-        <span className="flex items-center gap-3 font-heading font-semibold text-base sm:text-lg text-white group-hover:text-acm-cyan transition-colors">
+        <span className="flex items-center gap-3 font-heading font-semibold text-base sm:text-lg text-white group-hover:text-tech-cyan transition-colors">
           {highlight && (
-            <AlertCircle className="w-5 h-5 text-sky-400 shrink-0 animate-pulse" />
+            <AlertCircle className="w-5 h-5 text-tech-cyan shrink-0 animate-pulse" />
           )}
           {question}
         </span>
@@ -39,8 +39,8 @@ export function AccordionItem({
           className={cn(
             "p-1.5 rounded-full border transition-colors shrink-0 ml-3",
             isOpen
-              ? "bg-acm-blue/20 border-acm-cyan text-acm-cyan"
-              : "bg-navy-800 border-acm-blue/30 text-slate-400 group-hover:text-white"
+              ? "bg-tech-blue/25 border-tech-cyan text-tech-cyan shadow-[0_0_10px_rgba(56,189,248,0.3)]"
+              : "bg-[#0A1530] border-[rgba(96,165,250,0.3)] text-tech-muted group-hover:text-white"
           )}
         >
           <ChevronDown className="w-4 h-4" />
@@ -57,7 +57,7 @@ export function AccordionItem({
             transition={{ duration: 0.35, ease: [0.04, 0.62, 0.23, 0.98] }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-6 sm:px-6 pt-1 text-slate-300 text-sm sm:text-base leading-relaxed border-t border-acm-blue/10">
+            <div className="px-5 pb-6 sm:px-6 pt-1 text-tech-muted text-sm sm:text-base leading-relaxed border-t border-[rgba(96,165,250,0.15)]">
               {answer}
             </div>
           </motion.div>

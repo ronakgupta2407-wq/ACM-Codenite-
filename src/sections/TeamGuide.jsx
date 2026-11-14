@@ -37,12 +37,12 @@ export function TeamGuide() {
                 <div>
                   {/* Top Badge */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-acm-blue/20 text-acm-cyan border border-acm-cyan/40">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-tech-blue/15 text-tech-cyan border border-tech-cyan/40">
                       {model.size === 4 ? <Zap className="w-3.5 h-3.5" /> : <Shield className="w-3.5 h-3.5" />}
                       {model.badge}
                     </span>
 
-                    <div className="w-10 h-10 rounded-xl bg-navy-800 border border-acm-blue/30 flex items-center justify-center font-orbitron font-extrabold text-lg text-white">
+                    <div className="w-10 h-10 rounded-xl bg-[#0A1530] border border-[rgba(96,165,250,0.3)] flex items-center justify-center font-orbitron font-extrabold text-lg text-white">
                       {model.size}
                     </div>
                   </div>
@@ -51,25 +51,25 @@ export function TeamGuide() {
                     Squad of {model.size} Members
                   </h3>
 
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6 font-normal">
+                  <p className="text-tech-muted text-sm leading-relaxed mb-6 font-normal">
                     {model.tagline}
                   </p>
 
                   {/* Recommended Roles Breakdown */}
                   <div className="space-y-3.5 mb-6">
-                    <div className="text-xs font-mono uppercase tracking-wider text-slate-400">
+                    <div className="text-xs font-mono uppercase tracking-wider text-tech-muted font-semibold">
                       Recommended Role Distribution:
                     </div>
                     {model.roles.map((r, rIdx) => (
                       <div
                         key={rIdx}
-                        className="p-3 rounded-xl bg-navy-950/60 border border-acm-blue/20 flex flex-col gap-0.5"
+                        className="p-3 rounded-xl bg-[#050B1E] border border-[rgba(96,165,250,0.2)] flex flex-col gap-0.5"
                       >
-                        <div className="font-heading font-bold text-xs sm:text-sm text-sky-300 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-acm-cyan" />
+                        <div className="font-heading font-bold text-xs sm:text-sm text-tech-cyan flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-tech-cyan" />
                           {r.role}
                         </div>
-                        <div className="text-xs text-slate-400 pl-3.5 font-normal">
+                        <div className="text-xs text-tech-muted pl-3.5 font-normal">
                           {r.desc}
                         </div>
                       </div>
@@ -79,7 +79,7 @@ export function TeamGuide() {
 
                 <div>
                   {/* Ideal For note */}
-                  <div className="p-3 rounded-xl bg-sky-950/30 border border-sky-600/20 text-xs text-slate-300 mb-6">
+                  <div className="p-3 rounded-xl bg-[#0A1530] border border-[rgba(96,165,250,0.25)] text-xs text-tech-muted mb-6">
                     <strong className="text-white">Best suited for: </strong>
                     {model.idealFor}
                   </div>
@@ -87,7 +87,7 @@ export function TeamGuide() {
                   <Button
                     variant={model.size === 5 ? "primary" : model.size === 4 ? "secondary" : "outline"}
                     size="sm"
-                    className="w-full"
+                    className="w-full justify-center"
                     onClick={() => scrollToRegisterWithSize(model.size)}
                   >
                     Register a {model.size}-Member Team

@@ -29,8 +29,8 @@ export function Card({
     if (tilt) {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -7;
-      const rotateY = ((x - centerX) / centerX) * 7;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
       setRotate({ x: rotateX, y: rotateY });
     }
   };
@@ -62,35 +62,35 @@ export function Card({
       style={{ transformStyle: "preserve-3d" }}
       className={cn(
         "relative rounded-2xl p-6 transition-all duration-300",
-        "bg-gradient-to-b from-[#091438]/80 via-[#050b22]/90 to-[#020514]/95 backdrop-blur-2xl border border-cyan-500/20",
-        "hover:border-cyan-400/60 hover:shadow-[0_0_35px_rgba(0,240,255,0.22)]",
-        borderGlow && "before:absolute before:inset-0 before:rounded-2xl before:border before:border-transparent before:hover:border-cyan-400/30 before:pointer-events-none",
+        "bg-gradient-to-b from-[#101D3D]/90 via-[#0C1733]/92 to-[#050B1E]/95 backdrop-blur-2xl border border-[rgba(96,165,250,0.22)]",
+        "hover:border-tech-cyan/60 hover:shadow-[0_15px_35px_rgba(5,11,30,0.9),0_0_25px_rgba(56,189,248,0.25)]",
+        borderGlow && "before:absolute before:inset-0 before:rounded-2xl before:border before:border-transparent before:hover:border-tech-cyan/30 before:pointer-events-none",
         onClick && "cursor-pointer",
         className
       )}
       {...props}
     >
       {/* Cyber Corner HUD crosshairs */}
-      <span className="absolute top-2 left-2 text-[10px] font-mono text-cyan-400/30 select-none pointer-events-none">+</span>
-      <span className="absolute top-2 right-2 text-[10px] font-mono text-cyan-400/30 select-none pointer-events-none">+</span>
-      <span className="absolute bottom-2 left-2 text-[10px] font-mono text-cyan-400/30 select-none pointer-events-none">+</span>
-      <span className="absolute bottom-2 right-2 text-[10px] font-mono text-cyan-400/30 select-none pointer-events-none">+</span>
+      <span className="absolute top-2.5 left-2.5 text-[9px] font-mono text-tech-cyan/30 select-none pointer-events-none">+</span>
+      <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-tech-cyan/30 select-none pointer-events-none">+</span>
+      <span className="absolute bottom-2.5 left-2.5 text-[9px] font-mono text-tech-cyan/30 select-none pointer-events-none">+</span>
+      <span className="absolute bottom-2.5 right-2.5 text-[9px] font-mono text-tech-cyan/30 select-none pointer-events-none">+</span>
 
       {/* Radial Spotlight gradient following cursor */}
       {spotlight && isHovered && (
         <div
           className="pointer-events-none absolute -inset-px rounded-2xl opacity-100 transition-opacity duration-300"
           style={{
-            background: `radial-gradient(450px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(0, 240, 255, 0.16), transparent 80%)`,
+            background: `radial-gradient(400px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(56, 189, 248, 0.16), transparent 75%)`,
           }}
         />
       )}
 
       {/* Top reflective neon edge */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent pointer-events-none rounded-t-2xl" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tech-cyan/60 to-transparent pointer-events-none rounded-t-2xl" />
 
       {/* Card Content with 3D depth */}
-      <div className="relative z-10" style={{ transform: "translateZ(10px)" }}>
+      <div className="relative z-10" style={{ transform: "translateZ(8px)" }}>
         {children}
       </div>
     </motion.div>

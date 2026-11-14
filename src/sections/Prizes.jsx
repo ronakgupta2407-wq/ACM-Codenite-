@@ -44,8 +44,8 @@ export function Prizes() {
                   className={cn(
                     "relative rounded-2xl p-6 sm:p-7 backdrop-blur-xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group",
                     prize.isPopular 
-                      ? "bg-gradient-to-b from-[#1c1506]/90 via-[#0d0918]/95 to-[#050410]/95 border-amber-500/50 md:-translate-y-5 shadow-[0_0_35px_rgba(245,158,11,0.22)] ring-1 ring-amber-400/40" 
-                      : "bg-gradient-to-b from-[#0b132b]/80 via-[#070b1f]/90 to-[#020412]/95 border-cyan-500/25 hover:border-cyan-400/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.18)]"
+                      ? "bg-gradient-to-b from-[#1C1506]/95 via-[#101D3D]/95 to-[#050B1E]/98 border-amber-400/50 md:-translate-y-6 shadow-[0_0_35px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/40" 
+                      : "bg-gradient-to-b from-[#101D3D]/90 via-[#0A1530]/92 to-[#050B1E]/95 border-[rgba(96,165,250,0.25)] hover:border-tech-cyan/60 hover:shadow-[0_15px_35px_rgba(5,11,30,0.9),0_0_25px_rgba(56,189,248,0.25)]"
                   )}
                 >
                   {/* Top Neon Accent Line */}
@@ -53,14 +53,14 @@ export function Prizes() {
                     "absolute top-0 left-0 right-0 h-0.5",
                     prize.isPopular
                       ? "bg-gradient-to-r from-transparent via-amber-400 to-transparent"
-                      : "bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                      : "bg-gradient-to-r from-transparent via-tech-cyan to-transparent"
                   )} />
 
                   {/* Corner cyber ticks */}
-                  <span className="absolute top-2 left-2 text-[8px] font-mono text-cyan-500/30">┌</span>
-                  <span className="absolute top-2 right-2 text-[8px] font-mono text-cyan-500/30">┐</span>
-                  <span className="absolute bottom-2 left-2 text-[8px] font-mono text-cyan-500/30">└</span>
-                  <span className="absolute bottom-2 right-2 text-[8px] font-mono text-cyan-500/30">┘</span>
+                  <span className="absolute top-2 left-2 text-[8px] font-mono text-tech-cyan/40">┌</span>
+                  <span className="absolute top-2 right-2 text-[8px] font-mono text-tech-cyan/40">┐</span>
+                  <span className="absolute bottom-2 left-2 text-[8px] font-mono text-tech-cyan/40">└</span>
+                  <span className="absolute bottom-2 right-2 text-[8px] font-mono text-tech-cyan/40">┘</span>
 
                   {/* Popular Banner for 1st Place */}
                   {prize.isPopular && (
@@ -79,13 +79,13 @@ export function Prizes() {
                           "w-12 h-12 rounded-2xl flex items-center justify-center border font-orbitron font-black text-xl shadow-inner",
                           prize.isPopular
                             ? "bg-amber-400/20 text-amber-300 border-amber-400/50"
-                            : "bg-navy-800 text-slate-200 border-acm-blue/30"
+                            : "bg-[#0A1530] text-slate-200 border-[rgba(96,165,250,0.3)]"
                         )}
                       >
                         {prize.place}
                       </div>
 
-                      <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-navy-950/80 text-slate-300 border border-white/10">
+                      <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#050B1E]/90 text-slate-300 border border-[rgba(96,165,250,0.2)]">
                         {prize.badge}
                       </span>
                     </div>
@@ -93,23 +93,23 @@ export function Prizes() {
                     <h3 className="font-heading font-extrabold text-2xl text-white mb-1">
                       {prize.title}
                     </h3>
-                    <p className="text-xs font-mono text-slate-400 mb-6 uppercase tracking-wider">
+                    <p className="text-xs font-mono text-tech-muted mb-6 uppercase tracking-wider">
                       {prize.rank}
                     </p>
 
                     {/* Big Cash Amount */}
-                    <div className="font-orbitron font-black text-4xl text-white tracking-tight mb-6 bg-gradient-to-r from-white via-sky-200 to-acm-cyan bg-clip-text text-transparent">
+                    <div className="font-orbitron font-black text-4xl text-white tracking-tight mb-6 bg-gradient-to-r from-white via-slate-100 to-tech-cyan bg-clip-text text-transparent">
                       {prize.cash}
                     </div>
 
                     {/* Perks List */}
-                    <div className="space-y-3 pt-4 border-t border-white/10">
+                    <div className="space-y-3 pt-4 border-t border-[rgba(96,165,250,0.2)]">
                       {prize.perks.map((perk, pIndex) => (
                         <div key={pIndex} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
                           <CheckCircle2
                             className={cn(
                               "w-4 h-4 shrink-0 mt-0.5",
-                              prize.isPopular ? "text-amber-400" : "text-sky-400"
+                              prize.isPopular ? "text-amber-400" : "text-tech-cyan"
                             )}
                           />
                           <span>{perk}</span>
@@ -119,9 +119,9 @@ export function Prizes() {
                   </div>
 
                   {/* Bottom Accents */}
-                  <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-center">
-                    <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
-                      <Trophy className="w-3.5 h-3.5 text-acm-cyan" /> Official ACM Chapter Honor
+                  <div className="mt-6 pt-4 border-t border-[rgba(96,165,250,0.15)] flex items-center justify-center">
+                    <span className="text-[11px] font-mono text-tech-muted flex items-center gap-1.5">
+                      <Trophy className="w-3.5 h-3.5 text-tech-cyan" /> Official ACM Chapter Honor
                     </span>
                   </div>
                 </div>
@@ -136,7 +136,7 @@ export function Prizes() {
             <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-white">
               Special Category Awards
             </h3>
-            <p className="text-sm font-mono text-acm-cyan mt-1">
+            <p className="text-sm font-mono text-tech-cyan mt-1">
               ₹50,000 in Domain-Specific Accolades
             </p>
           </div>
@@ -155,11 +155,11 @@ export function Prizes() {
                 >
                   <Card tilt spotlight className="h-full flex flex-col justify-between p-6">
                     <div>
-                      <div className="w-10 h-10 rounded-xl bg-navy-800 border border-acm-blue/30 flex items-center justify-center text-acm-cyan mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-[#0A1530] border border-[rgba(96,165,250,0.3)] flex items-center justify-center text-tech-cyan mb-4">
                         <Icon className="w-5 h-5" />
                       </div>
 
-                      <div className="font-orbitron font-extrabold text-2xl text-white mb-1 bg-gradient-to-r from-sky-300 to-acm-cyan bg-clip-text text-transparent">
+                      <div className="font-orbitron font-extrabold text-2xl text-white mb-1 bg-gradient-to-r from-tech-cyan to-tech-electric bg-clip-text text-transparent">
                         {spec.cash}
                       </div>
 
@@ -167,13 +167,13 @@ export function Prizes() {
                         {spec.category}
                       </h4>
 
-                      <p className="text-slate-400 text-xs leading-relaxed font-normal">
+                      <p className="text-tech-muted text-xs leading-relaxed font-normal">
                         {spec.desc}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-acm-blue/20 text-[10px] font-mono text-slate-400 flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-acm-cyan" />
+                    <div className="mt-4 pt-3 border-t border-[rgba(96,165,250,0.2)] text-[10px] font-mono text-tech-muted flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-tech-cyan" />
                       <span>Cash + Merit Certificate</span>
                     </div>
                   </Card>

@@ -59,12 +59,12 @@ export function Timeline() {
         {/* Timeline Container */}
         <div ref={containerRef} className="relative max-w-4xl mx-auto mt-12">
           {/* Static Center Line (Background track) */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-navy-800 -translate-x-1/2" />
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-[#101D3D] -translate-x-1/2" />
 
           {/* Animated Glowing Center Line on Scroll */}
           <motion.div
             style={{ scaleY, transformOrigin: "top" }}
-            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-acm-blue via-sky-400 to-acm-cyan shadow-[0_0_10px_#22D3EE] -translate-x-1/2"
+            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-tech-blue via-tech-electric to-tech-cyan shadow-[0_0_12px_#38BDF8] -translate-x-1/2"
           />
 
           {/* Timeline Nodes */}
@@ -94,18 +94,18 @@ export function Timeline() {
                       tilt={false}
                       spotlight
                       className={cn(
-                        "p-5 sm:p-6 transition-all duration-300 hover:border-acm-cyan",
+                        "p-5 sm:p-6 transition-all duration-300 hover:border-tech-cyan",
                         isEven ? "md:text-left" : "md:text-right"
                       )}
                     >
                       {/* Time & Date Header */}
                       <div
                         className={cn(
-                          "flex items-center gap-2 mb-2 text-xs font-mono font-bold text-acm-cyan",
+                          "flex items-center gap-2 mb-2 text-xs font-mono font-bold text-tech-cyan",
                           isEven ? "md:justify-start" : "md:justify-end"
                         )}
                       >
-                        <span className="px-2 py-0.5 rounded bg-sky-950 border border-sky-600/30">
+                        <span className="px-2 py-0.5 rounded-md bg-[#0A1530] border border-[rgba(96,165,250,0.3)]">
                           {item.date}
                         </span>
                         <span className="text-white font-extrabold">{item.time}</span>
@@ -117,7 +117,7 @@ export function Timeline() {
                       </h4>
 
                       {/* Description */}
-                      <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal">
+                      <p className="text-tech-muted text-xs sm:text-sm leading-relaxed font-normal">
                         {item.description}
                       </p>
                     </Card>
@@ -131,9 +131,9 @@ export function Timeline() {
                     transition={{ type: "spring", stiffness: 350, damping: 20 }}
                     className="absolute left-6 md:left-1/2 top-4 md:top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center"
                   >
-                    <div className="relative w-10 h-10 rounded-full bg-navy-950 border-2 border-acm-cyan flex items-center justify-center text-acm-cyan shadow-glow-cyan">
+                    <div className="relative w-10 h-10 rounded-full bg-[#050B1E] border-2 border-tech-cyan flex items-center justify-center text-tech-cyan shadow-[0_0_15px_rgba(56,189,248,0.5)]">
                       <Icon className="w-5 h-5" />
-                      <span className="absolute -inset-1 rounded-full bg-acm-cyan/30 animate-ping -z-10" />
+                      <span className="absolute -inset-1 rounded-full bg-tech-cyan/30 animate-ping -z-10" />
                     </div>
                   </motion.div>
                 </div>

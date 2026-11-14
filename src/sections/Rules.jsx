@@ -16,16 +16,16 @@ export function Rules() {
         />
 
         {/* Quick Highlights Alert Banner */}
-        <div className="mb-10 p-5 rounded-2xl bg-sky-950/40 border border-sky-400/40 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="mb-10 p-5 rounded-2xl bg-[#101D3D]/90 border border-[rgba(96,165,250,0.3)] backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-[0_8px_24px_rgba(5,11,30,0.6)]">
           <div className="flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-sky-500/20 text-acm-cyan border border-acm-cyan/40 shrink-0">
+            <div className="p-2.5 rounded-xl bg-tech-blue/20 text-tech-cyan border border-tech-cyan/40 shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
               <h4 className="font-heading font-bold text-white text-base">
                 Key Participation Essentials
               </h4>
-              <p className="text-xs sm:text-sm text-slate-300 mt-0.5 leading-relaxed">
+              <p className="text-xs sm:text-sm text-tech-muted mt-0.5 leading-relaxed">
                 Teams can consist of <strong>4 to 6 members</strong>. Cross-college and cross-department squads are fully permitted. Registration is 100% free.
               </p>
             </div>

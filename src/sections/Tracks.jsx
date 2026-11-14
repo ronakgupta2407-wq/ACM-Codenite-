@@ -69,46 +69,46 @@ export function Tracks() {
                   tilt
                   spotlight
                   onClick={() => setSelectedTrack(track)}
-                  className="h-full flex flex-col justify-between group hover:border-cyan-400 hover:shadow-[0_0_35px_rgba(0,240,255,0.25)] transition-all duration-300 relative overflow-hidden"
+                  className="h-full flex flex-col justify-between group hover:border-tech-cyan hover:shadow-[0_15px_35px_rgba(5,11,30,0.9),0_0_25px_rgba(56,189,248,0.3)] transition-all duration-300 relative overflow-hidden"
                 >
                   {/* Subtle top neon ambient glow */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none group-hover:bg-cyan-400/20 transition-all" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-tech-cyan/10 rounded-full blur-2xl pointer-events-none group-hover:bg-tech-cyan/20 transition-all" />
 
                   <div>
                     {/* Top row with index, icon & badge */}
                     <div className="flex items-center justify-between mb-5">
-                      <div className="w-12 h-12 rounded-2xl bg-cyan-950/60 border border-cyan-400/30 flex items-center justify-center text-cyan-300 group-hover:bg-cyan-500/20 group-hover:scale-110 group-hover:border-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all">
+                      <div className="w-12 h-12 rounded-2xl bg-tech-blue/15 border border-tech-cyan/30 flex items-center justify-center text-tech-cyan group-hover:bg-tech-electric/25 group-hover:scale-110 group-hover:border-tech-cyan shadow-[0_0_15px_rgba(56,189,248,0.2)] transition-all">
                         <Icon className="w-6 h-6" />
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold text-slate-400">
+                        <span className="text-[10px] font-mono font-bold text-tech-muted">
                           // 0{index + 1}
                         </span>
-                        <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-400/40 shadow-sm group-hover:border-cyan-400">
+                        <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-[#0A1530] text-tech-cyan border border-tech-cyan/40 shadow-sm group-hover:border-tech-cyan">
                           {track.badge}
                         </span>
                       </div>
                     </div>
 
                     {/* Track Title */}
-                    <h3 className="font-heading font-black text-xl text-white group-hover:text-cyan-300 transition-colors mb-3 tracking-tight">
+                    <h3 className="font-heading font-black text-xl text-white group-hover:text-tech-cyan transition-colors mb-3 tracking-tight">
                       {track.title}
                     </h3>
 
                     {/* Track Short Description */}
-                    <p className="text-slate-300 text-sm leading-relaxed mb-6 font-normal">
+                    <p className="text-tech-muted text-sm leading-relaxed mb-6 font-normal">
                       {track.description}
                     </p>
                   </div>
 
                   {/* Card Footer CTA */}
-                  <div className="pt-4 border-t border-cyan-500/20 flex items-center justify-between text-xs font-mono font-bold transition-colors">
+                  <div className="pt-4 border-t border-[rgba(96,165,250,0.2)] flex items-center justify-between text-xs font-mono font-bold transition-colors">
                     <span className="flex items-center gap-1.5 text-amber-300">
                       <Lock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
                       <span>Challenges: Coming Soon</span>
                     </span>
-                    <span className="text-cyan-400 group-hover:text-white flex items-center gap-1">
+                    <span className="text-tech-cyan group-hover:text-white flex items-center gap-1">
                       <span>Explore</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
                     </span>
@@ -131,7 +131,7 @@ export function Tracks() {
         {selectedTrack && (
           <div className="space-y-6">
             {/* Overview Box */}
-            <div className="p-4 rounded-xl bg-navy-800/60 border border-acm-blue/30 text-slate-200 text-sm leading-relaxed">
+            <div className="p-4 rounded-xl bg-[#0A1530] border border-[rgba(96,165,250,0.25)] text-slate-200 text-sm leading-relaxed">
               {selectedTrack.details}
             </div>
 
@@ -150,15 +150,15 @@ export function Tracks() {
                       LOCKED
                     </span>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-xs text-tech-muted leading-relaxed">
                     Official problem statements for this track will be unveiled live at the <strong>Opening Ceremony on 17 January 2027 (07:00 PM IST)</strong>. Form your team and secure your registration today!
                   </p>
                 </div>
               </div>
 
               <div>
-                <div className="flex items-center gap-2 mb-3 text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                  <ListTodo className="w-4 h-4 text-acm-cyan" />
+                <div className="flex items-center gap-2 mb-3 text-xs font-mono font-bold uppercase tracking-wider text-tech-muted">
+                  <ListTodo className="w-4 h-4 text-tech-cyan" />
                   <span>Domain Scope & Focus Areas:</span>
                 </div>
 
@@ -166,9 +166,9 @@ export function Tracks() {
                   {selectedTrack.sampleProblems.map((statement, idx) => (
                     <div
                       key={idx}
-                      className="p-3.5 rounded-xl bg-navy-950/70 border border-acm-blue/20 flex items-start gap-3 text-slate-300 text-xs sm:text-sm leading-relaxed hover:border-acm-cyan/40 transition-colors"
+                      className="p-3.5 rounded-xl bg-[#050B1E] border border-[rgba(96,165,250,0.2)] flex items-start gap-3 text-tech-muted text-xs sm:text-sm leading-relaxed hover:border-tech-cyan/40 transition-colors"
                     >
-                      <span className="w-5 h-5 rounded-full bg-acm-blue/20 text-acm-cyan text-[11px] font-mono flex items-center justify-center shrink-0 mt-0.5 font-bold">
+                      <span className="w-5 h-5 rounded-full bg-tech-blue/20 text-tech-cyan text-[11px] font-mono flex items-center justify-center shrink-0 mt-0.5 font-bold">
                         0{idx + 1}
                       </span>
                       <div>
@@ -184,7 +184,7 @@ export function Tracks() {
             </div>
 
             {/* Modal Bottom CTA */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-acm-blue/20">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-[rgba(96,165,250,0.2)]">
               <Button
                 variant="outline"
                 size="sm"
