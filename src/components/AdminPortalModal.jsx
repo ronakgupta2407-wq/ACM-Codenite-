@@ -395,7 +395,7 @@ export function AdminPortalModal({ isOpen, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-navy-950/90 backdrop-blur-md cursor-pointer"
+          className="fixed inset-0 bg-[#050B1E]/90 backdrop-blur-md cursor-pointer"
         />
 
         <motion.div
@@ -403,9 +403,9 @@ export function AdminPortalModal({ isOpen, onClose }) {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.92, opacity: 0, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 350 }}
-          className="relative w-full max-w-6xl z-10 rounded-2xl bg-navy-900 border border-acm-cyan/40 shadow-glow-lg p-5 sm:p-8 max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col"
+          className="relative w-full max-w-6xl z-10 rounded-2xl bg-[#0A1530] border border-[rgba(96,165,250,0.3)] shadow-[0_20px_50px_rgba(5,11,30,0.9),0_0_30px_rgba(56,189,248,0.2)] p-5 sm:p-8 max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col"
         >
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-acm-blue via-acm-cyan to-indigo-500 rounded-t-2xl pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-tech-blue via-tech-electric to-tech-cyan rounded-t-2xl pointer-events-none" />
 
           <div className="flex items-center justify-between pb-4 mb-6 border-b border-acm-blue/20">
             <div className="flex items-center gap-3">

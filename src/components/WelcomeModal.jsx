@@ -40,7 +40,7 @@ export function WelcomeModal({ showAfterLoader }) {
     >
       <div className="space-y-4">
         {/* Banner with ACM Logo & Highlight */}
-        <div className="p-4 rounded-xl bg-gradient-to-br from-acm-blue/20 via-navy-800 to-navy-900 border border-acm-cyan/30 flex items-center gap-4">
+        <div className="p-4 rounded-xl bg-gradient-to-br from-tech-blue/20 via-[#101D3D] to-[#0A1530] border border-[rgba(96,165,250,0.3)] flex items-center gap-4">
           <img
             src={EVENT_DATA.organizer.acmLogo}
             alt="ACM Logo"
