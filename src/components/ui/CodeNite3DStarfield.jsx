@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 /**
  * CodeNite3DStarfield
  * 3D perspective warp-speed depth canvas rendering glowing cyber particles
- * streaming towards the viewer.
+ * streaming towards the viewer with TechForge Hackathon palette.
  */
 export function CodeNite3DStarfield() {
   const canvasRef = useRef(null);
@@ -28,6 +28,7 @@ export function CodeNite3DStarfield() {
     const numStars = 140;
     const stars = [];
     const speed = 2.2;
+    const palette = ["#38BDF8", "#3B82F6", "#6366F1", "#93C5FD"];
 
     for (let i = 0; i < numStars; i++) {
       stars.push({
@@ -35,12 +36,13 @@ export function CodeNite3DStarfield() {
         y: (Math.random() - 0.5) * height * 2,
         z: Math.random() * width,
         size: Math.random() * 2 + 1,
-        color: Math.random() > 0.4 ? "#00f0ff" : "#818cf8",
+        color: palette[i % palette.length],
       });
     }
 
     const render = () => {
-      ctx.fillStyle = "rgba(2, 4, 11, 0.35)";
+      // Midnight navy fade trail (#050B1E)
+      ctx.fillStyle = "rgba(5, 11, 30, 0.35)";
       ctx.fillRect(0, 0, width, height);
 
       const cx = width / 2;
