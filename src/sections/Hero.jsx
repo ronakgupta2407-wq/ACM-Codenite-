@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Countdown } from "../components/ui/Countdown";
-import { Card } from "../components/ui/Card";
 import { Hero3DRobotCanvas } from "../components/3d/Hero3DRobotCanvas";
 import { EVENT_DATA } from "../data/codeniteData";
 
@@ -73,16 +72,16 @@ export function Hero({ onOpenAdmin }) {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-950/80 via-navy-900 to-navy-950 border border-cyan-400/40 shadow-[0_0_20px_rgba(0,240,255,0.25)] mb-6 backdrop-blur-xl"
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#101D3D]/90 border border-[rgba(96,165,250,0.3)] shadow-[0_0_20px_rgba(56,189,248,0.2)] mb-6 backdrop-blur-xl"
             >
-              <div className="w-5 h-5 rounded-full overflow-hidden bg-white flex items-center justify-center shrink-0 border border-cyan-400/50 shadow-sm">
+              <div className="w-5 h-5 rounded-md overflow-hidden bg-white flex items-center justify-center shrink-0 border border-tech-cyan/40 shadow-sm p-0.5">
                 <img
                   src={EVENT_DATA.organizer.acmLogo}
                   alt="ACM Logo"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
-              <span className="text-xs font-mono font-bold tracking-widest uppercase text-cyan-300">
+              <span className="text-xs font-mono font-bold tracking-widest uppercase text-tech-cyan">
                 ACM MITS Chapter // CodeNite 2027
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping ml-0.5" />
@@ -96,10 +95,10 @@ export function Hero({ onOpenAdmin }) {
               className="relative"
             >
               <h1 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl text-white tracking-tight leading-none mb-3">
-                <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent drop-shadow-[0_2px_15px_rgba(255,255,255,0.2)]">
+                <span className="bg-gradient-to-r from-white via-slate-100 to-slate-200 bg-clip-text text-transparent drop-shadow-[0_2px_15px_rgba(255,255,255,0.15)]">
                   {glitchText}
                 </span>{" "}
-                <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(0,240,255,0.45)]">
+                <span className="bg-gradient-to-r from-tech-cyan via-tech-electric to-tech-violet bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(56,189,248,0.5)]">
                   2027
                 </span>
               </h1>
@@ -110,7 +109,7 @@ export function Hero({ onOpenAdmin }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl md:text-2xl font-heading font-semibold text-cyan-200/90 mb-4 tracking-wide"
+              className="text-lg sm:text-xl md:text-2xl font-heading font-semibold text-tech-cyan/95 mb-4 tracking-wide"
             >
               {EVENT_DATA.tagline}
             </motion.h2>
@@ -120,7 +119,7 @@ export function Hero({ onOpenAdmin }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl mb-6 font-normal"
+              className="text-tech-muted text-sm sm:text-base leading-relaxed max-w-xl mb-6 font-normal"
             >
               Join 1,500+ registered student hackers for 12 hours of overnight technical hacking, mentor checkpoints, high-octane prototyping, and a prize pool of ₹1,50,000+.
             </motion.p>
@@ -135,9 +134,9 @@ export function Hero({ onOpenAdmin }) {
               {EVENT_DATA.chips.map((chip) => (
                 <div
                   key={chip.label}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-b from-[#0a1538]/80 to-[#04091e]/90 border border-cyan-500/25 text-xs font-mono text-slate-200 backdrop-blur-md hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all"
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#101D3D]/80 border border-[rgba(96,165,250,0.25)] text-xs font-mono text-slate-200 backdrop-blur-md hover:border-tech-cyan/60 hover:shadow-[0_0_15px_rgba(56,189,248,0.2)] transition-all"
                 >
-                  <span className="text-cyan-400 font-bold tracking-wider">{chip.label}:</span>
+                  <span className="text-tech-cyan font-bold tracking-wider">{chip.label}:</span>
                   <span className="text-white font-medium">{chip.value}</span>
                 </div>
               ))}
@@ -165,10 +164,10 @@ export function Hero({ onOpenAdmin }) {
               <button
                 type="button"
                 onClick={() => onOpenAdmin && onOpenAdmin()}
-                className="px-5 py-3 rounded-xl bg-navy-900/90 hover:bg-navy-800 text-slate-200 hover:text-acm-cyan border border-acm-blue/30 hover:border-acm-cyan text-sm font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer w-full sm:w-auto"
+                className="px-5 py-3 rounded-xl bg-[#101D3D]/90 hover:bg-[#15244C] text-slate-200 hover:text-tech-cyan border border-[rgba(96,165,250,0.3)] hover:border-tech-cyan text-sm font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer w-full sm:w-auto"
                 title="Organizer Admin Portal"
               >
-                <ShieldCheck className="w-4 h-4 text-acm-cyan" />
+                <ShieldCheck className="w-4 h-4 text-tech-cyan" />
                 <span>Admin</span>
               </button>
 
@@ -190,7 +189,7 @@ export function Hero({ onOpenAdmin }) {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="w-full max-w-xl"
             >
-              <div className="flex items-center gap-2 mb-2 text-xs font-mono font-medium text-acm-cyan">
+              <div className="flex items-center gap-2 mb-2 text-xs font-mono font-medium text-tech-cyan">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                 <span>HACKATHON CLOCK TICKING DOWN TO 17 JAN 2027</span>
               </div>
@@ -201,7 +200,7 @@ export function Hero({ onOpenAdmin }) {
           {/* Right Column: 3D Animated Cartoon Robot Mascot ("NiteBot Prime") */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             {/* Outer Holographic Ambient Aura */}
-            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-cyan-500/20 via-sky-500/20 to-purple-600/25 blur-3xl pointer-events-none" />
+            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-tech-cyan/20 via-tech-electric/20 to-tech-violet/25 blur-3xl pointer-events-none" />
 
             {/* Three.js Interactive 3D Cartoon Robot */}
             <motion.div
@@ -220,27 +219,27 @@ export function Hero({ onOpenAdmin }) {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="w-full max-w-md grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-2 z-20"
             >
-              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
+              <div className="p-3 rounded-2xl bg-[#101D3D]/90 border border-[rgba(96,165,250,0.25)] backdrop-blur-xl flex flex-col items-center text-center shadow-[0_4px_20px_rgba(5,11,30,0.6)] hover:border-tech-cyan hover:shadow-[0_0_15px_rgba(56,189,248,0.25)] hover:scale-105 transition-all">
                 <Trophy className="w-4 h-4 text-amber-400 mb-1" />
-                <span className="text-[9px] font-mono text-slate-400 uppercase">Prize Pool</span>
+                <span className="text-[9px] font-mono text-tech-muted uppercase font-semibold">Prize Pool</span>
                 <span className="font-orbitron font-bold text-xs text-white">₹1,50,000+</span>
               </div>
 
-              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
-                <Clock className="w-4 h-4 text-sky-400 mb-1" />
-                <span className="text-[9px] font-mono text-slate-400 uppercase">Duration</span>
+              <div className="p-3 rounded-2xl bg-[#101D3D]/90 border border-[rgba(96,165,250,0.25)] backdrop-blur-xl flex flex-col items-center text-center shadow-[0_4px_20px_rgba(5,11,30,0.6)] hover:border-tech-cyan hover:shadow-[0_0_15px_rgba(56,189,248,0.25)] hover:scale-105 transition-all">
+                <Clock className="w-4 h-4 text-tech-electric mb-1" />
+                <span className="text-[9px] font-mono text-tech-muted uppercase font-semibold">Duration</span>
                 <span className="font-orbitron font-bold text-xs text-white">12 Hours</span>
               </div>
 
-              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
-                <UsersRound className="w-4 h-4 text-cyan-400 mb-1" />
-                <span className="text-[9px] font-mono text-slate-400 uppercase">Squad</span>
+              <div className="p-3 rounded-2xl bg-[#101D3D]/90 border border-[rgba(96,165,250,0.25)] backdrop-blur-xl flex flex-col items-center text-center shadow-[0_4px_20px_rgba(5,11,30,0.6)] hover:border-tech-cyan hover:shadow-[0_0_15px_rgba(56,189,248,0.25)] hover:scale-105 transition-all">
+                <UsersRound className="w-4 h-4 text-tech-cyan mb-1" />
+                <span className="text-[9px] font-mono text-tech-muted uppercase font-semibold">Squad</span>
                 <span className="font-orbitron font-bold text-xs text-white">4 to 6</span>
               </div>
 
-              <div className="p-2.5 rounded-2xl bg-[#06112d]/90 border border-cyan-400/30 backdrop-blur-xl flex flex-col items-center text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 hover:scale-105 transition-all">
+              <div className="p-3 rounded-2xl bg-[#101D3D]/90 border border-[rgba(96,165,250,0.25)] backdrop-blur-xl flex flex-col items-center text-center shadow-[0_4px_20px_rgba(5,11,30,0.6)] hover:border-tech-cyan hover:shadow-[0_0_15px_rgba(56,189,248,0.25)] hover:scale-105 transition-all">
                 <ShieldCheck className="w-4 h-4 text-emerald-400 mb-1" />
-                <span className="text-[9px] font-mono text-slate-400 uppercase">Entry</span>
+                <span className="text-[9px] font-mono text-tech-muted uppercase font-semibold">Entry</span>
                 <span className="font-orbitron font-bold text-xs text-emerald-300">100% Free</span>
               </div>
             </motion.div>

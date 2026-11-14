@@ -41,7 +41,6 @@ export const Button = React.forwardRef(
     const handleClick = (e) => {
       if (disabled || isLoading) return;
 
-      // Ripple effect
       const rect = buttonRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -55,35 +54,32 @@ export const Button = React.forwardRef(
       if (onClick) onClick(e);
     };
 
-    // Size variants
     const sizeClasses = {
-      sm: "px-3.5 py-1.5 text-xs font-semibold gap-1.5 rounded-lg",
+      sm: "px-4 py-2 text-xs font-semibold gap-1.5 rounded-xl",
       md: "px-5 py-2.5 text-sm font-semibold gap-2 rounded-xl",
       lg: "px-7 py-3.5 text-base font-bold gap-2.5 rounded-xl",
     };
 
-    // Variant styles
     const baseClasses =
-      "relative inline-flex items-center justify-center font-heading tracking-wide transition-colors duration-300 overflow-hidden cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-acm-electric focus:ring-offset-2 focus:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed";
+      "relative inline-flex items-center justify-center font-heading tracking-wide transition-all duration-300 overflow-hidden cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-tech-cyan focus:ring-offset-2 focus:ring-offset-[#050B1E] disabled:opacity-50 disabled:cursor-not-allowed";
 
     const variantClasses = {
       primary:
-        "bg-gradient-to-r from-acm-blue via-sky-500 to-acm-cyan text-white shadow-glow-sm hover:shadow-glow-md hover:from-sky-500 hover:to-acm-electric border border-cyan-400/30",
+        "bg-gradient-to-r from-tech-blue via-tech-electric to-tech-cyan text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(56,189,248,0.55)] border border-tech-cyan/40 hover:brightness-110",
       secondary:
-        "bg-navy-800/80 hover:bg-navy-700/80 text-white border border-acm-blue/40 hover:border-acm-cyan shadow-glass backdrop-blur-md",
+        "bg-[#101D3D]/90 hover:bg-[#15244C] text-white border border-[rgba(96,165,250,0.3)] hover:border-tech-cyan shadow-glass backdrop-blur-md",
       outline:
-        "bg-transparent text-sky-300 border border-sky-400/50 hover:text-white hover:border-acm-cyan hover:bg-acm-blue/15 shadow-sm",
+        "bg-transparent text-tech-cyan border border-tech-cyan/50 hover:text-white hover:border-tech-cyan hover:bg-tech-blue/20 shadow-sm",
       glow:
-        "bg-acm-blue text-white shadow-glow-md hover:shadow-glow-lg border border-acm-cyan/60 hover:bg-sky-500",
+        "bg-tech-blue text-white shadow-[0_0_25px_rgba(56,189,248,0.5)] hover:shadow-[0_0_35px_rgba(56,189,248,0.7)] border border-tech-cyan/60 hover:bg-tech-electric",
       ghost:
         "bg-transparent text-slate-300 hover:text-white hover:bg-white/5 border border-transparent",
     };
 
     return (
       <div className="relative inline-flex group">
-        {/* Continuous pulse ring for CTA */}
         {pulseRing && !disabled && (
-          <span className="absolute -inset-1 rounded-xl bg-gradient-to-r from-acm-blue to-acm-cyan opacity-40 blur-md group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse-slow pointer-events-none" />
+          <span className="absolute -inset-1 rounded-xl bg-gradient-to-r from-tech-blue via-tech-electric to-tech-cyan opacity-40 blur-md group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse-slow pointer-events-none" />
         )}
 
         <motion.button
@@ -98,55 +94,27 @@ export const Button = React.forwardRef(
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           animate={{ x: mouseOffset.x, y: mouseOffset.y }}
-          whileHover={{ scale: disabled ? 1 : 1.02, y: disabled ? 0 : -2 }}
-          whileTap={{ scale: disabled ? 1 : 0.96 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className={cn(baseClasses, sizeClasses[size], variantClasses[variant], className)}
           {...props}
         >
-          {/* Animated shine sweep on hover for primary/glow */}
-          {(variant === "primary" || variant === "glow") && (
-            <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 -translate-x-[200%] group-hover:translate-x-[400%] transition-transform duration-1000 ease-in-out pointer-events-none" />
-          )}
-
-          {/* Outline fill-slide animation */}
-          {variant === "outline" && (
-            <span className="absolute inset-0 bg-gradient-to-r from-acm-blue/20 to-sky-500/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out pointer-events-none" />
-          )}
-
-          {/* Ripple elements */}
-          {ripples.map((ripple) => (
+          {ripples.map((r) => (
             <span
-              key={ripple.id}
-              className="absolute rounded-full bg-white/30 animate-ping pointer-events-none"
+              key={r.id}
+              className="absolute bg-white/25 rounded-full pointer-events-none animate-ping"
               style={{
-                left: ripple.x - 20,
-                top: ripple.y - 20,
-                width: 40,
-                height: 40,
+                left: r.x - 10,
+                top: r.y - 10,
+                width: 20,
+                height: 20,
               }}
             />
           ))}
 
-          {/* Content / Morphing States */}
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin text-white" />
-                <span>Processing...</span>
-              </>
-            ) : isSuccess ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-400 stroke-[3]" />
-                <span>Success!</span>
-              </>
-            ) : (
-              <>
-                {Icon && <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />}
-                {children}
-              </>
-            )}
-          </span>
+          {isLoading && <Loader2 className="w-4 h-4 animate-spin mr-1" />}
+          {isSuccess && <Check className="w-4 h-4 text-emerald-300 mr-1" />}
+          {Icon && !isLoading && !isSuccess && <Icon className="w-4 h-4 mr-1" />}
+          {children}
         </motion.button>
       </div>
     );

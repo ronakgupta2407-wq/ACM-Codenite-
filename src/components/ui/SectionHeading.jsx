@@ -25,10 +25,10 @@ export function SectionHeading({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-widest uppercase text-cyan-300 bg-cyan-950/40 border border-cyan-400/40 shadow-[0_0_15px_rgba(0,240,255,0.2)] mb-4 backdrop-blur-md"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-widest uppercase text-tech-cyan bg-tech-blue/15 border border-tech-cyan/40 shadow-[0_0_15px_rgba(56,189,248,0.2)] mb-4 backdrop-blur-md"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-          <span className="text-cyan-400 font-mono">//</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-tech-cyan animate-ping" />
+          <span className="text-tech-cyan font-mono">//</span>
           {badge}
         </motion.div>
       )}
@@ -41,11 +41,11 @@ export function SectionHeading({
         transition={{ duration: 0.6, delay: 0.1 }}
         className="font-heading font-black text-3xl sm:text-4xl md:text-5xl text-white tracking-tight leading-tight"
       >
-        <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-white via-slate-100 to-slate-200 bg-clip-text text-transparent">
           {title}
         </span>{" "}
         {highlight && (
-          <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,240,255,0.4)]">
+          <span className="bg-gradient-to-r from-tech-cyan via-tech-electric to-tech-violet bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(56,189,248,0.45)]">
             {highlight}
           </span>
         )}
@@ -62,8 +62,8 @@ export function SectionHeading({
           align === "center" ? "mx-auto" : ""
         )}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
-        <div className="w-2 h-2 rotate-45 bg-cyan-400 shadow-[0_0_10px_#00f0ff] relative z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-tech-cyan to-transparent shadow-[0_0_8px_#38BDF8]" />
+        <div className="w-2 h-2 rotate-45 bg-tech-cyan shadow-[0_0_10px_#38BDF8] relative z-10" />
       </motion.div>
 
       {/* Subtitle */}
@@ -73,7 +73,7 @@ export function SectionHeading({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl font-normal"
+          className="text-tech-muted text-sm sm:text-base leading-relaxed max-w-2xl font-normal"
         >
           {subtitle}
         </motion.p>
